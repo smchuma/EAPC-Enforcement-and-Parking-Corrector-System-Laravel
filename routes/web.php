@@ -22,7 +22,7 @@ use Inertia\Inertia;
 
 //collector & enforcer
 
-Route::middleware('auth')->group(function () {
+Route::middleware( ['auth','role:enforcer,collector'])->group(function () {
     Route::get('/', [TaarifaController::class, 'index'])->name('taarifa.index');
 
 
@@ -35,6 +35,7 @@ Route::middleware('auth')->group(function () {
 // admin
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/admin/users', [AdminController::class, 'manageUsers'])->name('admin.users');
     Route::post('/admin/users', [AdminController::class, 'storeUser'])->name('admin.users.store');
 });
