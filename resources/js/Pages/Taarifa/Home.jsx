@@ -1,15 +1,17 @@
-import SalesForm from "@/Components/SalesForm";
+import CardsGrid from "@/Components/Cards/CardsGrid";
+import EmpBarGraph from "@/Components/Graphs/EmpBarGraph";
+import EmpPieChart from "@/Components/Graphs/EmpPieChart";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 
 const Home = ({ auth }) => {
     return (
         <AuthenticatedLayout user={auth.user}>
-            <main className="pt-24">
-                <div className="border-b-2 border-gray-300 pb-5 flex justify-between items-center">
-                    <h1 className="text-xl text-gray-500">Ripoti</h1>
-                    <SalesForm />
+            <main className="flex justify-center flex-col pt-24">
+                <CardsGrid />
+                <div className="flex flex-col lg:flex-row gap-x-5 gap-y-5 px-8 lg:px-5">
+                    <EmpBarGraph />
+                    <EmpPieChart />
                 </div>
-                <div>{/* <ReportList /> */}</div>
             </main>
         </AuthenticatedLayout>
     );
