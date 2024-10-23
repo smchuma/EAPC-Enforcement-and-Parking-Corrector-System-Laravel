@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Taarifa\ReportController;
 use App\Http\Controllers\Taarifa\TaarifaController;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -18,12 +20,18 @@ use Inertia\Inertia;
 |
 */
 
+// Auth::routes([
+//     'register' => false, // Disable the register route
+// ]);
 
 
 //collector & enforcer
 
+Route::redirect('/register', '/login');
+
 Route::middleware( ['auth','role:enforcer,collector'])->group(function () {
     Route::get('/', [TaarifaController::class, 'index'])->name('taarifa.index');
+    Route::get('/ripoti', [ReportController::class, 'index'])->name('report.index');
 
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
