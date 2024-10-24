@@ -83,9 +83,14 @@ const SalesForm = () => {
                 </DialogTrigger>
                 <DialogContent className="">
                     <DialogHeader>
-                        <DialogTitle>Jaza Ripoti</DialogTitle>
+                        <DialogTitle className="border-b-2 pb-4">
+                            Jaza Ripoti
+                        </DialogTitle>
                         <DialogDescription>
-                            <form onSubmit={handleSubmit} className="rounded">
+                            <form
+                                onSubmit={handleSubmit}
+                                className="rounded pt-3"
+                            >
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
                                     {/* Jaza Mauzo */}
                                     <div className="flex flex-col">
@@ -221,12 +226,15 @@ const SalesForm = () => {
                                 </div>
 
                                 {/* Submit Button */}
-                                <div className="mt-6">
+                                <div className="mt-7 mb-8 flex justify-end gap-2">
                                     <button
                                         type="submit"
-                                        className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition-colors"
+                                        className="w-1/4 bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition-colors"
                                     >
                                         Tuma Mauzo
+                                    </button>
+                                    <button className="w-1/6 border border-gray-400 text-black p-2 rounded hover:bg-gray-600 hover:text-white transition-colors">
+                                        Cancel
                                     </button>
                                 </div>
                             </form>
