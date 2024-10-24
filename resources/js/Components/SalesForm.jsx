@@ -12,64 +12,54 @@ import {
 import { IoMdAddCircleOutline } from "react-icons/io";
 import InputLabel from "./InputLabel";
 import TextInput from "./TextInput";
+import { usePage } from "@inertiajs/react";
 
 const SalesForm = () => {
+    const { auth } = usePage().props;
+    const role = auth.user.role;
+
+    const [dailySales, setDailySales] = useState("");
     const [controlNumbers, setControlNumbers] = useState([
-        { id: Date.now(), controlNumber: "", amount: "" },
+        { number: "", amount: "" },
     ]);
+    const [salesProofImage, setSalesProofImage] = useState(null);
 
-    // Handle adding a new control number
+    // Function to add a new empty controller number entry
     const addControlNumber = () => {
-        setControlNumbers([
-            ...controlNumbers,
-            { id: Date.now(), controlNumber: "", amount: "" },
-        ]);
+        setControlNumbers([...controlNumbers, { number: "", amount: "" }]);
     };
 
-    // Handle removing a control number
-    const removeControlNumber = (id) => {
-        setControlNumbers(controlNumbers.filter((item) => item.id !== id));
-    };
-
-    // Handle input change for control numbers
-    const handleControlChange = (id, field, value) => {
-        setControlNumbers(
-            controlNumbers.map((item) =>
-                item.id === id ? { ...item, [field]: value } : item
-            )
+    // Function to remove a controller number by its index
+    const removeControlNumber = (indexToRemove) => {
+        const updatedControlNumbers = controlNumbers.filter(
+            (_, index) => index !== indexToRemove
         );
+        setControlNumbers(updatedControlNumbers);
     };
 
     // Handle form submission
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // Validation: Ensure all control numbers are unique
-        const controlNums = controlNumbers.map((item) => item.controlNumber);
-        const uniqueControlNums = new Set(controlNums);
+        const formData = new FormData();
+        formData.append("daily_sales", dailySales);
+        formData.append("sales_proof_image", salesProofImage);
 
-        if (controlNums.length !== uniqueControlNums.size) {
-            alert("Control numbers must be unique.");
-            return;
-        }
+        controlNumbers.forEach((controller, index) => {
+            formData.append(
+                `control_numbers[${index}][number]`,
+                controller.number
+            );
+            formData.append(
+                `control_numbers[${index}][amount]`,
+                controller.amount
+            );
+        });
 
-        // Process form data
-        const formData = {
-            jazaMauzo: e.target.jazaMauzo.value,
-            uploadPicha: e.target.uploadPicha.files[0], // File object
-            controlNumbers: controlNumbers.map(({ controlNumber, amount }) => ({
-                controlNumber,
-                amount,
-            })),
-        };
-
-        console.log("Form Data:", formData);
-
-        // TODO: Handle form submission (e.g., send to API)
-
-        // Reset form
-        e.target.reset();
-        setControlNumbers([{ id: Date.now(), controlNumber: "", amount: "" }]);
+        // Inertia.post("/reports", formData, {
+        //     headers: {
+        //         "Content-Type": "multipart/form-data",
+        //     },
     };
 
     return (
@@ -89,80 +79,98 @@ const SalesForm = () => {
                         <DialogDescription>
                             <form
                                 onSubmit={handleSubmit}
-                                className="rounded pt-3"
+                                className="rounded pt-3 px-5 text-black"
                             >
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
-                                    {/* Jaza Mauzo */}
-                                    <div className="flex flex-col">
-                                        <InputLabel
-                                            htmlFor="jazaMauzo"
-                                            className="mb-4 font-semibold"
-                                        >
-                                            Jaza Mauzo
-                                        </InputLabel>
-                                        <TextInput
-                                            type="text"
-                                            id="jazaMauzo"
-                                            name="jazaMauzo"
-                                            required
-                                            className=" border border-gray-400 rounded-md"
-                                            placeholder="Ingiza mauzo yako"
-                                        />
-                                    </div>
+                                {role === "collector" && (
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
+                                        {/* Jaza Mauzo */}
+                                        <div className="flex flex-col">
+                                            <InputLabel
+                                                htmlFor="jazaMauzo"
+                                                className="mb-4 font-semibold"
+                                            >
+                                                Jaza Mauzo
+                                            </InputLabel>
+                                            <TextInput
+                                                type="number"
+                                                value={dailySales}
+                                                onChange={(e) =>
+                                                    setDailySales(
+                                                        e.target.value
+                                                    )
+                                                }
+                                                id="jazaMauzo"
+                                                name="jazaMauzo"
+                                                required
+                                                className=" border border-gray-400 rounded-md"
+                                                placeholder="Ingiza mauzo yako"
+                                            />
+                                        </div>
 
-                                    {/* Upload Picha */}
-                                    <div className="flex flex-col">
-                                        <InputLabel
-                                            htmlFor="uploadPicha"
-                                            className="mb-4 font-semibold"
-                                        >
-                                            Weka Picha Inayoonyesha Mauzo Yako
-                                            ya Leo
-                                        </InputLabel>
-                                        <TextInput
-                                            type="file"
-                                            id="uploadPicha"
-                                            name="uploadPicha"
-                                            accept="image/*"
-                                            required
-                                            className=" border border-gray-400 rounded"
-                                        />
+                                        {/* Upload Picha */}
+                                        <div className="flex flex-col">
+                                            <InputLabel
+                                                htmlFor="uploadPicha"
+                                                className="mb-4 font-semibold"
+                                            >
+                                                Weka Picha Inayoonyesha Mauzo
+                                                Yako ya Leo
+                                            </InputLabel>
+                                            <TextInput
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={(e) =>
+                                                    setSalesProofImage(
+                                                        e.target.files[0]
+                                                    )
+                                                }
+                                                id="uploadPicha"
+                                                name="uploadPicha"
+                                                required
+                                                className="p-2 border border-gray-400 rounded"
+                                            />
+                                        </div>
                                     </div>
-                                </div>
-
+                                )}
                                 {/* Mauzo ya Control Number */}
                                 <div className="mt-6">
                                     <h2 className="text-lg font-semibold mb-5">
                                         Mauzo ya Control Number
                                     </h2>
-                                    {controlNumbers.map((item, index) => (
+                                    {controlNumbers.map((controller, index) => (
                                         <div
-                                            key={item.id}
+                                            key={index}
                                             className="flex items-center mb-5"
                                         >
                                             <div className="flex-1 grid grid-cols-2 gap-4">
                                                 {/* Control Number */}
                                                 <div className="flex flex-col">
                                                     <label
-                                                        htmlFor={`controlNumber-${item.id}`}
+                                                        htmlFor={`controlNumber-${index}`}
                                                         className="mb-3"
                                                     >
                                                         Control Number
                                                     </label>
                                                     <input
                                                         type="text"
-                                                        id={`controlNumber-${item.id}`}
-                                                        name={`controlNumber-${item.id}`}
+                                                        id={`controlNumber-${index}`}
+                                                        name={`controlNumber-${index}`}
                                                         value={
-                                                            item.controlNumber
+                                                            controller.number
                                                         }
-                                                        onChange={(e) =>
-                                                            handleControlChange(
-                                                                item.id,
-                                                                "controlNumber",
-                                                                e.target.value
-                                                            )
-                                                        }
+                                                        onChange={(e) => {
+                                                            const updatedControlNumbers =
+                                                                [
+                                                                    ...controlNumbers,
+                                                                ];
+                                                            updatedControlNumbers[
+                                                                index
+                                                            ].number =
+                                                                e.target.value;
+                                                            setControlNumbers(
+                                                                updatedControlNumbers
+                                                            );
+                                                        }}
                                                         required
                                                         className="p-2 border border-gray-400 rounded"
                                                         placeholder="Ingiza Control Number"
@@ -172,23 +180,31 @@ const SalesForm = () => {
                                                 {/* Amount */}
                                                 <div className="flex flex-col">
                                                     <label
-                                                        htmlFor={`amount-${item.id}`}
+                                                        htmlFor={`amount-${index}`}
                                                         className="mb-3"
                                                     >
                                                         Kiasi
                                                     </label>
                                                     <input
                                                         type="number"
-                                                        id={`amount-${item.id}`}
-                                                        name={`amount-${item.id}`}
-                                                        value={item.amount}
-                                                        onChange={(e) =>
-                                                            handleControlChange(
-                                                                item.id,
-                                                                "amount",
-                                                                e.target.value
-                                                            )
+                                                        id={`amount-${index}`}
+                                                        name={`amount-${index}`}
+                                                        value={
+                                                            controller.amount
                                                         }
+                                                        onChange={(e) => {
+                                                            const updatedControlNumbers =
+                                                                [
+                                                                    ...controlNumbers,
+                                                                ];
+                                                            updatedControlNumbers[
+                                                                index
+                                                            ].amount =
+                                                                e.target.value;
+                                                            setControlNumbers(
+                                                                updatedControlNumbers
+                                                            );
+                                                        }}
                                                         required
                                                         className="p-2 border border-gray-400 rounded"
                                                         placeholder="Ingiza Kiasi"
@@ -202,7 +218,7 @@ const SalesForm = () => {
                                                     type="button"
                                                     onClick={() =>
                                                         removeControlNumber(
-                                                            item.id
+                                                            index
                                                         )
                                                     }
                                                     className="bg-transparent ml-4 text-red-500 hover:text-red-700 mt-6"
@@ -232,9 +248,6 @@ const SalesForm = () => {
                                         className="w-1/4 bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition-colors"
                                     >
                                         Tuma Mauzo
-                                    </button>
-                                    <button className="w-1/6 border border-gray-400 text-black p-2 rounded hover:bg-gray-600 hover:text-white transition-colors">
-                                        Cancel
                                     </button>
                                 </div>
                             </form>

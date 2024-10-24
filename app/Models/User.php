@@ -59,4 +59,9 @@ class User extends Authenticatable
     {
         return $this->role === 'enforcer';
     }
+
+
+    public function reports() {
+        return $this->hasMany(Report::class);
+    }
 }

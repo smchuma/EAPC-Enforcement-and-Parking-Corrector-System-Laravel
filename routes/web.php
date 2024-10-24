@@ -32,6 +32,7 @@ Route::redirect('/register', '/login');
 Route::middleware( ['auth','role:enforcer,collector'])->group(function () {
     Route::get('/', [TaarifaController::class, 'index'])->name('taarifa.index');
     Route::get('/ripoti', [ReportController::class, 'index'])->name('report.index');
+    Route::post('/ripoti', [ReportController::class, 'store'])->name('report.store');
 
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
