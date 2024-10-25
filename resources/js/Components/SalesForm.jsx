@@ -42,7 +42,10 @@ const SalesForm = () => {
         e.preventDefault();
 
         post("/ripoti", {
-            onSuccess: () => reset(), // Optionally reset form on success
+            onSuccess: () => {
+                reset(); // Reset initial fields
+                setData("control_numbers", [{ number: "", amount: "" }]); // Clear control numbers
+            },
         });
     };
 
@@ -71,7 +74,7 @@ const SalesForm = () => {
                                         <div className="flex flex-col">
                                             <InputLabel
                                                 htmlFor="jazaMauzo"
-                                                className="mb-4 font-semibold"
+                                                className="mb-4"
                                             >
                                                 Jaza Mauzo
                                             </InputLabel>
@@ -96,7 +99,7 @@ const SalesForm = () => {
                                         <div className="flex flex-col">
                                             <InputLabel
                                                 htmlFor="uploadPicha"
-                                                className="mb-4 font-semibold"
+                                                className="mb-4"
                                             >
                                                 Weka Picha Inayoonyesha Mauzo
                                                 Yako ya Leo
@@ -142,6 +145,8 @@ const SalesForm = () => {
                                                         <input
                                                             type="text"
                                                             id={`controlNumber-${index}`}
+                                                            pattern="[0-9]{0,12}"
+                                                            maxLength={12}
                                                             name={`controlNumber-${index}`}
                                                             value={
                                                                 controller.number

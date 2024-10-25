@@ -34,10 +34,10 @@ class ReportController extends Controller
             'control_numbers.*.amount' => 'required|numeric',
             'sales_proof_image' => 'nullable|image|max:2048',
         ], [
-            'control_numbers.*.number.regex' => 'control number format ni incorrect',
+            'control_numbers.*.number.regex' => 'Mpangilio wa control number hauko sahihi',
         ]);
 
-        // dd($request->all());
+        // dd($request->all());m
 
          $imagePath = null;
          if ($request->hasFile('sales_proof_image')) {
