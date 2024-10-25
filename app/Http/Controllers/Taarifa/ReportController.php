@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Taarifa;
 use App\Http\Controllers\Controller;
 use App\Models\ControlNumber;
 use App\Models\Report;
+use App\Rules\ControlNumberUnique;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -19,16 +20,25 @@ class ReportController extends Controller
 
     public function store(Request $request) {
 
+
+
+
         $request->validate([
             'daily_sales' => 'nullable|numeric',
             'control_numbers' => 'required|array',
-            'control_numbers.*.number' =>  'required|regex:/^9986\d{8}$/|unique:control_numbers,control_number',
+            'control_numbers.*.number' => [
+                'required',
+                'regex:/^9986\d{8}$/',
+                new ControlNumberUnique, // Use your custom rule here
+            ],
             'control_numbers.*.amount' => 'required|numeric',
             'sales_proof_image' => 'nullable|image|max:2048',
-
+        ], [
+            'control_numbers.*.number.regex' => 'control number format ni incorrect',
         ]);
 
-         // Handle image upload (only if daily sales is entered, i.e., for collectors)
+        // dd($request->all());
+
          $imagePath = null;
          if ($request->hasFile('sales_proof_image')) {
              $imagePath = $request->file('sales_proof_image')->store('sales_proof_images', 'public');
@@ -61,6 +71,6 @@ class ReportController extends Controller
     }
 
 
-        return redirect()->route('reports.index')->with('success', 'Report created successfully.');
+        return redirect()->back()->with('success', 'Report created successfully.');
     }
 }
