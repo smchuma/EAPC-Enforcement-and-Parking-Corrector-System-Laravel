@@ -17,7 +17,7 @@ const ProfileAvatar = () => {
         <main>
             <Dropdown>
                 <Dropdown.Trigger>
-                    <Avatar className="border-[1px] bg-gray-200 flex items-center justify-center">
+                    <Avatar className="border-[3px] bg-gray-200 flex items-center justify-center">
                         <AvatarFallback>{initials}</AvatarFallback>
                     </Avatar>
                 </Dropdown.Trigger>

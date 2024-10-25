@@ -4,6 +4,7 @@ import { IoMdSettings } from "react-icons/io";
 import { AiOutlineLogout } from "react-icons/ai";
 import SidebarItem from "./SidebarItem";
 import ApplicationLogo from "../ApplicationLogo";
+import { FaUsers } from "react-icons/fa";
 
 const Sidebar = () => {
     const sidebarItem = [
@@ -15,12 +16,19 @@ const Sidebar = () => {
         },
         {
             id: 2,
-            name: "Report",
+            name: "Reports",
             icon: <BiSolidReport size={20} />,
-            link: "/admin/report",
+            link: "/admin/reports",
         },
+
         {
             id: 3,
+            name: "Users",
+            icon: <FaUsers size={20} />,
+            link: "/admin/users",
+        },
+        {
+            id: 4,
             name: "Settings",
             icon: <IoMdSettings size={20} />,
             link: "/admin/settings",

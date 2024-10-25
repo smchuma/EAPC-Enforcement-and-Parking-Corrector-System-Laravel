@@ -83,4 +83,23 @@ class ReportController extends Controller
 
         return redirect()->back()->with('success', 'Report created successfully.');
     }
+
+
+    public function adminReports(Request $request) {
+
+        $query = Report::query();
+
+        if($request->has('search')) {
+            $search = $request->get('search');
+            $query->whereDate('created_at', $search);
+        }
+
+        return Inertia::render("Admin/Reports", [
+           "reports"=> $query->with("control_number")->orderByDesc('created_at')->paginate(5),
+        ]);
+    }
+
+
+
+
 }
