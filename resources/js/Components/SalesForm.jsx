@@ -17,6 +17,8 @@ const SalesForm = () => {
     const { auth } = usePage().props;
     const role = auth.user.role;
 
+    const [open, setOpen] = useState(false);
+
     // Using useForm from Inertia.js
     const { data, setData, post, processing, reset, errors } = useForm({
         daily_sales: "",
@@ -44,14 +46,15 @@ const SalesForm = () => {
         post("/ripoti", {
             onSuccess: () => {
                 reset(); // Reset initial fields
-                setData("control_numbers", [{ number: "", amount: "" }]); // Clear control numbers
+                setData("control_numbers", [{ number: "", amount: "" }]);
+                setOpen(false);
             },
         });
     };
 
     return (
         <div>
-            <Dialog>
+            <Dialog open={open} onOpenChange={setOpen}>
                 <DialogTrigger>
                     <div className="flex bg-gray-800 px-3 text-white p-2 rounded-md gap-x-2 items-center hover:scale-105 transition-all">
                         <IoMdAddCircleOutline size={18} />

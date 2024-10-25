@@ -14,8 +14,18 @@ class ReportController extends Controller
 {
     //
 
-    public function index() {
-        return Inertia::render("Taarifa/Ripoti");
+    public function index(Request $request) {
+
+        $query = Report::query();
+
+        if($request->has('search')) {
+            $search = $request->get('search');
+            $query->whereDate('created_at', $search);
+        }
+
+        return Inertia::render("Taarifa/Ripoti", [
+           "reports"=> $query->with("control_number")->orderByDesc('created_at')->paginate(5),
+        ]);
     }
 
     public function store(Request $request) {

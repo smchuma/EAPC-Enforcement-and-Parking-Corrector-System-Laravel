@@ -1,7 +1,8 @@
+import ReportList from "@/Components/Reports/ReportList";
 import SalesForm from "@/Components/SalesForm";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 
-const Ripoti = ({ auth }) => {
+const Ripoti = ({ auth, reports }) => {
     return (
         <AuthenticatedLayout user={auth.user}>
             <main className="pt-24">
@@ -9,7 +10,9 @@ const Ripoti = ({ auth }) => {
                     <h1 className="text-xl text-gray-500">Ripoti</h1>
                     <SalesForm />
                 </div>
-                <div>{/* <ReportList /> */}</div>
+                <div className="pb-16">
+                    <ReportList reports={reports} />
+                </div>
             </main>
         </AuthenticatedLayout>
     );
