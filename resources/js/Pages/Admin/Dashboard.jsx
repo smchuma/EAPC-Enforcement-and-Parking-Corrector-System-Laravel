@@ -1,3 +1,5 @@
+import AdminLayout from "@/Layouts/AdminLayout";
+
 export default function Dashboard({ auth }) {
-    return <main>dashboard</main>;
+    return <AdminLayout>dashboard</AdminLayout>;
 }
