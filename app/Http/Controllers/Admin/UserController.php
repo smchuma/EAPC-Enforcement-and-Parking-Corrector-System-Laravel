@@ -34,7 +34,7 @@ class UserController extends Controller
             'phone_number' => ['required', 'numeric', 'unique:users,phone_number',  'digits:10',],
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:8',
-            'role' => 'required|in:enforcer,collector'
+            'role' => 'required|in:enforcer,collector,admin'
         ]);
 
         User::create([
