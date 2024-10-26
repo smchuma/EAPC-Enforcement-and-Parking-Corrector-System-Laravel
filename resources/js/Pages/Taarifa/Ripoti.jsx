@@ -11,7 +11,7 @@ const Ripoti = ({ auth, reports }) => {
                     <SalesForm />
                 </div>
                 <div className="pb-16">
-                    <ReportList reports={reports} />
+                    <ReportList reports={reports} auth={auth} />
                 </div>
             </main>
         </AuthenticatedLayout>

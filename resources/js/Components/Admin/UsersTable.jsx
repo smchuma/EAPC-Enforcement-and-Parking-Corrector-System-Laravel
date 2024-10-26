@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import TextInput from "../TextInput";
-
 import { CiSearch } from "react-icons/ci";
 import { FaTrashAlt } from "react-icons/fa";
 import { GiPencil } from "react-icons/gi";
-import { GrNext, GrPrevious } from "react-icons/gr";
 
 const UsersTable = ({ users }) => {
     const [search, setSearch] = useState("");

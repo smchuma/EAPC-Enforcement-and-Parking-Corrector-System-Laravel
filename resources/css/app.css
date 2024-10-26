@@ -110,3 +110,7 @@ body {
         display: block;
     }
 }
+
+.blu {
+    background-color: rgb(83, 83, 255);
+}

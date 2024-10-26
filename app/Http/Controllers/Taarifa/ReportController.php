@@ -16,7 +16,7 @@ class ReportController extends Controller
 
     public function index(Request $request) {
 
-        $query = Report::query();
+        $query = Report::where('user_id', Auth::id());
 
         if($request->has('search')) {
             $search = $request->get('search');
@@ -95,7 +95,7 @@ class ReportController extends Controller
         }
 
         return Inertia::render("Admin/Reports", [
-           "reports"=> $query->with("control_number")->orderByDesc('created_at')->paginate(5),
+           "reports"=> $query->with("control_number", "user")->orderByDesc('created_at')->paginate(5),
         ]);
     }
 

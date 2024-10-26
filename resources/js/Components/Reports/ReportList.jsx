@@ -6,17 +6,13 @@ import {
     DialogHeader,
     DialogTitle,
 } from "../ui/dialog";
-import { GrPrevious } from "react-icons/gr";
-import { GrNext } from "react-icons/gr";
-import { router } from "@inertiajs/react";
 import TextInput from "../TextInput";
 import PrimaryButton from "../PrimaryButton";
 
-const ReportList = ({ reports }) => {
+const ReportList = ({ reports, auth }) => {
     const [filteredReports, setFilteredReports] = useState(reports.data);
     const [searchDate, setSearchDate] = useState("");
     const [selectedReport, setSelectedReport] = useState(null);
-    const [page, setPage] = useState(reports.current_page);
 
     const handleSearch = () => {
         if (searchDate) {
@@ -33,20 +29,6 @@ const ReportList = ({ reports }) => {
     const handleClear = () => {
         setSearchDate("");
         setFilteredReports(reports.data);
-    };
-
-    const handlePageChange = (newPage) => {
-        if (url) {
-            router.get(
-                url,
-                {},
-                {
-                    replace: true,
-                    preserveScroll: true,
-                    preserveState: true,
-                }
-            );
-        }
     };
 
     const openModal = (report) => setSelectedReport(report);
@@ -87,11 +69,17 @@ const ReportList = ({ reports }) => {
 
             {/* Table */}
             <table className="min-w-full table-auto border-collapse">
-                <thead>
+                <thead className="blu text-white">
                     <tr>
                         <th className="border p-2">Date</th>
-                        <th className="border p-2">Mauzo</th>
-                        <th className="border p-2">Picture</th>
+
+                        {auth.user.role === "collector" && (
+                            <th className="border p-2">Mauzo</th>
+                        )}
+                        {auth.user.role === "collector" && (
+                            <th className="border p-2">Picture</th>
+                        )}
+
                         <th className="border p-2">
                             Total Amount (Control Numbers)
                         </th>
@@ -109,22 +97,26 @@ const ReportList = ({ reports }) => {
                                     report.created_at
                                 ).toLocaleDateString()}
                             </td>
-                            <td className="border p-3 text-center">
-                                {report.daily_sales} TSH
-                            </td>
-                            <td className="border p-3 flex justify-center">
-                                {report.sales_proof_image ? (
-                                    <img
-                                        src={`/storage/${report.sales_proof_image}`}
-                                        alt="Report proof"
-                                        className="w-16 h-16 object-cover rounded"
-                                    />
-                                ) : (
-                                    <p className="text-xs font-semibold">
-                                        picha haipo
-                                    </p>
-                                )}
-                            </td>
+                            {auth.user.role === "collector" && (
+                                <td className="border p-3 text-center">
+                                    {report.daily_sales}
+                                </td>
+                            )}
+                            {auth.user.role === "collector" && (
+                                <td className="border p-3 flex justify-center">
+                                    {report.sales_proof_image ? (
+                                        <img
+                                            src={`/storage/${report.sales_proof_image}`}
+                                            alt="Report proof"
+                                            className="w-16 h-16 object-cover rounded"
+                                        />
+                                    ) : (
+                                        <p className="text-xs font-semibold">
+                                            picha haipo
+                                        </p>
+                                    )}
+                                </td>
+                            )}
                             <td className="border p-3 text-center">
                                 {report.control_number
                                     .reduce(
@@ -133,14 +125,13 @@ const ReportList = ({ reports }) => {
                                         0
                                     )
                                     .toFixed(2)}{" "}
-                                TSH
                             </td>
-                            <td className="border p-3">
+                            <td className="border p-3 text-center">
                                 <button
                                     onClick={() => openModal(report)}
                                     className="text-blue-600 underline hover:text-blue-800"
                                 >
-                                    View Details
+                                    Ona Control Number
                                 </button>
                             </td>
                         </tr>
@@ -193,25 +184,6 @@ const ReportList = ({ reports }) => {
                     Hauna ripoti yoyote
                 </h1>
             )}
-            <div className="flex justify-between  items-center gap-x-5 mt-5 mb-32">
-                <button
-                    onClick={() => handlePageChange(reports.prev_page_url)}
-                    disabled={page === 1}
-                    className="cursor-pointer"
-                >
-                    <GrPrevious />
-                </button>
-                <span>
-                    Page {page} of {reports.last_page}
-                </span>
-                <button
-                    onClick={() => handlePageChange(reports.next_page_url)}
-                    disabled={page === reports.last_page}
-                    className="cursor-pointer"
-                >
-                    <GrNext />
-                </button>
-            </div>
         </div>
     );
 };
