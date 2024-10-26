@@ -33,6 +33,8 @@ class UserController extends Controller
             'last_name' => 'required|string|max:255',
             'phone_number' => ['required', 'numeric', 'unique:users,phone_number',  'digits:10',],
             'email' => 'required|email|unique:users,email',
+            'street' => 'required|string',
+            'target' => 'required|numeric',
             'password' => 'required|min:8',
             'role' => 'required|in:enforcer,collector,admin'
         ]);
@@ -41,6 +43,8 @@ class UserController extends Controller
             'first_name' => $validated['first_name'],
             'last_name' => $validated['last_name'],
             'phone_number' => $validated['phone_number'],
+            'street' => $validated['street'],
+            'target' => $validated['target'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
             'role' => $validated['role']

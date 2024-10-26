@@ -1,30 +1,51 @@
 import { FaBullseye, FaChartLine, FaClipboardList } from "react-icons/fa";
 import Card from "./Card";
+import { usePage } from "@inertiajs/react";
 
-const CardsGrid = () => {
+const CardsGrid = ({ auth, reports }) => {
+    console.log(reports);
+
+    const totalDailySales = reports.reduce(
+        (total, report) => total + parseFloat(report.daily_sales || 0),
+        0
+    );
+    const totalControlNumberSales = reports.reduce((total, report) => {
+        return (
+            total +
+            report.control_number.reduce(
+                (sum, control) => sum + (parseFloat(control.amount) || 0),
+                0
+            )
+        );
+    }, 0);
+
     const cardData = [
         {
             id: 1,
             title: "MTAA NA TARGET",
-            value: "KIPATA/100,000",
+            value: `${auth.user.street} / ${auth.user.target}`,
             icon: FaBullseye,
-            subText: "/day",
         },
         {
             id: 2,
             title: "MAZUO YA SIKU",
-            value: "90,000",
+            value: totalDailySales.toLocaleString(),
             icon: FaChartLine,
             subText: "/day",
         },
         {
             id: 3,
             title: "MAUZO YA CONTROL NUMBER",
-            value: "30,000",
+            value: totalControlNumberSales.toLocaleString(),
             icon: FaClipboardList,
             subText: "/day",
         },
     ];
+
+    const dailySalesMetTarget = totalDailySales >= auth.user.target;
+    const dailySalesMessage = dailySalesMetTarget
+        ? "Target Achieved!"
+        : "Below Target";
 
     return (
         <main className="container mx-auto px-4 py-6">
@@ -36,6 +57,9 @@ const CardsGrid = () => {
                         value={card.value}
                         Icon={card.icon}
                         subText={card.subText}
+                        auth={auth}
+                        metTarget={card.metTarget}
+                        message={card.message}
                     />
                 ))}
             </div>

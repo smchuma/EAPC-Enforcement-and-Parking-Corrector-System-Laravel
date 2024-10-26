@@ -1,7 +1,5 @@
 import { MdDashboard } from "react-icons/md";
 import { BiSolidReport } from "react-icons/bi";
-import { IoMdSettings } from "react-icons/io";
-import { AiOutlineLogout } from "react-icons/ai";
 import SidebarItem from "./SidebarItem";
 import ApplicationLogo from "../ApplicationLogo";
 import { FaUsers } from "react-icons/fa";
@@ -26,12 +24,6 @@ const Sidebar = () => {
             name: "Users",
             icon: <FaUsers size={20} />,
             link: "/admin/users",
-        },
-        {
-            id: 4,
-            name: "Settings",
-            icon: <IoMdSettings size={20} />,
-            link: "/admin/settings",
         },
     ];
 

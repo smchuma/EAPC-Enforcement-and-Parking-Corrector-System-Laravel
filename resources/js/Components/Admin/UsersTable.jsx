@@ -11,18 +11,20 @@ const UsersTable = ({ users }) => {
 
     useEffect(() => {
         setFilteredData(
-            users.filter(
-                (user) =>
-                    user.first_name
-                        .toLowerCase()
-                        .includes(search.toLowerCase()) ||
-                    user.last_name
-                        .toLowerCase()
-                        .includes(search.toLowerCase()) ||
-                    user.phone_number
-                        .toLowerCase()
-                        .includes(search.toLowerCase())
-            )
+            users
+                .filter(
+                    (user) =>
+                        user.first_name
+                            .toLowerCase()
+                            .includes(search.toLowerCase()) ||
+                        user.last_name
+                            .toLowerCase()
+                            .includes(search.toLowerCase()) ||
+                        user.phone_number
+                            .toLowerCase()
+                            .includes(search.toLowerCase())
+                )
+                .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
         );
     }, [search, users]);
 
@@ -48,6 +50,8 @@ const UsersTable = ({ users }) => {
                         <tr className="bg-blue-700 text-white">
                             <th className="py-4">First Name</th>
                             <th>Last Name</th>
+                            <th>Target</th>
+                            <th>Mtaa</th>
                             <th>Phone Number</th>
                             <th>Email</th>
                             <th>Role</th>
@@ -65,6 +69,12 @@ const UsersTable = ({ users }) => {
                                 </td>
                                 <td className="text-center border-r-2 border-gray-200 p-3">
                                     {user.last_name}
+                                </td>
+                                <td className="text-center border-r-2 border-gray-200 p-3">
+                                    {user.target === null ? "N/A" : user.target}
+                                </td>
+                                <td className="text-center border-r-2 border-gray-200 p-3">
+                                    {user.street === null ? "N/A" : user.street}
                                 </td>
                                 <td className="text-center border-r-2 border-gray-200 p-3">
                                     {user.phone_number}
@@ -96,28 +106,9 @@ const UsersTable = ({ users }) => {
                         ))}
                     </tbody>
                 </table>
-                {/* {filteredData.length == 0 && (
-                <h1 className="text-center my-5">No User Found</h1>
-            )} */}
-                {/* <div className="flex justify-between  items-center gap-x-5 mt-5 mb-32">
-                <button
-                    onClick={() => handlePageChange(page - 1)}
-                    disabled={page === 1}
-                    className="cursor-pointer"
-                >
-                    <GrPrevious />
-                </button>
-                <span>
-                    Page {page} of {users.last_page}
-                </span>
-                <button
-                    onClick={() => handlePageChange(page + 1)}
-                    disabled={page === users.last_page}
-                    className="cursor-pointer"
-                >
-                    <GrNext />
-                </button>
-            </div> */}
+                {filteredData.length == 0 && (
+                    <h1 className="text-center my-5">No User Found</h1>
+                )}
             </div>
         </main>
     );

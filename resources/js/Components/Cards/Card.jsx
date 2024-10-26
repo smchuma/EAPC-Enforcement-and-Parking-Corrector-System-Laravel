@@ -1,4 +1,4 @@
-const Card = ({ title, value, Icon, subText }) => {
+const Card = ({ title, value, Icon, subText, metTarget, message }) => {
     return (
         <div
             className="bg-gray-50
