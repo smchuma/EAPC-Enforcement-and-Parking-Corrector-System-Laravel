@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('phone_number')->unique();
             $table->integer('target')->nullable();
+            $table->integer('control_number_target')->nullable();
             $table->string('street')->nullable();
             $table->string('role')->default('collector');
             $table->string('email')->unique();

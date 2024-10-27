@@ -3,8 +3,6 @@ import Card from "./Card";
 import { usePage } from "@inertiajs/react";
 
 const CardsGrid = ({ auth, reports }) => {
-    console.log(reports);
-
     const totalDailySales = reports.reduce(
         (total, report) => total + parseFloat(report.daily_sales || 0),
         0
