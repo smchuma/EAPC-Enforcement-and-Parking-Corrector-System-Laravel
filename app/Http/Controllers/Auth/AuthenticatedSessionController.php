@@ -23,6 +23,7 @@ class AuthenticatedSessionController extends Controller
         return Inertia::render('Auth/Login', [
             'canResetPassword' => Route::has('password.request'),
             'status' => session('status'),
+            'error' => session('error')
         ]);
     }
 
@@ -37,7 +38,7 @@ class AuthenticatedSessionController extends Controller
             DB::connection()->getPdo();
 
         } catch(\Exception $e) {
-            return redirect()->back()->with('db_error','Could not connect to the database');
+            return redirect()->route('login')->with('error','Could not connect to the database');
         }
 
         $request->authenticate();
@@ -45,6 +46,7 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         $role = Auth::user()->role;
+
 
         if($role === "admin") {
             return redirect()->intended("/admin/dashboard");

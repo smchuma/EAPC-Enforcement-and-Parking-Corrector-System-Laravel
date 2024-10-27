@@ -1,48 +1,51 @@
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { TrendingUp } from "lucide-react";
+import { Bar, BarChart, XAxis, YAxis } from "recharts";
 import {
     Card,
     CardContent,
     CardDescription,
+    CardFooter,
     CardHeader,
     CardTitle,
 } from "../ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "../ui/chart";
-
-export const description = "A multiple bar chart";
-
+export const description = "A horizontal bar chart";
 const chartData = [
-    { month: "January", desktop: 186, mobile: 80 },
-    { month: "February", desktop: 305, mobile: 200 },
-    { month: "March", desktop: 237, mobile: 120 },
-    { month: "April", desktop: 73, mobile: 190 },
-    { month: "May", desktop: 209, mobile: 130 },
-    { month: "June", desktop: 214, mobile: 140 },
+    { month: "January", desktop: 186 },
+    { month: "February", desktop: 305 },
+    { month: "March", desktop: 237 },
+    { month: "April", desktop: 73 },
+    { month: "May", desktop: 209 },
+    { month: "June", desktop: 214 },
 ];
-
 const chartConfig = {
     desktop: {
         label: "Desktop",
         color: "hsl(var(--chart-1))",
     },
-    mobile: {
-        label: "Mobile",
-        color: "hsl(var(--chart-2))",
-    },
 };
 
-export default function EmpBarGraph() {
+export function HorizontalBarGraph() {
     return (
-        <Card className="w-full lg:w-[50%]">
+        <Card className="flex flex-col w-full lg:w-[50%]">
             <CardHeader>
-                <CardTitle>Mauzo</CardTitle>
+                <CardTitle>Mauzo ya Control Number</CardTitle>
                 <CardDescription>January - June 2024</CardDescription>
             </CardHeader>
             <CardContent>
                 <ChartContainer config={chartConfig}>
-                    <BarChart accessibilityLayer data={chartData}>
-                        <CartesianGrid vertical={false} />
-                        <XAxis
+                    <BarChart
+                        accessibilityLayer
+                        data={chartData}
+                        layout="vertical"
+                        margin={{
+                            left: -20,
+                        }}
+                    >
+                        <XAxis type="number" dataKey="desktop" hide />
+                        <YAxis
                             dataKey="month"
+                            type="category"
                             tickLine={false}
                             tickMargin={10}
                             axisLine={false}
@@ -50,17 +53,12 @@ export default function EmpBarGraph() {
                         />
                         <ChartTooltip
                             cursor={false}
-                            content={<ChartTooltipContent indicator="dashed" />}
+                            content={<ChartTooltipContent hideLabel />}
                         />
                         <Bar
                             dataKey="desktop"
                             fill="var(--color-desktop)"
-                            radius={4}
-                        />
-                        <Bar
-                            dataKey="mobile"
-                            fill="var(--color-mobile)"
-                            radius={4}
+                            radius={5}
                         />
                     </BarChart>
                 </ChartContainer>

@@ -20,6 +20,7 @@ const UserCreateForm = () => {
         last_name: "",
         phone_number: "",
         target: "",
+        control_number_target: "",
         street: "",
         email: "",
         role: "",
@@ -201,26 +202,30 @@ const UserCreateForm = () => {
                                         <div className="md:w-1/2 px-3">
                                             <InputLabel
                                                 className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
-                                                htmlFor="grid-mtaa"
+                                                htmlFor="grid-control-number-target"
                                                 required
                                             >
-                                                MTAA
+                                                Control number target
                                             </InputLabel>
                                             <TextInput
                                                 className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 placeholder:text-sm"
                                                 id="grid-street"
                                                 type="text"
-                                                placeholder="Enter Mtaa"
-                                                value={data.street}
+                                                placeholder="Enter Control Number Target"
+                                                value={
+                                                    data.control_number_target
+                                                }
                                                 onChange={(e) =>
                                                     setData(
-                                                        "street",
+                                                        "control_number_target",
                                                         e.target.value
                                                     )
                                                 }
                                             />
                                             <InputError
-                                                message={errors.street}
+                                                message={
+                                                    errors.control_number_target
+                                                }
                                                 className="mt-2"
                                             />
                                         </div>
@@ -275,6 +280,35 @@ const UserCreateForm = () => {
                                                 className="mt-2"
                                             />
                                         </div>
+
+                                        <div className="md:w-1/2 px-3">
+                                            <InputLabel
+                                                className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
+                                                htmlFor="grid-mtaa"
+                                                required
+                                            >
+                                                MTAA
+                                            </InputLabel>
+                                            <TextInput
+                                                className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 placeholder:text-sm"
+                                                id="grid-street"
+                                                type="text"
+                                                placeholder="Enter Mtaa"
+                                                value={data.street}
+                                                onChange={(e) =>
+                                                    setData(
+                                                        "street",
+                                                        e.target.value
+                                                    )
+                                                }
+                                            />
+                                            <InputError
+                                                message={errors.street}
+                                                className="mt-2"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="-mx-3 md:flex mb-2">
                                         <div className="md:w-1/2 px-3">
                                             <InputLabel
                                                 className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"

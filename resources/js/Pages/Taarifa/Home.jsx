@@ -1,6 +1,7 @@
 import CardsGrid from "@/Components/Cards/CardsGrid";
 import EmpBarGraph from "@/Components/Graphs/EmpBarGraph";
 import EmpPieChart from "@/Components/Graphs/EmpPieChart";
+import { HorizontalBarGraph } from "@/Components/Graphs/HorizontalBarGraph";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 
 const Home = ({ auth, reports }) => {
@@ -10,7 +11,8 @@ const Home = ({ auth, reports }) => {
                 <CardsGrid auth={auth} reports={reports} />
                 <div className="flex flex-col lg:flex-row gap-x-5 gap-y-5 px-8 lg:px-5">
                     <EmpBarGraph />
-                    <EmpPieChart />
+                    {/* <EmpPieChart /> */}
+                    <HorizontalBarGraph />
                 </div>
             </main>
         </AuthenticatedLayout>

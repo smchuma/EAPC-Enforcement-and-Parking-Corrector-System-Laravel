@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import TextInput from "../TextInput";
 import { CiSearch } from "react-icons/ci";
-import { FaTrashAlt } from "react-icons/fa";
-import { GiPencil } from "react-icons/gi";
+import { FaEllipsisVertical } from "react-icons/fa6";
 
 const UsersTable = ({ users }) => {
     const [search, setSearch] = useState("");
@@ -48,14 +47,15 @@ const UsersTable = ({ users }) => {
                 <table className="min-w-full leading-normal">
                     <thead>
                         <tr className="bg-blue-700 text-white">
-                            <th className="py-4">First Name</th>
+                            <th className="py-4 pl-2">First Name</th>
                             <th>Last Name</th>
                             <th>Target</th>
+                            <th>Control Number Target</th>
                             <th>Mtaa</th>
                             <th>Phone Number</th>
                             <th>Email</th>
                             <th>Role</th>
-                            <th>Actions</th>
+                            <th className="pr-2">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -64,7 +64,7 @@ const UsersTable = ({ users }) => {
                                 key={user.id}
                                 className="border-2 border-gray-200"
                             >
-                                <td className="text-center border-r-2 border-gray-200 p-3">
+                                <td className="text-center border-r-2 border-gray-200 p-4">
                                     {user.first_name}
                                 </td>
                                 <td className="text-center border-r-2 border-gray-200 p-3">
@@ -72,6 +72,11 @@ const UsersTable = ({ users }) => {
                                 </td>
                                 <td className="text-center border-r-2 border-gray-200 p-3">
                                     {user.target === null ? "N/A" : user.target}
+                                </td>
+                                <td className="text-center border-r-2 border-gray-200 p-3">
+                                    {user.target === null
+                                        ? "N/A"
+                                        : user.control_number_target}
                                 </td>
                                 <td className="text-center border-r-2 border-gray-200 p-3">
                                     {user.street === null ? "N/A" : user.street}
@@ -86,21 +91,8 @@ const UsersTable = ({ users }) => {
                                     {user.role}
                                 </td>
 
-                                <td className="text-center border-r-2 border-gray-200 ">
-                                    <button>
-                                        <GiPencil
-                                            className="mr-4"
-                                            onClick={() => onRowClick(user)}
-                                        />
-                                    </button>
-                                    <button
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            onDeleteClick(user);
-                                        }}
-                                    >
-                                        <FaTrashAlt className="text-red-500" />
-                                    </button>
+                                <td className="flex justify-center mt-4 text-gray-500 border-r-2 border-gray-200 ">
+                                    <FaEllipsisVertical />
                                 </td>
                             </tr>
                         ))}

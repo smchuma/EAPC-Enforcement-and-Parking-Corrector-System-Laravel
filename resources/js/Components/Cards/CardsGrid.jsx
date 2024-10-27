@@ -1,6 +1,5 @@
 import { FaBullseye, FaChartLine, FaClipboardList } from "react-icons/fa";
 import Card from "./Card";
-import { usePage } from "@inertiajs/react";
 
 const CardsGrid = ({ auth, reports }) => {
     const totalDailySales = reports.reduce(
@@ -20,30 +19,36 @@ const CardsGrid = ({ auth, reports }) => {
     const cardData = [
         {
             id: 1,
-            title: "MTAA NA TARGET",
-            value: `${auth.user.street} / ${auth.user.target}`,
+            title: "MTAA",
+            value: `${auth.user.street}`,
             icon: FaBullseye,
+            valueColor: "text-black",
         },
         {
             id: 2,
             title: "MAZUO YA SIKU",
-            value: totalDailySales.toLocaleString(),
+            value: `${totalDailySales.toLocaleString()}/${auth.user.target}`,
             icon: FaChartLine,
             subText: "/day",
+            valueColor:
+                totalDailySales >= auth.user.target
+                    ? "text-green-500"
+                    : "text-red-500",
         },
         {
             id: 3,
             title: "MAUZO YA CONTROL NUMBER",
-            value: totalControlNumberSales.toLocaleString(),
+            value: `${totalControlNumberSales.toLocaleString()}/${
+                auth.user.control_number_target
+            }`,
             icon: FaClipboardList,
             subText: "/day",
+            valueColor:
+                totalControlNumberSales >= auth.user.control_number_target
+                    ? "text-green-500"
+                    : "text-red-500",
         },
     ];
-
-    const dailySalesMetTarget = totalDailySales >= auth.user.target;
-    const dailySalesMessage = dailySalesMetTarget
-        ? "Target Achieved!"
-        : "Below Target";
 
     return (
         <main className="container mx-auto px-4 py-6">
@@ -56,8 +61,7 @@ const CardsGrid = ({ auth, reports }) => {
                         Icon={card.icon}
                         subText={card.subText}
                         auth={auth}
-                        metTarget={card.metTarget}
-                        message={card.message}
+                        valueColor={card.valueColor}
                     />
                 ))}
             </div>
