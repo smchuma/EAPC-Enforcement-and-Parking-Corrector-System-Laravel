@@ -2,6 +2,13 @@ import { useState } from "react";
 import TextInput from "../TextInput";
 import { CiSearch } from "react-icons/ci";
 import PrimaryButton from "../PrimaryButton";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+} from "../ui/dialog";
 
 const ReportTable = ({ reports }) => {
     const [filteredReports, setFilteredReports] = useState(reports.data);
@@ -142,6 +149,48 @@ const ReportTable = ({ reports }) => {
                     <h1 className="mt-10 font-semibold text-center">
                         No Reports Found
                     </h1>
+                )}
+                {selectedReport && (
+                    <Dialog
+                        open={Boolean(selectedReport)}
+                        onOpenChange={closeModal}
+                    >
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>
+                                    Control Numbers Details
+                                </DialogTitle>
+                                <DialogDescription>
+                                    <div className="space-y-4">
+                                        {selectedReport.control_number.map(
+                                            (control) => (
+                                                <div
+                                                    key={control.id}
+                                                    className="flex justify-between border-b border-gray-300 py-2"
+                                                >
+                                                    <span>
+                                                        Control Number:{" "}
+                                                        {control.control_number}
+                                                    </span>
+                                                    <span>
+                                                        Amount: {control.amount}
+                                                    </span>
+                                                </div>
+                                            )
+                                        )}
+                                    </div>
+                                    <div className="mt-6">
+                                        <button
+                                            onClick={closeModal}
+                                            className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+                                        >
+                                            Close
+                                        </button>
+                                    </div>
+                                </DialogDescription>
+                            </DialogHeader>
+                        </DialogContent>
+                    </Dialog>
                 )}
             </div>
         </main>

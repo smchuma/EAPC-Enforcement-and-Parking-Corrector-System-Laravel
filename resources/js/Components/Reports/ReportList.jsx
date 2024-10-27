@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
     Dialog,
     DialogContent,
@@ -13,6 +13,10 @@ const ReportList = ({ reports, auth }) => {
     const [filteredReports, setFilteredReports] = useState(reports.data);
     const [searchDate, setSearchDate] = useState("");
     const [selectedReport, setSelectedReport] = useState(null);
+
+    useEffect(() => {
+        setFilteredReports(reports.data);
+    }, [reports]);
 
     const handleSearch = () => {
         if (searchDate) {
@@ -69,7 +73,7 @@ const ReportList = ({ reports, auth }) => {
 
             {/* Table */}
             <table className="min-w-full table-auto border-collapse">
-                <thead className="blu text-white">
+                <thead className="bg-gray-900 text-white">
                     <tr>
                         <th className="border p-2">Date</th>
 
