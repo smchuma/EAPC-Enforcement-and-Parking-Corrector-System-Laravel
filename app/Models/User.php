@@ -48,22 +48,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function isAdmin()
-    {
-        return $this->role === 'admin';
-    }
-
-    public function isCollector()
-    {
-        return $this->role === 'collector';
-    }
-
-    public function isEnforcer()
-    {
-        return $this->role === 'enforcer';
-    }
-
-
     public function reports() {
         return $this->hasMany(Report::class);
     }
