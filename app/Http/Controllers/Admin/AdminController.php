@@ -99,4 +99,36 @@ class AdminController extends Controller
 
 }
 
+public function ViewTargets(Request $request) {
+
+    $query = User::query();
+
+    if($request->has('search')) {
+        $search = $request->get('search');
+        $query->where('first_name', 'LIKE', "%{$search}%");
+    }
+
+    return Inertia::render("Admin/Targets", [
+       "users"=> $query->orderByDesc('created_at')->paginate(5),
+    ]);
+}
+
+
+public function add_target(Request $request, $id)
+{
+    $user = User::findOrFail($id);
+
+    $user->street = $request->input('street');
+    $user->target = $request->input('target');
+    $user->control_number_target = $request->input('control_number_target');
+
+
+
+    $user->save();
+
+
+    return redirect()->back()->with('success','Target added successfully');
+
+}
+
 }

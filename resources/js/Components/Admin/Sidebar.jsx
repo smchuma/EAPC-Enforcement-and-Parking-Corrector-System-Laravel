@@ -3,7 +3,7 @@ import { BiSolidReport } from "react-icons/bi";
 import SidebarItem from "./SidebarItem";
 import ApplicationLogo from "../ApplicationLogo";
 import { FaUsers } from "react-icons/fa";
-import { HiUsers } from "react-icons/hi2";
+import { FiTarget } from "react-icons/fi";
 
 const Sidebar = () => {
     const sidebarItem = [
@@ -15,20 +15,20 @@ const Sidebar = () => {
         },
         {
             id: 2,
-            name: "Reports Management",
+            name: "Reports",
             icon: <BiSolidReport size={20} />,
             link: "/admin/reports",
         },
 
         {
             id: 4,
-            name: "Employees Management",
-            icon: <HiUsers size={20} />,
-            link: "/admin/employees",
+            name: "Target",
+            icon: <FiTarget size={20} />,
+            link: "/admin/targets",
         },
         {
             id: 5,
-            name: "Users Management",
+            name: "Users",
             icon: <FaUsers size={20} />,
             link: "/admin/users",
         },
