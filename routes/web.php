@@ -59,7 +59,9 @@ Route::group(['prefix' => 'admin'], function() {
 
         Route::get('/users', [AdminController::class, 'viewUsers'])->name('admin.viewUsers');
         Route::post('/users/store', [AdminController::class, 'storeUser'])->name('admin.storeUser');
-        Route::put('/users/update', [AdminController::class, 'store'])->name('admin.updateUsers');
+        Route::put('/users/update/{id}', [AdminController::class, 'updateUser'])->name('admin.updateUsers');
+        Route::delete('/users/delete/{id}', [AdminController::class, 'destroy_user'] )->name('admin.destroy_user');
+
     });
 });
 

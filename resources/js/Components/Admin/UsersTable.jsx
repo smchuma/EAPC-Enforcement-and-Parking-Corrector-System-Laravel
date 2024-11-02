@@ -2,11 +2,42 @@ import React, { useEffect, useState } from "react";
 import TextInput from "../TextInput";
 import { CiSearch } from "react-icons/ci";
 import { FaEllipsisVertical } from "react-icons/fa6";
+import Dropdown from "../Dropdown";
+import { MdOutlineEdit } from "react-icons/md";
+import { BsTrash } from "react-icons/bs";
+import Swal from "sweetalert2";
+import { useForm } from "@inertiajs/react";
 
 const UsersTable = ({ users }) => {
     const [search, setSearch] = useState("");
 
     const [filteredData, setFilteredData] = useState(users.data);
+    const { delete: destroy } = useForm();
+
+    // delete a user
+
+    const handleDelete = (user) => {
+        Swal.fire({
+            title: `${user.first_name} ${user.last_name}`,
+            text: `Are you sure you want to delete this user`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "No, keep it",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                destroy(route("admin.destroy_user", user.id), {
+                    preserveScroll: true,
+                    onSuccess: () => {
+                        setFilteredData(
+                            filteredData.filter((v) => v.id !== user.id)
+                        );
+                    },
+                });
+                Swal.fire("Deleted!", "The user  has been deleted.", "success");
+            }
+        });
+    };
 
     useEffect(() => {
         setFilteredData(
@@ -49,9 +80,6 @@ const UsersTable = ({ users }) => {
                         <tr className="bg-blue-700 text-white">
                             <th className="py-4 pl-2">First Name</th>
                             <th>Last Name</th>
-                            <th>Target</th>
-                            <th>Control Number Target</th>
-                            <th>Mtaa</th>
                             <th>Phone Number</th>
                             <th>Email</th>
                             <th>Role</th>
@@ -71,17 +99,6 @@ const UsersTable = ({ users }) => {
                                     {user.last_name}
                                 </td>
                                 <td className="text-center border-r-2 border-gray-200 p-3">
-                                    {user.target === null ? "N/A" : user.target}
-                                </td>
-                                <td className="text-center border-r-2 border-gray-200 p-3">
-                                    {user.target === null
-                                        ? "N/A"
-                                        : user.control_number_target}
-                                </td>
-                                <td className="text-center border-r-2 border-gray-200 p-3">
-                                    {user.street === null ? "N/A" : user.street}
-                                </td>
-                                <td className="text-center border-r-2 border-gray-200 p-3">
                                     {user.phone_number}
                                 </td>
                                 <td className="text-center border-r-2 border-gray-200">
@@ -91,8 +108,32 @@ const UsersTable = ({ users }) => {
                                     {user.role}
                                 </td>
 
-                                <td className="flex justify-center mt-4 text-gray-500 border-r-2 border-gray-200 ">
-                                    <FaEllipsisVertical />
+                                <td className="flex justify-center mt-4 text-gray-500 border-r-2 border-gray-200 cursor-pointer ">
+                                    <Dropdown>
+                                        <Dropdown.Trigger>
+                                            <FaEllipsisVertical />
+                                        </Dropdown.Trigger>
+
+                                        <Dropdown.Content>
+                                            <Dropdown.Link>
+                                                <div className="flex items-center gap-x-2 cursor-pointer">
+                                                    <MdOutlineEdit />
+                                                    Edit
+                                                </div>
+                                            </Dropdown.Link>
+                                            <Dropdown.Link>
+                                                <div
+                                                    className="flex items-center gap-x-2 text-red-600"
+                                                    onClick={(e) => {
+                                                        handleDelete(user);
+                                                    }}
+                                                >
+                                                    <BsTrash />
+                                                    Delete
+                                                </div>
+                                            </Dropdown.Link>
+                                        </Dropdown.Content>
+                                    </Dropdown>
                                 </td>
                             </tr>
                         ))}

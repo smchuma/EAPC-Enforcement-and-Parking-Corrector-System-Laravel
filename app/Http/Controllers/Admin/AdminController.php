@@ -60,5 +60,18 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'User created successfully.');
     }
 
+    ///delete a user
+
+    public function destroy_user($id)
+    {
+
+        $user = User::findOrFail($id);
+
+        $user->delete();
+
+        return redirect()->back()->with('success', 'User deleted successfully.');
+    }
+
+    public function updateUser() {}
 
 }

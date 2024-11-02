@@ -8,10 +8,10 @@ export const ToastProvider = ({ children }) => {
     const { session } = usePage().props;
 
     useEffect(() => {
-        if (session.success) {
+        if (session?.success) {
             toast.success(session.success);
         }
-        if (session.error) {
+        if (session?.error) {
             toast.error(session.error);
         }
     }, [session]);
