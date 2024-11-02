@@ -7,7 +7,7 @@ import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
 import { Head, Link, useForm, usePage } from "@inertiajs/react";
 
-export default function Login({ status, canResetPassword, error }) {
+export default function AdminLogin({ status, canResetPassword, error }) {
     const { data, setData, post, processing, errors, reset } = useForm({
         email: "",
         password: "",
@@ -24,7 +24,7 @@ export default function Login({ status, canResetPassword, error }) {
     const submit = (e) => {
         e.preventDefault();
 
-        post(route("login"));
+        post(route("admin.login"));
     };
 
     const closeError = () => {
@@ -33,7 +33,7 @@ export default function Login({ status, canResetPassword, error }) {
 
     return (
         <GuestLayout>
-            <Head title="Log in" />
+            <Head title="Admin Log in" />
 
             {status && (
                 <div className="mb-4 font-medium text-sm text-green-600">
@@ -46,8 +46,8 @@ export default function Login({ status, canResetPassword, error }) {
                     className="mb-5 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
                     role="alert"
                 >
-                    <span className="block sm:inline">{error}</span>
-                    <span className="absolute top-0 bottom-0 right-0 px-4 py-3">
+                    <span class="block sm:inline">{error}</span>
+                    <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
                         <svg
                             class="fill-current h-6 w-6 text-red-500"
                             role="button"
@@ -61,6 +61,7 @@ export default function Login({ status, canResetPassword, error }) {
                     </span>
                 </div>
             )}
+            <h1 className="text-center text-xl">Admin</h1>
 
             <form onSubmit={submit}>
                 <div>

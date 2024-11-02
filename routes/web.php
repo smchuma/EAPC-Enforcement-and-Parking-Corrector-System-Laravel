@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\admin\AdminLoginController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Taarifa\ReportController;
@@ -28,9 +29,9 @@ use Inertia\Inertia;
 
 //collector & enforcer
 
-Route::redirect('/register', '/login');
 
-Route::middleware( ['auth'])->group(function () {
+
+Route::middleware( ['auth', 'admin.redirect'])->group(function () {
     Route::get('/', [TaarifaController::class, 'index'])->name('taarifa.index');
     Route::get('/ripoti', [ReportController::class, 'index'])->name('report.index');
     Route::post('/ripoti', [ReportController::class, 'store'])->name('report.store');
@@ -42,16 +43,27 @@ Route::middleware( ['auth'])->group(function () {
 });
 
 
-// admin
+// admin routes
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-    Route::get('/admin/users', [AdminController::class, 'manageUsers'])->name('admin.users');
-    Route::post('/admin/users', [AdminController::class, 'storeUser'])->name('admin.users.store');
-    Route::get('/admin/reports', [ReportController::class, 'adminReports'])->name('admin.reports');
-    Route::get('/users', [UserController::class, 'index'])->name('users.index');
-    Route::post('/users', [UserController::class, 'store'])->name('users.store');
+Route::group(['prefix' => 'admin'], function() {
+
+    Route::group(['middleware' => 'admin.guest'], function() {
+
+        Route::get("/login", [AdminLoginController::class,"index"])->name("admin.login");
+        Route::post('/login', [AdminLoginController:: class, 'authenticate'])->name('admin.authenticate');
+    });
+
+    Route::group(['middleware' => 'admin.auth'], function() {
+        Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+        Route::get('/reports', [ReportController::class, 'adminReports'])->name('admin.reports');
+
+        Route::get('/users', [AdminController::class, 'viewUsers'])->name('admin.viewUsers');
+        Route::post('/users/store', [AdminController::class, 'storeUser'])->name('admin.storeUser');
+        Route::put('/users/update', [AdminController::class, 'store'])->name('admin.updateUsers');
+    });
 });
+
+
 
 
 

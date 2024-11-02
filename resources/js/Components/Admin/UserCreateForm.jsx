@@ -19,9 +19,6 @@ const UserCreateForm = () => {
         first_name: "",
         last_name: "",
         phone_number: "",
-        target: "",
-        control_number_target: "",
-        street: "",
         email: "",
         role: "",
         password: "",
@@ -31,7 +28,7 @@ const UserCreateForm = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        post(route("users.store", { preserveScroll: true }), {
+        post(route("admin.storeUser", { preserveScroll: true }), {
             onSuccess: () => {
                 reset();
                 setOpen(false);
@@ -172,64 +169,7 @@ const UserCreateForm = () => {
                                             />
                                         </div>
                                     </div>
-                                    <div className="-mx-3 md:flex mb-2">
-                                        <div className="md:w-1/2 px-3 mb-6 md:mb-0">
-                                            <InputLabel
-                                                className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
-                                                htmlFor="grid-target"
-                                                required
-                                            >
-                                                Target
-                                            </InputLabel>
-                                            <TextInput
-                                                className="placeholder:text-sm appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3"
-                                                id="grid-target"
-                                                type="text"
-                                                value={data.target}
-                                                onChange={(e) =>
-                                                    setData(
-                                                        "target",
-                                                        e.target.value
-                                                    )
-                                                }
-                                                placeholder="Enter the Target"
-                                            />
-                                            <InputError
-                                                message={errors.target}
-                                                className="mt-2"
-                                            />
-                                        </div>
-                                        <div className="md:w-1/2 px-3">
-                                            <InputLabel
-                                                className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
-                                                htmlFor="grid-control-number-target"
-                                                required
-                                            >
-                                                Control number target
-                                            </InputLabel>
-                                            <TextInput
-                                                className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 placeholder:text-sm"
-                                                id="grid-street"
-                                                type="text"
-                                                placeholder="Enter Control Number Target"
-                                                value={
-                                                    data.control_number_target
-                                                }
-                                                onChange={(e) =>
-                                                    setData(
-                                                        "control_number_target",
-                                                        e.target.value
-                                                    )
-                                                }
-                                            />
-                                            <InputError
-                                                message={
-                                                    errors.control_number_target
-                                                }
-                                                className="mt-2"
-                                            />
-                                        </div>
-                                    </div>
+
                                     <div className="-mx-3 md:flex mb-2">
                                         <div className="md:w-1/2 px-3 mb-6 md:mb-0">
                                             <InputLabel
@@ -257,12 +197,6 @@ const UserCreateForm = () => {
                                                     Select
                                                 </option>
                                                 <option
-                                                    value="admin"
-                                                    className="text-sm"
-                                                >
-                                                    Admin
-                                                </option>
-                                                <option
                                                     value="enforcer"
                                                     className="text-sm"
                                                 >
@@ -280,36 +214,7 @@ const UserCreateForm = () => {
                                                 className="mt-2"
                                             />
                                         </div>
-
-                                        <div className="md:w-1/2 px-3">
-                                            <InputLabel
-                                                className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
-                                                htmlFor="grid-mtaa"
-                                                required
-                                            >
-                                                MTAA
-                                            </InputLabel>
-                                            <TextInput
-                                                className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 placeholder:text-sm"
-                                                id="grid-street"
-                                                type="text"
-                                                placeholder="Enter Mtaa"
-                                                value={data.street}
-                                                onChange={(e) =>
-                                                    setData(
-                                                        "street",
-                                                        e.target.value
-                                                    )
-                                                }
-                                            />
-                                            <InputError
-                                                message={errors.street}
-                                                className="mt-2"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="-mx-3 md:flex mb-2">
-                                        <div className="md:w-1/2 px-3">
+                                        <div className="md:w-1/2 px-3 mb-6 md:mb-0">
                                             <InputLabel
                                                 className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
                                                 htmlFor="grid-password"

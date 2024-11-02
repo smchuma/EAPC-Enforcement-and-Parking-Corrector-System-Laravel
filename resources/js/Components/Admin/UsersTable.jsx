@@ -6,11 +6,11 @@ import { FaEllipsisVertical } from "react-icons/fa6";
 const UsersTable = ({ users }) => {
     const [search, setSearch] = useState("");
 
-    const [filteredData, setFilteredData] = useState(users);
+    const [filteredData, setFilteredData] = useState(users.data);
 
     useEffect(() => {
         setFilteredData(
-            users
+            users.data
                 .filter(
                     (user) =>
                         user.first_name
@@ -25,7 +25,7 @@ const UsersTable = ({ users }) => {
                 )
                 .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
         );
-    }, [search, users]);
+    }, [search, users.data]);
 
     const handleSearch = (e) => {
         setSearch(e.target.value);
