@@ -72,6 +72,31 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'User deleted successfully.');
     }
 
-    public function updateUser() {}
+
+    // update a user
+
+    public function update_user(Request $request, $id)
+{
+    $user = User::findOrFail($id);
+
+    $request->validate([
+        'first_name' => 'required|string|max:255',
+        'last_name' => 'required|string|max:255',
+        'role' => 'required|in:enforcer,collector,admin'
+
+    ]);
+
+
+    $user->first_name = $request->input('first_name');
+    $user->last_name = $request->input('last_name');
+    $user->role = $request->input('role');
+
+
+    $user->save();
+
+
+    return redirect()->back()->with('success','User updated successfully');
+
+}
 
 }

@@ -2,17 +2,24 @@ import React, { useEffect, useState } from "react";
 import TextInput from "../TextInput";
 import { CiSearch } from "react-icons/ci";
 import { FaEllipsisVertical } from "react-icons/fa6";
-import Dropdown from "../Dropdown";
-import { MdOutlineEdit } from "react-icons/md";
 import { BsTrash } from "react-icons/bs";
 import Swal from "sweetalert2";
 import { useForm } from "@inertiajs/react";
+import EditUser from "./EditUser";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
 const UsersTable = ({ users }) => {
     const [search, setSearch] = useState("");
 
     const [filteredData, setFilteredData] = useState(users.data);
     const { delete: destroy } = useForm();
+    const [open, setOpen] = useState(false);
 
     // delete a user
 
@@ -44,15 +51,17 @@ const UsersTable = ({ users }) => {
             users.data
                 .filter(
                     (user) =>
-                        user.first_name
+                        (user.role === "enforcer" ||
+                            user.role === "collector") &&
+                        (user.first_name
                             .toLowerCase()
                             .includes(search.toLowerCase()) ||
-                        user.last_name
-                            .toLowerCase()
-                            .includes(search.toLowerCase()) ||
-                        user.phone_number
-                            .toLowerCase()
-                            .includes(search.toLowerCase())
+                            user.last_name
+                                .toLowerCase()
+                                .includes(search.toLowerCase()) ||
+                            user.phone_number
+                                .toLowerCase()
+                                .includes(search.toLowerCase()))
                 )
                 .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
         );
@@ -109,31 +118,35 @@ const UsersTable = ({ users }) => {
                                 </td>
 
                                 <td className="flex justify-center mt-4 text-gray-500 border-r-2 border-gray-200 cursor-pointer ">
-                                    <Dropdown>
-                                        <Dropdown.Trigger>
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger>
                                             <FaEllipsisVertical />
-                                        </Dropdown.Trigger>
-
-                                        <Dropdown.Content>
-                                            <Dropdown.Link>
-                                                <div className="flex items-center gap-x-2 cursor-pointer">
-                                                    <MdOutlineEdit />
-                                                    Edit
-                                                </div>
-                                            </Dropdown.Link>
-                                            <Dropdown.Link>
-                                                <div
-                                                    className="flex items-center gap-x-2 text-red-600"
-                                                    onClick={(e) => {
-                                                        handleDelete(user);
-                                                    }}
-                                                >
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent>
+                                            <DropdownMenuLabel
+                                                className="hover:bg-gray-100 cursor-pointer w-full"
+                                                onClick={(e) => setOpen(true)}
+                                            >
+                                                <EditUser
+                                                    open={open}
+                                                    setOpen={setOpen}
+                                                    user={user}
+                                                />
+                                            </DropdownMenuLabel>
+                                            <DropdownMenuSeparator />
+                                            <DropdownMenuLabel
+                                                className="hover:bg-gray-100 cursor-pointer w-full"
+                                                onClick={(e) => {
+                                                    handleDelete(user);
+                                                }}
+                                            >
+                                                <div className="flex items-center gap-x-2 text-red-600">
                                                     <BsTrash />
                                                     Delete
                                                 </div>
-                                            </Dropdown.Link>
-                                        </Dropdown.Content>
-                                    </Dropdown>
+                                            </DropdownMenuLabel>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
                                 </td>
                             </tr>
                         ))}
