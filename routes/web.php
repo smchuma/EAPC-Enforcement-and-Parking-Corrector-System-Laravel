@@ -61,6 +61,7 @@ Route::group(['prefix' => 'admin'], function() {
         Route::post('/users/store', [AdminController::class, 'storeUser'])->name('admin.storeUser');
         Route::put('/user/update/{id}', [AdminController::class, 'update_user'])->name('admin.update_user');
         Route::delete('/user/delete/{id}', [AdminController::class, 'destroy_user'] )->name('admin.destroy_user');
+        Route::post('/add_report', [ReportController::class, 'store'])->name('admin.add_report');
 
         Route::get('/targets', [AdminController::class, 'viewTargets'])->name('admin.view_targets');
         Route::put('/targets/{id}', [AdminController::class, 'add_target'])->name('admin.add_target');

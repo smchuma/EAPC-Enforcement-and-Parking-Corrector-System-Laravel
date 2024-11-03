@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Taarifa;
 use App\Http\Controllers\Controller;
 use App\Models\ControlNumber;
 use App\Models\Report;
+use App\Models\User;
 use App\Rules\ControlNumberUnique;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,10 +31,8 @@ class ReportController extends Controller
 
     public function store(Request $request) {
 
-
-
-
         $request->validate([
+            'user_id' => 'nullable|exists:users,id',
             'daily_sales' => 'nullable|numeric',
             'control_numbers' => 'required|array',
             'control_numbers.*.number' => [
@@ -47,7 +46,8 @@ class ReportController extends Controller
             'control_numbers.*.number.regex' => 'Mpangilio wa control number hauko sahihi',
         ]);
 
-        // dd($request->all());m
+        $userId = $request->input('user_id') ?: Auth::id();
+
 
          $imagePath = null;
          if ($request->hasFile('sales_proof_image')) {
@@ -56,7 +56,7 @@ class ReportController extends Controller
 
            // Create the report
         $report = Report::create([
-            'user_id' => Auth::id(),
+            'user_id' => $userId,
             'daily_sales' => $request->input('daily_sales'),
             'sales_proof_image' => $imagePath,
         ]);
@@ -88,6 +88,7 @@ class ReportController extends Controller
     public function adminReports(Request $request) {
 
         $query = Report::query();
+        $users = User::get();
 
         if($request->has('search')) {
             $search = $request->get('search');
@@ -96,10 +97,12 @@ class ReportController extends Controller
 
         return Inertia::render("Admin/Reports", [
            "reports"=> $query->with("control_number", "user")->orderByDesc('created_at')->paginate(5),
+           "users" => $users
         ]);
     }
 
 
+    public function adminAddReport(){}
 
 
 }

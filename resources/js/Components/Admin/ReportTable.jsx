@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TextInput from "../TextInput";
 import { CiSearch } from "react-icons/ci";
 import PrimaryButton from "../PrimaryButton";
@@ -14,6 +14,23 @@ const ReportTable = ({ reports }) => {
     const [filteredReports, setFilteredReports] = useState(reports.data);
     const [searchDate, setSearchDate] = useState("");
     const [selectedReport, setSelectedReport] = useState(null);
+    const [search, setSearch] = useState("");
+
+    useEffect(() => {
+        setFilteredReports(
+            reports.data
+                .filter(
+                    (report) =>
+                        report.user.first_name
+                            .toLowerCase()
+                            .includes(search.toLowerCase()) ||
+                        report.user.last_name
+                            .toLowerCase()
+                            .includes(search.toLowerCase())
+                )
+                .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+        );
+    }, [search, reports.data]);
 
     const handleSearch = () => {
         if (searchDate) {
