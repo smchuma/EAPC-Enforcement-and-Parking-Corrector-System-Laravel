@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Taarifa;
 
 use App\Http\Controllers\Controller;
 use App\Models\Report;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -16,7 +17,8 @@ class TaarifaController extends Controller
         $reports = Report::where('user_id', Auth::id());
 
         return Inertia::render("Taarifa/Home", [
-            "reports" => $reports->with('control_number')->get()
+            "reports" => $reports->with('control_number')->get(),
+
         ]);
     }
 }

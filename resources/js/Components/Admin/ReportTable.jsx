@@ -14,7 +14,6 @@ const ReportTable = ({ reports }) => {
     const [filteredReports, setFilteredReports] = useState(reports.data);
     const [searchDate, setSearchDate] = useState("");
     const [selectedReport, setSelectedReport] = useState(null);
-    const [page, setPage] = useState(reports.current_page);
 
     const handleSearch = () => {
         if (searchDate) {
@@ -31,20 +30,6 @@ const ReportTable = ({ reports }) => {
     const handleClear = () => {
         setSearchDate("");
         setFilteredReports(reports.data);
-    };
-
-    const handlePageChange = (newPage) => {
-        if (url) {
-            router.get(
-                url,
-                {},
-                {
-                    replace: true,
-                    preserveScroll: true,
-                    preserveState: true,
-                }
-            );
-        }
     };
 
     const openModal = (report) => setSelectedReport(report);

@@ -27,7 +27,9 @@ const CardsGrid = ({ auth, reports }) => {
         {
             id: 2,
             title: "MAZUO YA SIKU",
-            value: `${totalDailySales.toLocaleString()}/${auth.user.target}`,
+            value: `${totalDailySales.toLocaleString()}/${
+                auth.user.target == null ? 0 : user.target
+            }`,
             icon: FaChartLine,
             subText: "/day",
             valueColor:
