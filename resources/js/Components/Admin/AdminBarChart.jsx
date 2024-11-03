@@ -1,5 +1,4 @@
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
-
 import {
     Card,
     CardContent,
@@ -36,10 +35,11 @@ const chartConfig = {
     },
 };
 
-export default function AdminBarChart({ reports }) {
+export default function AdminBarGraph({ reports }) {
     const chartData = allMonths.map((month) => ({
         month,
         daily_sales: 0,
+        control_number_target: 0,
     }));
 
     reports.forEach((report) => {
@@ -56,6 +56,15 @@ export default function AdminBarChart({ reports }) {
                     ? parseInt(report.daily_sales, 10)
                     : 0;
                 chartData[monthIndex].daily_sales += dailySalesValue || 0;
+
+                // Accumulate control number amounts
+                if (report.control_number) {
+                    report.control_number.forEach((control) => {
+                        const controlAmount = parseFloat(control.amount) || 0;
+                        chartData[monthIndex].control_number_target +=
+                            controlAmount;
+                    });
+                }
             }
         }
     });
@@ -63,7 +72,7 @@ export default function AdminBarChart({ reports }) {
     return (
         <Card className="w-full">
             <CardHeader>
-                <CardTitle>Total Mauzo</CardTitle>
+                <CardTitle>Mauzo ya Target na Control Number</CardTitle>
                 <CardDescription>January - December 2024</CardDescription>
             </CardHeader>
             <CardContent>
