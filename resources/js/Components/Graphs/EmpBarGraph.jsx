@@ -36,26 +36,22 @@ const chartConfig = {
 };
 
 export default function EmpBarGraph({ reports }) {
-    // Initialize chart data with zero values for each month
     const chartData = allMonths.map((month) => ({
         month,
         daily_sales: 0,
         control_number_target: 0,
     }));
 
-    // Process reports data to aggregate by month
     reports.forEach((report) => {
         const reportDate = new Date(report.created_at);
         const month = isValid(reportDate) ? format(reportDate, "MMMM") : null;
 
         if (month) {
-            // Find the index of the month in the chart data
             const monthIndex = chartData.findIndex(
                 (data) => data.month === month
             );
 
             if (monthIndex !== -1) {
-                // Accumulate daily sales
                 const dailySalesValue = report.daily_sales
                     ? parseInt(report.daily_sales, 10)
                     : 0;

@@ -1,35 +1,65 @@
-import { TrendingUp } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
 import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from "../ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "../ui/chart";
+import { format, isValid } from "date-fns";
 
-export const description = "A bar chart";
-
-const chartData = [
-    { month: "January", desktop: 186 },
-    { month: "February", desktop: 305 },
-    { month: "March", desktop: 237 },
-    { month: "April", desktop: 73 },
-    { month: "May", desktop: 209 },
-    { month: "June", desktop: 214 },
+const allMonths = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
 ];
 
 const chartConfig = {
-    desktop: {
-        label: "Desktop",
+    target: {
+        label: "Target Mauzo",
         color: "hsl(var(--chart-1))",
+    },
+    control_number_target: {
+        label: "Control Number Mauzo",
+        color: "hsl(var(--chart-2))",
     },
 };
 
-export function AdminBarChart() {
+export default function AdminBarChart({ reports }) {
+    const chartData = allMonths.map((month) => ({
+        month,
+        daily_sales: 0,
+    }));
+
+    reports.forEach((report) => {
+        const reportDate = new Date(report.created_at);
+        const month = isValid(reportDate) ? format(reportDate, "MMMM") : null;
+
+        if (month) {
+            const monthIndex = chartData.findIndex(
+                (data) => data.month === month
+            );
+
+            if (monthIndex !== -1) {
+                const dailySalesValue = report.daily_sales
+                    ? parseInt(report.daily_sales, 10)
+                    : 0;
+                chartData[monthIndex].daily_sales += dailySalesValue || 0;
+            }
+        }
+    });
+
     return (
         <Card className="w-full">
             <CardHeader>
@@ -49,25 +79,21 @@ export function AdminBarChart() {
                         />
                         <ChartTooltip
                             cursor={false}
-                            content={<ChartTooltipContent hideLabel />}
+                            content={<ChartTooltipContent indicator="dashed" />}
                         />
                         <Bar
-                            dataKey="desktop"
-                            fill="var(--color-desktop)"
-                            radius={8}
+                            dataKey="daily_sales"
+                            fill="var(--color-target)"
+                            radius={4}
+                        />
+                        <Bar
+                            dataKey="control_number_target"
+                            fill="var(--color-control-number-target)"
+                            radius={4}
                         />
                     </BarChart>
                 </ChartContainer>
             </CardContent>
-            <CardFooter className="flex-col items-start gap-2 text-sm">
-                <div className="flex gap-2 font-medium leading-none">
-                    Trending up by 5.2% this month{" "}
-                    <TrendingUp className="h-4 w-4" />
-                </div>
-                <div className="leading-none text-muted-foreground">
-                    Showing total visitors for the last 6 months
-                </div>
-            </CardFooter>
         </Card>
     );
 }

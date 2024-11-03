@@ -1,11 +1,9 @@
 import { GitCommitVertical, TrendingUp } from "lucide-react";
 import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
-
 import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from "../ui/card";
@@ -13,27 +11,40 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent } from "../ui/chart";
 
 export const description = "A line chart with custom dots";
 
-const chartData = [
-    { month: "January", desktop: 186, mobile: 80 },
-    { month: "February", desktop: 305, mobile: 200 },
-    { month: "March", desktop: 237, mobile: 120 },
-    { month: "April", desktop: 73, mobile: 190 },
-    { month: "May", desktop: 209, mobile: 130 },
-    { month: "June", desktop: 214, mobile: 140 },
+// Utility to format month names for display
+const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
 ];
 
-const chartConfig = {
-    desktop: {
-        label: "Desktop",
-        color: "hsl(var(--chart-1))",
-    },
-    mobile: {
-        label: "Mobile",
-        color: "hsl(var(--chart-2))",
-    },
-};
+// Function to aggregate control number counts per month
+function aggregateControlNumbersByMonth(reports) {
+    const monthlyData = Array(12).fill(0);
 
-export function AdminLineChart() {
+    reports.forEach((report) => {
+        const month = new Date(report.created_at).getMonth();
+        monthlyData[month] += report.control_number.length;
+    });
+
+    return monthlyData.map((total, index) => ({
+        month: monthNames[index],
+        totalSales: total,
+    }));
+}
+
+export default function AdminLineChart({ reports }) {
+    const chartData = aggregateControlNumbersByMonth(reports);
+
     return (
         <Card className="w-full">
             <CardHeader>
@@ -41,14 +52,17 @@ export function AdminLineChart() {
                 <CardDescription>January - December 2024</CardDescription>
             </CardHeader>
             <CardContent>
-                <ChartContainer config={chartConfig}>
+                <ChartContainer
+                    config={{
+                        totalSales: {
+                            label: "Total Sales",
+                            color: "hsl(var(--chart-1))",
+                        },
+                    }}
+                >
                     <LineChart
-                        accessibilityLayer
                         data={chartData}
-                        margin={{
-                            left: 12,
-                            right: 12,
-                        }}
+                        margin={{ left: 12, right: 12 }}
                     >
                         <CartesianGrid vertical={false} />
                         <XAxis
@@ -63,37 +77,24 @@ export function AdminLineChart() {
                             content={<ChartTooltipContent hideLabel />}
                         />
                         <Line
-                            dataKey="desktop"
+                            dataKey="totalSales"
                             type="natural"
                             stroke="var(--color-desktop)"
                             strokeWidth={2}
-                            dot={({ cx, cy, payload }) => {
-                                const r = 24;
-                                return (
-                                    <GitCommitVertical
-                                        key={payload.month}
-                                        x={cx - r / 2}
-                                        y={cy - r / 2}
-                                        width={r}
-                                        height={r}
-                                        fill="hsl(var(--background))"
-                                        stroke="var(--color-desktop)"
-                                    />
-                                );
-                            }}
+                            dot={({ cx, cy, payload }) => (
+                                <GitCommitVertical
+                                    x={cx - 12}
+                                    y={cy - 12}
+                                    width={24}
+                                    height={24}
+                                    fill="hsl(var(--background))"
+                                    stroke="var(--color-desktop)"
+                                />
+                            )}
                         />
                     </LineChart>
                 </ChartContainer>
             </CardContent>
-            <CardFooter className="flex-col items-start gap-2 text-sm">
-                <div className="flex gap-2 font-medium leading-none">
-                    Trending up by 5.2% this month{" "}
-                    <TrendingUp className="h-4 w-4" />
-                </div>
-                <div className="leading-none text-muted-foreground">
-                    Showing total visitors for the last 6 months
-                </div>
-            </CardFooter>
         </Card>
     );
 }
