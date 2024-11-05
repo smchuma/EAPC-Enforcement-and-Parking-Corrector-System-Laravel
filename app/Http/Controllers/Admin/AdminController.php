@@ -18,7 +18,7 @@ class AdminController extends Controller
     public function dashboard()
     {
 
-        $reports = Report::with("control_number")->get();
+        $reports = Report::with("control_number", "user")->get();
 
         return Inertia::render('Admin/Dashboard', [
             "reports" => $reports

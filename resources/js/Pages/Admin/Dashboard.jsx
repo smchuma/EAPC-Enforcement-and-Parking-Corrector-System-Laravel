@@ -1,6 +1,5 @@
+import AdminAllGraph from "@/Components/Admin/AdminAllGraph";
 import AdminBarChart from "@/Components/Admin/AdminBarChart";
-import AdminLineChart from "@/Components/Admin/AdminLineChart";
-import EmpPieChart from "@/Components/Graphs/EmpPieChart";
 import AdminLayout from "@/Layouts/AdminLayout";
 
 export default function Dashboard({ reports }) {
@@ -12,7 +11,8 @@ export default function Dashboard({ reports }) {
                 <div className="flex flex-col lg:flex-row gap-5 px-8  w-full">
                     <AdminBarChart reports={reports} />
                     {/* <AdminLineChart reports={reports} /> */}
-                    <EmpPieChart />
+                    {/* <EmpPieChart /> */}
+                    <AdminAllGraph reports={reports} />
                 </div>
             </main>
         </AdminLayout>
