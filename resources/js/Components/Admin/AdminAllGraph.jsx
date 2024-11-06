@@ -1,4 +1,3 @@
-import { TrendingUp } from "lucide-react";
 import {
     Bar,
     BarChart,
@@ -15,7 +14,7 @@ import {
     CardHeader,
     CardTitle,
 } from "../ui/card";
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "../ui/chart";
+import { ChartContainer, ChartTooltipContent } from "../ui/chart";
 
 // Function to aggregate report data by user
 const aggregateReports = (reports) => {
