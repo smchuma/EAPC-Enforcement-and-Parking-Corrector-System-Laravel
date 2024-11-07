@@ -51,7 +51,7 @@ const UsersTable = ({ users }) => {
             users.data
                 .filter(
                     (user) =>
-                        (user.role === "enforcer" ||
+                        (user.role === "enforcement" ||
                             user.role === "collector") &&
                         (user.first_name
                             .toLowerCase()

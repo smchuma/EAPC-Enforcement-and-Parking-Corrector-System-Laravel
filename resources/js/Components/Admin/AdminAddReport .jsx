@@ -58,6 +58,7 @@ const AdminAddReport = ({ users }) => {
             },
         });
     };
+    const filteredUsers = users.filter((user) => user.role !== "admin");
 
     return (
         <div>
@@ -94,7 +95,7 @@ const AdminAddReport = ({ users }) => {
                                     className="p-2 border border-gray-400 rounded"
                                 >
                                     <option value="">Chagua...</option>
-                                    {users.map((user) => (
+                                    {filteredUsers.map((user) => (
                                         <option key={user.id} value={user.id}>
                                             {user.first_name} {user.last_name}
                                         </option>
@@ -203,6 +204,17 @@ const AdminAddReport = ({ users }) => {
                                                         className="p-2 border border-gray-400 rounded"
                                                         placeholder="Ingiza Control Number"
                                                     />
+                                                    {errors[
+                                                        `control_numbers.${index}.number`
+                                                    ] && (
+                                                        <span className="text-red-500 mt-1">
+                                                            {
+                                                                errors[
+                                                                    `control_numbers.${index}.number`
+                                                                ]
+                                                            }
+                                                        </span>
+                                                    )}
                                                 </div>
 
                                                 {/* Amount */}

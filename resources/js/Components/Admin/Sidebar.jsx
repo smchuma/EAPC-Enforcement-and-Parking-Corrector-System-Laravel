@@ -17,7 +17,14 @@ const Sidebar = () => {
             id: 2,
             name: "Reports",
             icon: <BiSolidReport size={20} />,
-            link: "/admin/reports",
+            subItems: [
+                { id: "2a", name: "Full Report", link: "/admin/full-report" },
+                {
+                    id: "2b",
+                    name: "Target Report",
+                    link: "/admin/target-report",
+                },
+            ],
         },
 
         {

@@ -9,7 +9,7 @@ const AdminNavbar = () => {
     const pageTitle = title.split("/")[1];
 
     return (
-        <nav className="bg-gray-100 shadow-md flex justify-between px-3 items-center py-3 fixed top-0 w-full lg:w-[calc(100%-18rem)]">
+        <nav className="bg-gray-100 shadow-md flex justify-between px-3 items-center py-3 fixed top-0 w-full lg:w-[calc(100%-18rem)] z-[50]">
             <div className="flex gap-x-2">
                 <GiHamburgerMenu size={24} className="ham" />
                 <h1>{pageTitle}</h1>

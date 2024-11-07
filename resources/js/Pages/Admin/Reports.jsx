@@ -5,7 +5,7 @@ import AdminLayout from "@/Layouts/AdminLayout";
 const Reports = ({ reports, users }) => {
     return (
         <AdminLayout>
-            <main className="pt-12">
+            <main className="pt-8">
                 <div className="flex justify-end pr-6 pb-5">
                     <AdminAddReport users={users} />
                 </div>

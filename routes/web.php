@@ -55,7 +55,8 @@ Route::group(['prefix' => 'admin'], function() {
 
     Route::group(['middleware' => 'admin.auth'], function() {
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-        Route::get('/reports', [ReportController::class, 'adminReports'])->name('admin.reports');
+        Route::get('/full-report', [ReportController::class, 'adminReports'])->name('admin.reports');
+        Route::get('/target-report', [ReportController::class, 'target_report'])->name('admin.target_reports');
 
         Route::get('/users', [AdminController::class, 'viewUsers'])->name('admin.viewUsers');
         Route::post('/users/store', [AdminController::class, 'storeUser'])->name('admin.storeUser');

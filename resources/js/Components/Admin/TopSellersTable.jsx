@@ -65,19 +65,19 @@ export default function TopSellersTable({ reports }) {
                     <tbody>
                         {sortedUsers.map((user, index) => (
                             <tr key={index} className="hover:bg-gray-100">
-                                <td className="px-4 py-2 border-b">
+                                <td className="px-4 py-2 border-b text-center">
                                     {user.name}
                                 </td>
-                                <td className="px-4 py-2 border-b">
+                                <td className="px-4 py-2 border-b text-center">
                                     {user.role}
                                 </td>
-                                <td className="px-4 py-2 border-b">
+                                <td className="px-4 py-2 border-b text-center">
                                     {user.totalDailySales}
                                 </td>
-                                <td className="px-4 py-2 border-b">
+                                <td className="px-4 py-2 border-b text-center">
                                     {user.totalControlSales}
                                 </td>
-                                <td className="px-4 py-2 border-b font-bold">
+                                <td className="px-4 py-2 border-b font-bold text-center">
                                     {user.totalDailySales +
                                         user.totalControlSales}
                                 </td>

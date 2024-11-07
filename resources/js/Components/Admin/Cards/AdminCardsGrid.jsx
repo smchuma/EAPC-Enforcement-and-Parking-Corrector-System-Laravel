@@ -18,25 +18,29 @@ const AdminCardsGrid = ({ reports }) => {
         );
     }, 0);
 
+    const total = totalDailySales + totalControlNumberSales;
+
     const cardData = [
         {
             id: 1,
-            title: "Mauzo",
-            value: ``,
+            title: "MAUZO YA SIKU",
+            value: `${totalDailySales.toLocaleString()}
+            `,
             icon: FiTrendingUp,
             subText: "TSH",
         },
         {
             id: 2,
-            title: "MAuzo ya Control Number",
-            value: ``,
+            title: "MAUZO YA CONTROL NUMBER",
+            value: `${totalControlNumberSales.toLocaleString()}`,
+
             icon: AiOutlineDollarCircle,
             subText: "TSH",
         },
         {
             id: 3,
-            title: "Jumla",
-            value: "",
+            title: "JUMLA",
+            value: `${total.toLocaleString()}`,
             icon: MdOutlineAssessment,
             subText: "TSH",
         },

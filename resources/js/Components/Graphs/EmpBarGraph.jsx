@@ -9,21 +9,6 @@ import {
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "../ui/chart";
 import { format, isValid } from "date-fns";
 
-const allMonths = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-];
-
 const chartConfig = {
     target: {
         label: "Target Mauzo",
@@ -36,38 +21,40 @@ const chartConfig = {
 };
 
 export default function EmpBarGraph({ reports }) {
-    const chartData = allMonths.map((month) => ({
-        month,
-        daily_sales: 0,
-        control_number_target: 0,
-    }));
+    const monthlyData = {};
 
     reports.forEach((report) => {
         const reportDate = new Date(report.created_at);
         const month = isValid(reportDate) ? format(reportDate, "MMMM") : null;
 
         if (month) {
-            const monthIndex = chartData.findIndex(
-                (data) => data.month === month
-            );
+            // Initialize the month in monthlyData if it doesn't exist
+            if (!monthlyData[month]) {
+                monthlyData[month] = {
+                    month,
+                    daily_sales: 0,
+                    control_number_target: 0,
+                };
+            }
 
-            if (monthIndex !== -1) {
-                const dailySalesValue = report.daily_sales
-                    ? parseInt(report.daily_sales, 10)
-                    : 0;
-                chartData[monthIndex].daily_sales += dailySalesValue || 0;
+            // Accumulate daily sales
+            const dailySalesValue = report.daily_sales
+                ? parseInt(report.daily_sales, 10)
+                : 0;
+            monthlyData[month].daily_sales += dailySalesValue;
 
-                // Accumulate control number amounts
-                if (report.control_number) {
-                    report.control_number.forEach((control) => {
-                        const controlAmount = parseFloat(control.amount) || 0;
-                        chartData[monthIndex].control_number_target +=
-                            controlAmount;
-                    });
-                }
+            // Accumulate control number amounts
+            if (report.control_number) {
+                report.control_number.forEach((control) => {
+                    const controlAmount = parseFloat(control.amount) || 0;
+                    monthlyData[month].control_number_target += controlAmount;
+                });
             }
         }
     });
+
+    // Convert the accumulated data in monthlyData to an array for charting
+    const chartData = Object.values(monthlyData);
 
     return (
         <Card className="w-full lg:w-[50%]">
@@ -97,7 +84,7 @@ export default function EmpBarGraph({ reports }) {
                         />
                         <Bar
                             dataKey="control_number_target"
-                            fill="var(--color-control-number-target)"
+                            fill="#0d8a6f"
                             radius={4}
                         />
                     </BarChart>

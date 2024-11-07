@@ -191,10 +191,10 @@ const UserCreateForm = () => {
                                                 Select
                                             </option>
                                             <option
-                                                value="enforcer"
+                                                value="enforcement"
                                                 className="text-sm"
                                             >
-                                                Enforcer
+                                                Enforcement
                                             </option>
                                             <option
                                                 value="collector"

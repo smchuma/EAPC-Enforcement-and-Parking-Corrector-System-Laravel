@@ -101,8 +101,21 @@ class ReportController extends Controller
         ]);
     }
 
+    public function target_report(Request $request) {
 
-    public function adminAddReport(){}
+        $query = Report::query();
+        $users = User::get();
+
+        if($request->has('search')) {
+            $search = $request->get('search');
+            $query->whereDate('created_at', $search);
+        }
+
+        return Inertia::render("Admin/TargetReport", [
+           "reports"=> $query->with("control_number", "user")->orderByDesc('created_at')->paginate(5),
+           "users" => $users
+        ]);
+    }
 
 
 }
