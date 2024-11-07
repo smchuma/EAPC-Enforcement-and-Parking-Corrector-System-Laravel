@@ -13,9 +13,12 @@ export default function Dashboard({ reports }) {
                     <AdminBarChart reports={reports} />
                     <AdminAllGraph reports={reports} />
                 </div>
-                <h1 className="mt-10 mx-10 font-bold">Top Sellers</h1>
-                <TopSellersTable reports={reports} />
+                <h1 className="mt-10 mx-10 font-bold mb-5">Top Sellers</h1>
+                <div className="pb-20 px-8  w-full">
+                    <TopSellersTable reports={reports} />
+                </div>
             </main>
         </AdminLayout>
     );
 }
+p;

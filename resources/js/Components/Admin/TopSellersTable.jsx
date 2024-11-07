@@ -41,7 +41,7 @@ export default function TopSellersTable({ reports }) {
     );
 
     return (
-        <Card className="w-full">
+        <Card className="w-full bg-gray-50">
             <CardHeader>
                 <CardTitle>Top Sellers</CardTitle>
             </CardHeader>

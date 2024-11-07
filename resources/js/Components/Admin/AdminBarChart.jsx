@@ -58,7 +58,7 @@ export default function AdminBarGraph({ reports }) {
     const chartData = Object.values(monthlyData);
 
     return (
-        <Card className="w-full">
+        <Card className="w-full bg-gray-50">
             <CardHeader>
                 <CardTitle>Mauzo ya Target na Control Number</CardTitle>
                 <CardDescription>
