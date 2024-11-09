@@ -1,7 +1,6 @@
 import {
     Card,
     CardContent,
-    CardDescription,
     CardFooter,
     CardHeader,
     CardTitle,
@@ -33,19 +32,25 @@ export function UserDetails({ user }) {
                 </div>
                 <div>
                     <span className="font-semibold text-gray-600">Street:</span>
-                    <div className="text-gray-800">{user.street}</div>
+                    <div className="text-gray-800">
+                        {!user.street ? "N/A" : user.street}
+                    </div>
                 </div>
 
                 <div>
                     <span className="font-semibold text-gray-600">Target:</span>
-                    <div className="text-gray-800">{user.target}</div>
+                    <div className="text-gray-800">
+                        {!user.target ? 0 : user.target}
+                    </div>
                 </div>
                 <div>
                     <span className="font-semibold text-gray-600">
                         Control Number Target:
                     </span>
                     <div className="text-gray-800">
-                        {user.control_number_target}
+                        {!user.control_number_target
+                            ? 0
+                            : user.control_number_target}
                     </div>
                 </div>
                 <div>

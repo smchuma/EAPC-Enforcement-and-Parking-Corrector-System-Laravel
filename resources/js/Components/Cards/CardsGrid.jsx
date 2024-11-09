@@ -16,37 +16,37 @@ const CardsGrid = ({ auth, reports }) => {
         );
     }, 0);
 
+    const dailySalesTarget = auth.user.target || 0;
+    const controlNumberTarget = auth.user.control_number_target || 0;
+
     const cardData = [
         {
             id: 1,
             title: "MTAA",
             value: `${!auth.user.street ? "N/A" : auth.user.street}`,
             icon: FaBullseye,
-            valueColor: "text-black",
         },
         {
             id: 2,
             title: "MAZUO YA SIKU",
-            value: `${totalDailySales.toLocaleString()}/${
-                auth.user.target == null ? 0 : auth.user.target
-            }`,
+            value: `${totalDailySales.toLocaleString()}/${dailySalesTarget.toLocaleString()}`,
+
             icon: FaChartLine,
             subText: "/day",
             valueColor:
-                totalDailySales >= auth.user.target
+                totalDailySales >= dailySalesTarget
                     ? "text-green-500"
                     : "text-red-500",
         },
         {
             id: 3,
             title: "MAUZO YA CONTROL NUMBER",
-            value: `${totalControlNumberSales.toLocaleString()}/${
-                auth.user.control_number_target
-            }`,
+            value: `${totalControlNumberSales.toLocaleString()}/${controlNumberTarget.toLocaleString()}`,
+
             icon: FaClipboardList,
             subText: "/day",
             valueColor:
-                totalControlNumberSales >= auth.user.control_number_target
+                totalControlNumberSales >= controlNumberTarget
                     ? "text-green-500"
                     : "text-red-500",
         },

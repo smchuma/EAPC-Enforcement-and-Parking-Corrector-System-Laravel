@@ -62,6 +62,8 @@ export default function Login({ status, canResetPassword, error }) {
                 </div>
             )}
 
+            <h1 className="text-center text-xl">Collector & Enforcer Panel</h1>
+
             <form onSubmit={submit}>
                 <div>
                     <InputLabel htmlFor="email" value="Email" />

@@ -111,7 +111,7 @@ const AddTarget = ({ user, open, setOpen }) => {
 
                                 {/* Control Number Target field for both collectors and enforcers */}
                                 {(user.role === "collector" ||
-                                    user.role === "enforcer") && (
+                                    user.role === "enforcement") && (
                                     <div className="mb-4">
                                         <InputLabel
                                             className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"

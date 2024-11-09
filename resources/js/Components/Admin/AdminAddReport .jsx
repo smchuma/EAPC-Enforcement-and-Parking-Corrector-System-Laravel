@@ -180,8 +180,8 @@ const AdminAddReport = ({ users }) => {
                                                     <input
                                                         type="text"
                                                         id={`controlNumber-${index}`}
-                                                        pattern="[0-9]{0,12}"
-                                                        maxLength={12}
+                                                        pattern="[0-9]{0,13}"
+                                                        maxLength={13}
                                                         name={`controlNumber-${index}`}
                                                         value={
                                                             controller.number

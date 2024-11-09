@@ -1,10 +1,10 @@
-const Card = ({ title, value, Icon, subText }) => {
+const Card = ({ title, value, Icon, subText, valueColor }) => {
     return (
         <div
             className="bg-gray-50
         shadow-lg rounded-xl p-6
         flex items-center flex-col md:flex-row space-x-4
-         hover:shadow-xl cursor-pointer
+         hover:shadow-xl cursor-pointer, valueColor
          transition-shadow duration-300
          "
         >
@@ -16,7 +16,9 @@ const Card = ({ title, value, Icon, subText }) => {
                     {title}
                 </h3>
                 <div className="flex items-baseline space-x-2 mt-1 justify-center md:justify-start">
-                    <p className="text-xl font-semibold">{value}</p>
+                    <p className={`text-xl font-semibold ${valueColor}`}>
+                        {value}
+                    </p>
                     {subText && (
                         <span className="text-sm text-gray-400">{subText}</span>
                     )}
