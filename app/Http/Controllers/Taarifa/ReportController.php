@@ -37,14 +37,14 @@ class ReportController extends Controller
             'control_numbers' => 'required|array',
             'control_numbers.*.number' => [
                 'required',
-                'regex:/^9986\d{8}$/',
+                'regex:/^9986\d{9}$/',
                 new ControlNumberUnique, // Use your custom rule here
             ],
             'control_numbers.*.amount' => 'required|numeric',
             'sales_proof_image' => 'nullable|image|max:2048',
         ], [
             'control_numbers.*.number.regex' => 'Mpangilio wa control number hauko sahihi',
-        ]);
+    ]);
 
         $userId = $request->input('user_id') ?: Auth::id();
 

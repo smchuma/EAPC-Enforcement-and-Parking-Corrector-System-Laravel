@@ -20,7 +20,7 @@ const CardsGrid = ({ auth, reports }) => {
         {
             id: 1,
             title: "MTAA",
-            value: `${auth?.user?.street}`,
+            value: `${!auth.user.street ? "N/A" : auth.user.street}`,
             icon: FaBullseye,
             valueColor: "text-black",
         },
@@ -28,12 +28,12 @@ const CardsGrid = ({ auth, reports }) => {
             id: 2,
             title: "MAZUO YA SIKU",
             value: `${totalDailySales.toLocaleString()}/${
-                auth?.user?.target == null ? 0 : user?.target
+                auth.user.target == null ? 0 : auth.user.target
             }`,
             icon: FaChartLine,
             subText: "/day",
             valueColor:
-                totalDailySales >= auth?.user?.target
+                totalDailySales >= auth.user.target
                     ? "text-green-500"
                     : "text-red-500",
         },
@@ -41,12 +41,12 @@ const CardsGrid = ({ auth, reports }) => {
             id: 3,
             title: "MAUZO YA CONTROL NUMBER",
             value: `${totalControlNumberSales.toLocaleString()}/${
-                auth?.user?.control_number_target
+                auth.user.control_number_target
             }`,
             icon: FaClipboardList,
             subText: "/day",
             valueColor:
-                totalControlNumberSales >= auth?.user?.control_number_target
+                totalControlNumberSales >= auth.user.control_number_target
                     ? "text-green-500"
                     : "text-red-500",
         },
@@ -62,7 +62,6 @@ const CardsGrid = ({ auth, reports }) => {
                         value={card.value}
                         Icon={card.icon}
                         subText={card.subText}
-                        auth={auth}
                         valueColor={card.valueColor}
                     />
                 ))}
