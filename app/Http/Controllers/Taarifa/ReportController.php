@@ -7,6 +7,8 @@ use App\Models\ControlNumber;
 use App\Models\Report;
 use App\Models\User;
 use App\Rules\ControlNumberUnique;
+use App\Rules\UniqueDailyReport;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -31,8 +33,14 @@ class ReportController extends Controller
 
     public function store(Request $request) {
 
+        $userId = $request->input('user_id') ?: Auth::id();
+
         $request->validate([
-            'user_id' => 'nullable|exists:users,id',
+            'user_id' => [
+                'nullable',
+                'exists:users,id',
+                new UniqueDailyReport($userId)  // Custom rule to check one report per day
+            ],
             'daily_sales' => 'nullable|numeric',
             'control_numbers' => 'required|array',
             'control_numbers.*.number' => [
@@ -45,8 +53,6 @@ class ReportController extends Controller
         ], [
             'control_numbers.*.number.regex' => 'Mpangilio wa control number hauko sahihi',
     ]);
-
-        $userId = $request->input('user_id') ?: Auth::id();
 
 
          $imagePath = null;
@@ -74,6 +80,7 @@ class ReportController extends Controller
         }
 
             ControlNumber::create([
+            'user_id' => $userId,
             'report_id' => $report->id,
             'control_number' => $controller['number'],
             'amount' => $controller['amount'],
@@ -113,6 +120,60 @@ class ReportController extends Controller
 
         return Inertia::render("Admin/TargetReports", [
            "reports"=> $query->with("control_number", "user")->orderByDesc('created_at')->paginate(5),
+           "users" => $users
+        ]);
+    }
+
+
+    //target- reports
+
+    public function collector_daily_sales_report(Request $request){
+
+        $query = Report::query();
+        $users = User::get();
+
+        if($request->has('search')) {
+            $search = $request->get('search');
+            $query->whereDate('created_at', $search);
+        }
+
+        return Inertia::render("Admin/Reports/CollectorDailySales", [
+           "reports"=> $query->with( "user")->orderByDesc('created_at')->paginate(5),
+           "users" => $users
+        ]);
+    }
+
+
+    public function collector_control_number_sales_report(Request $request){
+
+        $query = ControlNumber::query();
+        $users = User::get();
+
+        if($request->has('search')) {
+            $search = $request->get('search');
+            $query->whereDate('created_at', $search);
+        }
+
+        return Inertia::render("Admin/Reports/CollectorControlNumberSales", [
+           "control_number_reports"=> $query->with( "user")->orderByDesc('created_at')->paginate(5),
+           "users" => $users
+        ]);
+    }
+
+
+
+    public function enforcement_control_number_sales_report(Request $request){
+
+        $query = ControlNumber::query();
+        $users = User::get();
+
+        if($request->has('search')) {
+            $search = $request->get('search');
+            $query->whereDate('created_at', $search);
+        }
+
+        return Inertia::render("Admin/Reports/EnforcementControlNumberSales", [
+           "control_number_reports"=> $query->with( "user")->orderByDesc('created_at')->paginate(5),
            "users" => $users
         ]);
     }

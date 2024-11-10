@@ -56,7 +56,14 @@ Route::group(['prefix' => 'admin'], function() {
     Route::group(['middleware' => 'admin.auth'], function() {
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
         Route::get('/full-report', [ReportController::class, 'adminReports'])->name('admin.reports');
+
+        //target reports
         Route::get('/target-reports', [ReportController::class, 'target_reports'])->name('admin.target_reports');
+        Route::get('/target-reports/collector_daily_sales_report', [ReportController::class, 'collector_daily_sales_report'])->name('admin.collector_daily_sales_report');
+        Route::get('/target-reports/collector_control_number_sales_report', [ReportController::class, 'collector_control_number_sales_report'])->name('admin.collector_control_number_sales_report');
+        Route::get('/target-reports/enforcement_control_number_sales_report', [ReportController::class, 'enforcement_control_number_sales_report'])->name('admin.enforcement_control_number_sales_report');
+
+
 
         Route::get('/users', [AdminController::class, 'viewUsers'])->name('admin.viewUsers');
         Route::post('/users/store', [AdminController::class, 'storeUser'])->name('admin.storeUser');

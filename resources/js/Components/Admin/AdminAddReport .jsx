@@ -14,7 +14,6 @@ import TextInput from "../TextInput";
 import { usePage, useForm } from "@inertiajs/react";
 
 const AdminAddReport = ({ users }) => {
-    const { auth } = usePage().props;
     const [open, setOpen] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
 
@@ -283,6 +282,9 @@ const AdminAddReport = ({ users }) => {
                                     Number
                                 </button>
                             </div>
+                            <p className="text-sm mt-3 text-center text-red-600">
+                                {errors.user_id}
+                            </p>
 
                             {/* Submit Button */}
                             <div className="mt-7 mb-8 flex justify-end gap-2">

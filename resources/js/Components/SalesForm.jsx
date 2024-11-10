@@ -253,6 +253,10 @@ const SalesForm = () => {
                                 </button>
                             </div>
 
+                            <p className="text-sm mt-3 text-center text-red-600">
+                                {errors.user_id}
+                            </p>
+
                             {/* Submit Button */}
                             <div className="mt-7 mb-8 flex justify-end gap-2">
                                 <button

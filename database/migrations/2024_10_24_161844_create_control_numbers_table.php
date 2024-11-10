@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('control_numbers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('report_id')->constrained('reports')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('control_number', 13);
             $table->decimal('amount', 15, 2);
             $table->timestamps();
