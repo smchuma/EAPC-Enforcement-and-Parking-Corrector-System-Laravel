@@ -10,6 +10,7 @@ class ControlNumber extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'report_id',
         'control_number',
         'amount'
@@ -17,5 +18,9 @@ class ControlNumber extends Model
 
     public function report() {
         return $this->belongsTo(Report::class);
+    }
+
+    public function user() {
+        return $this->belongsTo(User::class);
     }
 }

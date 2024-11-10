@@ -18,7 +18,6 @@ const Test = ({ reports }) => {
                     fullName: `${report.user.first_name} ${report.user.last_name}`,
                     mtaa: report.user.street || "N/A",
                     salesTarget: report.user.sales_target || 0, // Sales Target
-                    controlNumberTarget: report.user.control_number_target || 0, // Control Number Target
                     dates: {},
                 };
             }

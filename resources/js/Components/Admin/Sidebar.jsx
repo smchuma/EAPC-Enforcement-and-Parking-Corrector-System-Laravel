@@ -21,8 +21,8 @@ const Sidebar = () => {
                 { id: "2a", name: "Full Report", link: "/admin/full-report" },
                 {
                     id: "2b",
-                    name: "Target Report",
-                    link: "/admin/target-report",
+                    name: "Target Reports",
+                    link: "/admin/target-reports",
                 },
             ],
         },

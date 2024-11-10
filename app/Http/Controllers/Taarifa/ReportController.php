@@ -101,7 +101,7 @@ class ReportController extends Controller
         ]);
     }
 
-    public function target_report(Request $request) {
+    public function target_reports(Request $request) {
 
         $query = Report::query();
         $users = User::get();
@@ -111,7 +111,7 @@ class ReportController extends Controller
             $query->whereDate('created_at', $search);
         }
 
-        return Inertia::render("Admin/TargetReport", [
+        return Inertia::render("Admin/TargetReports", [
            "reports"=> $query->with("control_number", "user")->orderByDesc('created_at')->paginate(5),
            "users" => $users
         ]);

@@ -1,15 +1,15 @@
 import AdminLayout from "@/Layouts/AdminLayout";
-import TargetReportTable from "@/Components/Admin/TargetReportTable";
 import Test from "./Test";
 
-const TargetReport = ({ reports }) => {
+const TargetReports = ({ reports }) => {
+    console.log(reports);
     return (
         <AdminLayout>
             <main className="p-5">
-                <Test reports={reports} />
+                <h1 className="text-2xl">Target Reports</h1>
             </main>
         </AdminLayout>
     );
 };
 
-export default TargetReport;
+export default TargetReports;
