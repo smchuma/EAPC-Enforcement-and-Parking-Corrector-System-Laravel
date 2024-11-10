@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Report;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 
@@ -127,13 +128,17 @@ public function add_target(Request $request, $id)
     $user->target = $request->input('target');
     $user->control_number_target = $request->input('control_number_target');
 
-
-
     $user->save();
 
 
     return redirect()->back()->with('success','Target added successfully');
 
+}
+
+
+    public function logout() {
+     Auth::guard('admin')->logout();
+    return redirect()->route('admin.login');
 }
 
 }
