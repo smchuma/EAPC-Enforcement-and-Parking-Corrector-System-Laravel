@@ -149,10 +149,8 @@ const SalesForm = () => {
                                                         Control Number
                                                     </label>
                                                     <input
-                                                        type="text"
+                                                        type="number"
                                                         id={`controlNumber-${index}`}
-                                                        pattern="[0-9]{0,13}"
-                                                        maxLength={13}
                                                         name={`controlNumber-${index}`}
                                                         value={
                                                             controller.number

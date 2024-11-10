@@ -37,7 +37,7 @@ class ReportController extends Controller
             'control_numbers' => 'required|array',
             'control_numbers.*.number' => [
                 'required',
-                'regex:/^9986\d{9}$/',
+                'regex:/^9986\d+$/',
                 new ControlNumberUnique, // Use your custom rule here
             ],
             'control_numbers.*.amount' => 'required|numeric',

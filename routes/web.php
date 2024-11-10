@@ -67,6 +67,7 @@ Route::group(['prefix' => 'admin'], function() {
         Route::get('/targets', [AdminController::class, 'viewTargets'])->name('admin.view_targets');
         Route::put('/targets/{id}', [AdminController::class, 'add_target'])->name('admin.add_target');
 
+        Route::post('/logout', [AdminController::class, 'logout'])->name('admin.logout');
 
     });
 });
