@@ -11,16 +11,16 @@ import {
 import { IoMdAddCircleOutline } from "react-icons/io";
 import InputLabel from "./InputLabel";
 import TextInput from "./TextInput";
-import { usePage, useForm } from "@inertiajs/react";
+import { useForm } from "@inertiajs/react";
 
-const SalesForm = () => {
-    const { auth } = usePage().props;
+const SalesForm = ({ auth }) => {
     const role = auth.user.role;
 
     const [open, setOpen] = useState(false);
 
     // Using useForm from Inertia.js
     const { data, setData, post, processing, reset, errors } = useForm({
+        user_id: auth.user.id,
         daily_sales: "",
         control_numbers: [{ number: "", amount: "" }],
         sales_proof_image: null,

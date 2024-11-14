@@ -61,7 +61,7 @@ export default function AdminLogin({ status, canResetPassword, error }) {
                     </span>
                 </div>
             )}
-            <h1 className="text-center text-xl">Admin Panel</h1>
+            <h1 className="text-center text-sm">Admin Panel</h1>
 
             <form onSubmit={submit}>
                 <div>
