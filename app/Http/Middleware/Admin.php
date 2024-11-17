@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class RedirectIfAdmin
+class Admin
 {
     /**
      * Handle an incoming request.
@@ -16,11 +16,11 @@ class RedirectIfAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check() && Auth::user()->role === 'admin') {
-            // If the admin tries to access a non-admin route, redirect back to their intended dashboard
-            return redirect()->back()->with('error', 'Admins cannot access this page.');
+        if ( Auth::check() && Auth::user()->role === "admin" )
+        {
+            return $next($request);
         }
 
-        return $next($request);
+        return redirect('/');
     }
 }

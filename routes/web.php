@@ -31,11 +31,11 @@ use Inertia\Inertia;
 
 
 
-Route::middleware( ['auth', 'admin.redirect'])->group(function () {
+Route::middleware( ['auth'])->group(function () {
+
     Route::get('/', [TaarifaController::class, 'index'])->name('taarifa.index');
     Route::get('/ripoti', [ReportController::class, 'index'])->name('report.index');
     Route::post('/ripoti', [ReportController::class, 'store'])->name('report.store');
-
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -47,13 +47,7 @@ Route::middleware( ['auth', 'admin.redirect'])->group(function () {
 
 Route::group(['prefix' => 'admin'], function() {
 
-    Route::group(['middleware' => 'admin.guest'], function() {
-
-        Route::get("/login", [AdminLoginController::class,"index"])->name("admin.login");
-        Route::post('/login', [AdminLoginController:: class, 'authenticate'])->name('admin.authenticate');
-    });
-
-    Route::group(['middleware' => 'admin.auth'], function() {
+    Route::group(['middleware' => ['auth', 'admin']], function() {
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
         Route::get('/full-report', [ReportController::class, 'adminReports'])->name('admin.reports');
 
@@ -62,8 +56,6 @@ Route::group(['prefix' => 'admin'], function() {
         Route::get('/target-reports/collector_daily_sales_report', [ReportController::class, 'collector_daily_sales_report'])->name('admin.collector_daily_sales_report');
         Route::get('/target-reports/collector_control_number_sales_report', [ReportController::class, 'collector_control_number_sales_report'])->name('admin.collector_control_number_sales_report');
         Route::get('/target-reports/enforcement_control_number_sales_report', [ReportController::class, 'enforcement_control_number_sales_report'])->name('admin.enforcement_control_number_sales_report');
-
-
 
         Route::get('/users', [AdminController::class, 'viewUsers'])->name('admin.viewUsers');
         Route::post('/users/store', [AdminController::class, 'storeUser'])->name('admin.storeUser');
