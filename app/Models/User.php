@@ -57,4 +57,5 @@ class User extends Authenticatable
     public function control_number() {
         return $this->hasMany(ControlNumber::class);
     }
+
 }

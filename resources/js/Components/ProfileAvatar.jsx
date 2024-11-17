@@ -27,7 +27,7 @@ const ProfileAvatar = () => {
                         Profile
                     </Dropdown.Link>
                     <Dropdown.Link
-                        href={route("admin.logout")}
+                        href={route("logout")}
                         method="post"
                         as="button"
                     >
