@@ -11,13 +11,12 @@ import {
 import { IoMdAddCircleOutline } from "react-icons/io";
 import InputLabel from "../InputLabel";
 import TextInput from "../TextInput";
-import { usePage, useForm } from "@inertiajs/react";
+import { useForm } from "@inertiajs/react";
 
 const AdminAddReport = ({ users }) => {
     const [open, setOpen] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
 
-    // Form data setup using Inertia.js
     const { data, setData, post, processing, reset, errors } = useForm({
         user_id: "",
         daily_sales: "",
@@ -25,10 +24,10 @@ const AdminAddReport = ({ users }) => {
         sales_proof_image: null,
     });
 
-    // Handle selection of a user
     const handleUserChange = (e) => {
         const userId = e.target.value;
-        const user = users.find((u) => u.id === parseInt(userId));
+
+        const user = users.find((u) => parseInt(u.id) === parseInt(userId));
         setSelectedUser(user);
         setData("user_id", userId);
     };
@@ -58,6 +57,8 @@ const AdminAddReport = ({ users }) => {
         });
     };
     const filteredUsers = users.filter((user) => user.role !== "admin");
+
+    console.log(selectedUser);
 
     return (
         <div>

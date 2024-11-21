@@ -1,9 +1,9 @@
 import AdminLayout from "@/Layouts/AdminLayout";
 import { Link } from "@inertiajs/react";
 import { IoMdArrowBack } from "react-icons/io";
+import CollectorSales from "@/Components/Reports/CollectorSales";
 
 const CollectorDailySales = ({ reports }) => {
-    console.log(reports);
     return (
         <AdminLayout>
             <main className="p-5 space-y-4">
@@ -16,6 +16,7 @@ const CollectorDailySales = ({ reports }) => {
 
                     <h1 className="text-xl">Collector Daily sales Report</h1>
                 </div>
+                <CollectorSales reports={reports} />
             </main>
         </AdminLayout>
     );

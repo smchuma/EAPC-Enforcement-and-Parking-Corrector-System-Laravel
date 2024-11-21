@@ -130,16 +130,40 @@ class ReportController extends Controller
     public function collector_daily_sales_report(Request $request){
 
         $query = Report::query();
-        $users = User::get();
+
+        $users = User::where('role', 'collector')->get();
 
         if($request->has('search')) {
             $search = $request->get('search');
             $query->whereDate('created_at', $search);
         }
 
+        $reports = $query->with('user')
+        ->whereIn('user_id', $users->pluck('id'))
+        ->get()
+        ->groupBy(function ($report) {
+            return $report->created_at->format('Y-m-d'); // Group by date
+        })
+        ->map(function ($dailyReports, $date) {
+            return $dailyReports->map(function ($report) use ($date) {
+                return [
+                    "user_id" =>  $report->user->id,
+                    'first_name' => $report->user->first_name,
+                    'last_name' => $report->user->last_name,
+                    'mtaa' => $report->user->street,
+                    'target' => $report->user->target,
+                    'date' => $date,
+                    'sales' => $report->daily_sales,
+                ];
+            });
+        });
+
+
+
+
+
         return Inertia::render("Admin/Reports/CollectorDailySales", [
-           "reports"=> $query->with( "user")->orderByDesc('created_at')->paginate(5),
-           "users" => $users
+            "reports" => $reports,
         ]);
     }
 

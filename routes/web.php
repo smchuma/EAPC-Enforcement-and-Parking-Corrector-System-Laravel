@@ -31,7 +31,7 @@ use Inertia\Inertia;
 
 
 
-Route::middleware( ['auth'])->group(function () {
+Route::middleware( ['auth', 'agent'])->group(function () {
 
     Route::get('/', [TaarifaController::class, 'index'])->name('taarifa.index');
     Route::get('/ripoti', [ReportController::class, 'index'])->name('report.index');
