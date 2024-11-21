@@ -19,7 +19,7 @@ const CollectorSales = ({ reports }) => {
             renderCell: (params) => {
                 const value = params.value || 0;
                 const backgroundColor =
-                    value >= 100 ? "green" : value >= 75 ? "yellow" : "red";
+                    value === 100 ? "green" : value >= 75 ? "yellow" : "red";
                 const color = "white";
 
                 return (
@@ -64,10 +64,14 @@ const CollectorSales = ({ reports }) => {
                 rows.push(groupedUsers[userKey]);
             }
 
-            // Update the corresponding date field for this user
-            groupedUsers[userKey][`date_${dateIndex}`] = Math.round(
-                (report.sales / report.target) * 100
+            // Calculate percentage and clamp it to 100% max
+            const percentage = Math.min(
+                Math.round((report.sales / report.target) * 100),
+                100
             );
+
+            // Update the corresponding date field for this user
+            groupedUsers[userKey][`date_${dateIndex}`] = percentage;
         });
     });
 
@@ -95,7 +99,7 @@ const CollectorSales = ({ reports }) => {
                     if (columnIndex > 2) {
                         const value =
                             rows[rowIndex][columns[columnIndex].field];
-                        if (value >= 100) return [0, 128, 0]; // Green
+                        if (value === 100) return [0, 128, 0]; // Green
                         if (value >= 75) return [255, 255, 0]; // Yellow
                         return [255, 0, 0]; // Red
                     }
