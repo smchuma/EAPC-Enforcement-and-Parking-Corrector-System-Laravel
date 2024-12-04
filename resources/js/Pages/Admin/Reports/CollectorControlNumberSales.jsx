@@ -1,9 +1,10 @@
+import CollectorControlNumber from "@/Components/Reports/CollectorControlNumber";
 import AdminLayout from "@/Layouts/AdminLayout";
 import { Link } from "@inertiajs/react";
 import { IoMdArrowBack } from "react-icons/io";
 
-const CollectorControlNumberSales = ({ control_number_reports }) => {
-    console.log(control_number_reports);
+const CollectorControlNumberSales = ({ reports }) => {
+    console.log(reports);
     return (
         <AdminLayout>
             <main className="p-5 space-y-4">
@@ -18,7 +19,7 @@ const CollectorControlNumberSales = ({ control_number_reports }) => {
                         Collector Control Number sales Report
                     </h1>
                 </div>
-                this is where the table goes
+                <CollectorControlNumber reports={reports} />
             </main>
         </AdminLayout>
     );

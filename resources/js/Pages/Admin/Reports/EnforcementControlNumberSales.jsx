@@ -1,8 +1,9 @@
+import EnforcementControlNumber from "@/Components/Reports/EnforcementControlNumber";
 import AdminLayout from "@/Layouts/AdminLayout";
 import { Link } from "@inertiajs/react";
 import { IoMdArrowBack } from "react-icons/io";
 
-const EnforcementControlNumberSales = ({ control_number_reports }) => {
+const EnforcementControlNumberSales = ({ reports }) => {
     return (
         <AdminLayout>
             <main className="p-5 space-y-4">
@@ -14,9 +15,10 @@ const EnforcementControlNumberSales = ({ control_number_reports }) => {
                     </Link>
 
                     <h1 className="text-xl">
-                        Enforcement Control Number sales Report
+                        Collector Control Number sales Report
                     </h1>
                 </div>
+                <EnforcementControlNumber reports={reports} />
             </main>
         </AdminLayout>
     );

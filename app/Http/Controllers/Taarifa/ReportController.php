@@ -171,15 +171,38 @@ class ReportController extends Controller
     public function collector_control_number_sales_report(Request $request){
 
         $query = ControlNumber::query();
-        $users = User::get();
+
+        $users = User::where('role', 'collector')->get();
 
         if($request->has('search')) {
             $search = $request->get('search');
             $query->whereDate('created_at', $search);
         }
 
+        $reports = $query->with('user')
+        ->whereIn('user_id', $users->pluck('id'))
+        ->get()
+        ->groupBy(function ($report) {
+            return $report->created_at->format('Y-m-d'); // Group by date
+        })
+        ->map(function ($dailyReports, $date) {
+            return $dailyReports->map(function ($report) use ($date) {
+                return [
+                    "user_id" =>  $report->user->id,
+                    'first_name' => $report->user->first_name,
+                    'last_name' => $report->user->last_name,
+                    'mtaa' => $report->user->street,
+                    'control_number_target' => $report->user->control_number_target,
+                    'control_number' => $report->control_number,
+                    'date' => $date,
+                    'sales' => $report->amount,
+                ];
+            });
+        });
+
+
         return Inertia::render("Admin/Reports/CollectorControlNumberSales", [
-           "control_number_reports"=> $query->with( "user")->orderByDesc('created_at')->paginate(5),
+            "reports" => $reports,
            "users" => $users
         ]);
     }
@@ -189,15 +212,37 @@ class ReportController extends Controller
     public function enforcement_control_number_sales_report(Request $request){
 
         $query = ControlNumber::query();
-        $users = User::get();
+
+        $users = User::where('role', 'enforcement')->get();
 
         if($request->has('search')) {
             $search = $request->get('search');
             $query->whereDate('created_at', $search);
         }
 
+        $reports = $query->with('user')
+        ->whereIn('user_id', $users->pluck('id'))
+        ->get()
+        ->groupBy(function ($report) {
+            return $report->created_at->format('Y-m-d'); // Group by date
+        })
+        ->map(function ($dailyReports, $date) {
+            return $dailyReports->map(function ($report) use ($date) {
+                return [
+                    "user_id" =>  $report->user->id,
+                    'first_name' => $report->user->first_name,
+                    'last_name' => $report->user->last_name,
+                    'mtaa' => $report->user->street,
+                    'control_number_target' => $report->user->control_number_target,
+                    'control_number' => $report->control_number,
+                    'date' => $date,
+                    'sales' => $report->amount,
+                ];
+            });
+        });
+
         return Inertia::render("Admin/Reports/EnforcementControlNumberSales", [
-           "control_number_reports"=> $query->with( "user")->orderByDesc('created_at')->paginate(5),
+            "reports" => $reports,
            "users" => $users
         ]);
     }
