@@ -19,8 +19,9 @@ class AdminUserSeeder extends Seeder
         User::updateOrCreate([
             "email" => "admin@eapcs.com"
         ], [
-            'first_name' => 'admin@eapcs.com',
+            'first_name' => 'Admin',
             'last_name' => 'EAPCS',
+            'username' => 'admin',
             'phone_number' => '0712122729',
             'role' => 'admin',
             'password' => Hash::make('Admin123')

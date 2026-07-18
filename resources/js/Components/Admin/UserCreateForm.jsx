@@ -14,6 +14,9 @@ import TextInput from "../TextInput";
 import InputError from "../InputError";
 import PrimaryButton from "../PrimaryButton";
 
+const generateUsername = (firstName, lastName) =>
+    (firstName.charAt(0) + lastName).toLowerCase().replace(/\s+/g, "");
+
 const UserCreateForm = () => {
     const { data, setData, post, processing, errors, reset } = useForm({
         first_name: "",
@@ -25,6 +28,14 @@ const UserCreateForm = () => {
     });
 
     const [open, setOpen] = useState(false);
+    const [previewUsername, setPreviewUsername] = useState("");
+
+    const handleNameChange = (field, value) => {
+        setData(field, value);
+        const first = field === "first_name" ? value : data.first_name;
+        const last = field === "last_name" ? value : data.last_name;
+        setPreviewUsername(generateUsername(first, last));
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -76,12 +87,9 @@ const UserCreateForm = () => {
                                             type="text"
                                             value={data.first_name}
                                             onChange={(e) =>
-                                                setData(
-                                                    "first_name",
-                                                    e.target.value
-                                                )
+                                                handleNameChange("first_name", e.target.value)
                                             }
-                                            placeholder="Enter the Fist Name"
+                                            placeholder="Enter the First Name"
                                         />
                                         <InputError
                                             message={errors.first_name}
@@ -103,10 +111,7 @@ const UserCreateForm = () => {
                                             placeholder="Enter the Last Name"
                                             value={data.last_name}
                                             onChange={(e) =>
-                                                setData(
-                                                    "last_name",
-                                                    e.target.value
-                                                )
+                                                handleNameChange("last_name", e.target.value)
                                             }
                                         />
                                         <InputError
@@ -115,6 +120,20 @@ const UserCreateForm = () => {
                                         />
                                     </div>
                                 </div>
+
+                                {previewUsername && (
+                                    <div className="-mx-3 md:flex mb-2">
+                                        <div className="md:w-full px-3 mb-3">
+                                            <InputLabel className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2">
+                                                Username (auto-generated)
+                                            </InputLabel>
+                                            <div className="appearance-none block w-full bg-gray-100 text-gray-500 border border-grey-lighter rounded py-3 px-4 text-sm">
+                                                {previewUsername}
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
                                 <div className="-mx-3 md:flex mb-2">
                                     <div className="md:w-1/2 px-3 mb-6 md:mb-0">
                                         <InputLabel

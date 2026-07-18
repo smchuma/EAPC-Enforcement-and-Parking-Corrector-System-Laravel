@@ -54,11 +54,24 @@ class AdminController extends Controller
             'role' => 'required|in:enforcement,collector,admin'
         ]);
 
+        $firstName = strtolower(preg_replace('/\s+/', '', $validated['first_name']));
+        $lastName = strtolower(preg_replace('/\s+/', '', $validated['last_name']));
+        $username = substr($firstName, 0, 1) . $lastName;
+        $lettersUsed = 1;
+        while (User::where('username', $username)->exists()) {
+            $lettersUsed++;
+            $username = substr($firstName, 0, $lettersUsed) . $lastName;
+            if ($lettersUsed >= strlen($firstName)) {
+                break;
+            }
+        }
+
         User::create([
             'first_name' => $validated['first_name'],
             'last_name' => $validated['last_name'],
             'phone_number' => $validated['phone_number'],
             'email' => $validated['email'],
+            'username' => $username,
             'password' => Hash::make($validated['password']),
             'role' => $validated['role']
         ]);

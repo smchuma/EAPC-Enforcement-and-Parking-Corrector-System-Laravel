@@ -44,7 +44,7 @@ const Sidebar = () => {
     return (
         <main className="bg-gray-100 invisible lg:visible fixed w-72 h-full top-0 shadow-md rounded-2xl pt-10">
             <div className="flex justify-center items-center flex-col">
-                <ApplicationLogo className="mb-10 text-2xl lobster-regular text-gray-500 " />
+                <ApplicationLogo className="mb-10 text-2xl lobster-regular text-gray-600 " />
                 {sidebarItem.map((item) => (
                     <SidebarItem key={item.id} item={item} />
                 ))}

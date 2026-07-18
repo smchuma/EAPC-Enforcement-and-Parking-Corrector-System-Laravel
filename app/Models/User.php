@@ -26,6 +26,7 @@ class User extends Authenticatable
         'phone_number',
         'role',
         'email',
+        'username',
         'password',
         'target',
         'control_number_target',
