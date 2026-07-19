@@ -11,6 +11,7 @@ class Report extends Model
 
     protected $fillable = [
         'user_id',
+        'supervisor_id',
         'daily_sales',
         'sales_proof_image'
 
@@ -18,6 +19,10 @@ class Report extends Model
 
     public function user() {
         return $this->belongsTo(User::class);
+    }
+
+    public function supervisor() {
+        return $this->belongsTo(User::class, 'supervisor_id');
     }
 
     public function control_number() {

@@ -28,6 +28,7 @@ class ReportController extends Controller
 
         return Inertia::render("Taarifa/Ripoti", [
            "reports"=> $query->with("control_number")->orderByDesc('created_at')->paginate(5),
+           "supervisors" => User::where('role', 'supervisor')->get(['id', 'first_name', 'last_name']),
         ]);
     }
 
@@ -41,6 +42,7 @@ class ReportController extends Controller
                 'exists:users,id',
                 new UniqueDailyReport($userId)  // Custom rule to check one report per day
             ],
+            'supervisor_id' => ['nullable', 'exists:users,id,role,supervisor'],
             'daily_sales' => 'nullable|numeric',
             'control_numbers' => 'required|array',
             'control_numbers.*.number' => [
@@ -63,6 +65,7 @@ class ReportController extends Controller
            // Create the report
         $report = Report::create([
             'user_id' => $userId,
+            'supervisor_id' => $request->input('supervisor_id'),
             'daily_sales' => $request->input('daily_sales'),
             'sales_proof_image' => $imagePath,
         ]);

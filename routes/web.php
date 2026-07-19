@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Taarifa\ReportController;
 use App\Http\Controllers\Taarifa\TaarifaController;
+use App\Http\Controllers\Supervisor\SupervisorController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -68,6 +69,15 @@ Route::group(['prefix' => 'admin'], function() {
 
         Route::post('/logout', [AdminController::class, 'logout'])->name('admin.logout');
 
+    });
+});
+
+
+// supervisor routes
+
+Route::group(['prefix' => 'supervisor'], function() {
+    Route::group(['middleware' => ['auth', 'supervisor']], function() {
+        Route::get('/dashboard', [SupervisorController::class, 'dashboard'])->name('supervisor.dashboard');
     });
 });
 

@@ -77,12 +77,15 @@ const ReportList = ({ reports, auth }) => {
                     <tr>
                         <th className="border p-2">Date</th>
 
-                        {auth.user.role === "collector" && (
-                            <th className="border p-2">Mauzo</th>
+                        {auth.user.role === "supervisor" && (
+                            <th className="border p-2">Collector</th>
                         )}
-                        {auth.user.role === "collector" && (
-                            <th className="border p-2">Picture</th>
-                        )}
+                        {["collector", "supervisor"].includes(
+                            auth.user.role
+                        ) && <th className="border p-2">Mauzo</th>}
+                        {["collector", "supervisor"].includes(
+                            auth.user.role
+                        ) && <th className="border p-2">Picture</th>}
 
                         <th className="border p-2">
                             Total Amount (Control Numbers)
@@ -101,12 +104,22 @@ const ReportList = ({ reports, auth }) => {
                                     report.created_at
                                 ).toLocaleDateString()}
                             </td>
-                            {auth.user.role === "collector" && (
+                            {auth.user.role === "supervisor" && (
+                                <td className="border p-3 text-center">
+                                    {report.user?.first_name}{" "}
+                                    {report.user?.last_name}
+                                </td>
+                            )}
+                            {["collector", "supervisor"].includes(
+                                auth.user.role
+                            ) && (
                                 <td className="border p-3 text-center">
                                     {report.daily_sales}
                                 </td>
                             )}
-                            {auth.user.role === "collector" && (
+                            {["collector", "supervisor"].includes(
+                                auth.user.role
+                            ) && (
                                 <td className="border p-3 flex justify-center">
                                     {report.sales_proof_image ? (
                                         <img

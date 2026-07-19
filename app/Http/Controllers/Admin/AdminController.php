@@ -51,7 +51,7 @@ class AdminController extends Controller
             'phone_number' => ['required', 'numeric', 'unique:users,phone_number',  'digits:10',],
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:8',
-            'role' => 'required|in:enforcement,collector,admin'
+            'role' => 'required|in:enforcement,collector,admin,supervisor'
         ]);
 
         $firstName = strtolower(preg_replace('/\s+/', '', $validated['first_name']));
@@ -101,7 +101,7 @@ class AdminController extends Controller
     $request->validate([
         'first_name' => 'required|string|max:255',
         'last_name' => 'required|string|max:255',
-        'role' => 'required|in:enforcer,collector,admin'
+        'role' => 'required|in:enforcer,collector,admin,supervisor'
 
     ]);
 

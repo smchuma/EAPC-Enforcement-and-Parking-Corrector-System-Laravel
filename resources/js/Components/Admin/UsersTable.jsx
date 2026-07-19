@@ -52,7 +52,8 @@ const UsersTable = ({ users }) => {
                 .filter(
                     (user) =>
                         (user.role === "enforcement" ||
-                            user.role === "collector") &&
+                            user.role === "collector" ||
+                            user.role === "supervisor") &&
                         (user.first_name
                             .toLowerCase()
                             .includes(search.toLowerCase()) ||

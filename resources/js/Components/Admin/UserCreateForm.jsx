@@ -221,6 +221,12 @@ const UserCreateForm = () => {
                                             >
                                                 Collector
                                             </option>
+                                            <option
+                                                value="supervisor"
+                                                className="text-sm"
+                                            >
+                                                Supervisor
+                                            </option>
                                         </select>
                                         <InputError
                                             message={errors.role}

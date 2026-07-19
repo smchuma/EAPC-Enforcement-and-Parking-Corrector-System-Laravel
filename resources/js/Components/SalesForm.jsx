@@ -13,7 +13,7 @@ import InputLabel from "./InputLabel";
 import TextInput from "./TextInput";
 import { useForm } from "@inertiajs/react";
 
-const SalesForm = ({ auth }) => {
+const SalesForm = ({ auth, supervisors = [] }) => {
     const role = auth.user.role;
 
     const [open, setOpen] = useState(false);
@@ -21,6 +21,7 @@ const SalesForm = ({ auth }) => {
     // Using useForm from Inertia.js
     const { data, setData, post, processing, reset, errors } = useForm({
         user_id: auth.user.id,
+        supervisor_id: "",
         daily_sales: "",
         control_numbers: [{ number: "", amount: "" }],
         sales_proof_image: null,
@@ -125,6 +126,45 @@ const SalesForm = ({ auth }) => {
                                             className="p-2 border border-gray-400 rounded"
                                         />
                                     </div>
+                                </div>
+                            )}
+
+                            {role === "collector" && (
+                                <div className="flex flex-col mt-4">
+                                    <InputLabel
+                                        htmlFor="supervisorSelect"
+                                        className="mb-4"
+                                    >
+                                        Chagua Msimamizi
+                                    </InputLabel>
+                                    <select
+                                        id="supervisorSelect"
+                                        value={data.supervisor_id}
+                                        onChange={(e) =>
+                                            setData(
+                                                "supervisor_id",
+                                                e.target.value
+                                            )
+                                        }
+                                        required
+                                        className="p-2 border border-gray-400 rounded"
+                                    >
+                                        <option value="">Chagua...</option>
+                                        {supervisors.map((supervisor) => (
+                                            <option
+                                                key={supervisor.id}
+                                                value={supervisor.id}
+                                            >
+                                                {supervisor.first_name}{" "}
+                                                {supervisor.last_name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    {errors.supervisor_id && (
+                                        <span className="text-red-500 mt-1">
+                                            {errors.supervisor_id}
+                                        </span>
+                                    )}
                                 </div>
                             )}
 

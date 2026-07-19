@@ -56,6 +56,10 @@ class User extends Authenticatable
         return $this->hasMany(Report::class);
     }
 
+    public function supervisedReports() {
+        return $this->hasMany(Report::class, 'supervisor_id');
+    }
+
     public function control_number() {
         return $this->hasMany(ControlNumber::class);
     }
