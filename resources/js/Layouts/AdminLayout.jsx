@@ -8,7 +8,7 @@ export default function AdminAuthenticated({ user, header, children }) {
 
     return (
         <ToastProvider>
-            <main className="min-h-screen bg-gray-100">
+            <main className="min-h-screen bg-gradient-to-br from-slate-100 via-gray-50 to-slate-100">
                 <Sidebar
                     isOpen={sidebarOpen}
                     onClose={() => setSidebarOpen(false)}

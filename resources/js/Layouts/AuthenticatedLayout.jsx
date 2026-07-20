@@ -8,7 +8,7 @@ export default function Authenticated({ user, header, children }) {
         useState(false);
 
     return (
-        <div className="min-h-screen bg-gray-100">
+        <div className="min-h-screen bg-gradient-to-br from-slate-100 via-gray-50 to-slate-100">
             <div className="md:w-[80%] mx-auto">
                 <HomeNav />
                 <main>{children}</main>

@@ -1,15 +1,15 @@
-import AdminAddReport from "@/Components/Admin/AdminAddReport ";
-import ReportTable from "@/Components/Admin/ReportTable";
+import ReportSummaryTable from "@/Components/Reports/ReportSummaryTable";
 import AdminLayout from "@/Layouts/AdminLayout";
 
-const Reports = ({ reports, users, supervisors }) => {
+const Reports = ({ reports }) => {
     return (
         <AdminLayout>
             <main className="pt-6">
-                <div className="flex justify-end px-4 sm:px-6 lg:px-8">
-                    <AdminAddReport users={users} supervisors={supervisors} />
-                </div>
-                <ReportTable reports={reports} />
+                <ReportSummaryTable
+                    reports={reports}
+                    pdfRoute="admin.reports_pdf"
+                    csvRoute="admin.reports_csv"
+                />
             </main>
         </AdminLayout>
     );
