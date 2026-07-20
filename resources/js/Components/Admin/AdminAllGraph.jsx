@@ -23,6 +23,8 @@ const aggregateReports = (reports) => {
     reports.forEach((report) => {
         const { user_id, daily_sales, user, control_number } = report;
 
+        if (!user) return;
+
         // Initialize user data if it doesn't exist
         if (!userData[user_id]) {
             userData[user_id] = {

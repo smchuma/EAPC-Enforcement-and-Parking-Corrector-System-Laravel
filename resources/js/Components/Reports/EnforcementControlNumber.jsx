@@ -1,7 +1,5 @@
 import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
-import jsPDF from "jspdf";
-import "jspdf-autotable";
 
 const EnforcementControlNumber = ({ reports }) => {
     // Prepare columns dynamically
@@ -82,48 +80,13 @@ const EnforcementControlNumber = ({ reports }) => {
         });
     });
 
-    // Export to PDF function
-    const exportToPDF = () => {
-        const doc = new jsPDF();
-        doc.text("Parking Collector Control Number Sales Report", 14, 10);
-
-        // Map rows and columns for the PDF table
-        const tableData = rows.map((row) =>
-            columns.map((col) => {
-                if (col.field.startsWith("date_")) {
-                    return `${row[col.field] || 0}%`;
-                }
-                return row[col.field] || "N/A";
-            })
-        );
-
-        // Use jsPDF autoTable for dynamic PDF generation with styles
-        doc.autoTable({
-            head: [columns.map((col) => col.headerName)],
-            body: tableData,
-            styles: {
-                fillColor: (rowIndex, columnIndex) => {
-                    if (columnIndex > 2) {
-                        const value =
-                            rows[rowIndex][columns[columnIndex].field];
-                        if (value === 100) return [0, 128, 0]; // Green
-                        if (value >= 75) return [255, 255, 0]; // Yellow
-                        return [255, 0, 0]; // Red
-                    }
-                    return null;
-                },
-                textColor: "black",
-            },
-        });
-
-        doc.save("CollectorControlNumberSalesReport.pdf");
-    };
-
     return (
         <main className="p-5 space-y-4">
             <div className="flex items-center justify-between gap-x-5">
                 <Button
-                    onClick={exportToPDF}
+                    href={route(
+                        "admin.enforcement_control_number_sales_report_pdf"
+                    )}
                     variant="contained"
                     color="primary"
                 >

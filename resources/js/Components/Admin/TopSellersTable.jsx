@@ -3,6 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 export default function TopSellersTable({ reports }) {
     // Aggregate total sales per user
     const userSalesData = reports.reduce((acc, report) => {
+        if (!report.user) return acc;
+
         const userId = report.user.id;
         const userFullName = `${report.user.first_name} ${report.user.last_name}`;
         const userRole = report.user.role; // Assuming 'role' field exists on the user object

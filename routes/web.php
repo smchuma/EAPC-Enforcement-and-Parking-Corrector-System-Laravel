@@ -58,6 +58,10 @@ Route::group(['prefix' => 'admin'], function() {
         Route::get('/target-reports/collector_control_number_sales_report', [ReportController::class, 'collector_control_number_sales_report'])->name('admin.collector_control_number_sales_report');
         Route::get('/target-reports/enforcement_control_number_sales_report', [ReportController::class, 'enforcement_control_number_sales_report'])->name('admin.enforcement_control_number_sales_report');
 
+        Route::get('/target-reports/collector_daily_sales_report/pdf', [ReportController::class, 'collector_daily_sales_report_pdf'])->name('admin.collector_daily_sales_report_pdf');
+        Route::get('/target-reports/collector_control_number_sales_report/pdf', [ReportController::class, 'collector_control_number_sales_report_pdf'])->name('admin.collector_control_number_sales_report_pdf');
+        Route::get('/target-reports/enforcement_control_number_sales_report/pdf', [ReportController::class, 'enforcement_control_number_sales_report_pdf'])->name('admin.enforcement_control_number_sales_report_pdf');
+
         Route::get('/users', [AdminController::class, 'viewUsers'])->name('admin.viewUsers');
         Route::post('/users/store', [AdminController::class, 'storeUser'])->name('admin.storeUser');
         Route::put('/user/update/{id}', [AdminController::class, 'update_user'])->name('admin.update_user');

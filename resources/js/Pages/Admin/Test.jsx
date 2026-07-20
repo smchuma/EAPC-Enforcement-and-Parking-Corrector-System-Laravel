@@ -1,5 +1,5 @@
 import PrimaryButton from "@/Components/PrimaryButton";
-import * as XLSX from "xlsx";
+import { downloadCsv } from "@/utils/csvExport";
 import { useState, useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 
@@ -165,10 +165,7 @@ const Test = ({ reports }) => {
             return rowData;
         });
 
-        const worksheet = XLSX.utils.json_to_sheet(worksheetData);
-        const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, "Target Report");
-        XLSX.writeFile(workbook, "TargetReport.xlsx");
+        downloadCsv(worksheetData, "TargetReport.csv");
     };
 
     return (

@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ReportController extends Controller
 {
@@ -250,5 +251,123 @@ class ReportController extends Controller
         ]);
     }
 
+
+    public function collector_daily_sales_report_pdf(Request $request)
+    {
+        $query = Report::query();
+
+        $users = User::where('role', 'collector')->get();
+
+        if ($request->has('search')) {
+            $search = $request->get('search');
+            $query->whereDate('created_at', $search);
+        }
+
+        $reports = $query->with('user')
+            ->whereIn('user_id', $users->pluck('id'))
+            ->orderBy('created_at')
+            ->get();
+
+        $dates = $reports->map(fn ($report) => $report->created_at->format('Y-m-d'))
+            ->unique()
+            ->values();
+
+        $rows = [];
+        foreach ($reports as $report) {
+            $userId = $report->user->id;
+
+            if (! isset($rows[$userId])) {
+                $rows[$userId] = [
+                    'name' => "{$report->user->first_name} {$report->user->last_name}",
+                    'mtaa' => $report->user->street,
+                    'target' => $report->user->target,
+                    'dates' => [],
+                ];
+            }
+
+            $target = $rows[$userId]['target'];
+            $percentage = $target ? min(round(($report->daily_sales / $target) * 100), 100) : 0;
+            $rows[$userId]['dates'][$report->created_at->format('Y-m-d')] = $percentage;
+        }
+
+        $pdf = Pdf::loadView('pdf.target-report', [
+            'title' => 'Parking Collector Report',
+            'targetLabel' => 'Target',
+            'dates' => $dates,
+            'rows' => array_values($rows),
+        ]);
+
+        return $pdf->download('CollectorDailySalesReport.pdf');
+    }
+
+    public function collector_control_number_sales_report_pdf(Request $request)
+    {
+        return $this->controlNumberSalesReportPdf(
+            $request,
+            'collector',
+            'Parking Collector Control Number Sales Report',
+            'CollectorControlNumberSalesReport.pdf'
+        );
+    }
+
+    public function enforcement_control_number_sales_report_pdf(Request $request)
+    {
+        return $this->controlNumberSalesReportPdf(
+            $request,
+            'enforcement',
+            'Parking Enforcement Control Number Sales Report',
+            'EnforcementControlNumberSalesReport.pdf'
+        );
+    }
+
+    private function controlNumberSalesReportPdf(Request $request, string $role, string $title, string $filename)
+    {
+        $query = ControlNumber::query();
+
+        $users = User::where('role', $role)->get();
+
+        if ($request->has('search')) {
+            $search = $request->get('search');
+            $query->whereDate('created_at', $search);
+        }
+
+        $controlNumbers = $query->with('user')
+            ->whereIn('user_id', $users->pluck('id'))
+            ->orderBy('created_at')
+            ->get();
+
+        $dates = $controlNumbers->map(fn ($cn) => $cn->created_at->format('Y-m-d'))
+            ->unique()
+            ->values();
+
+        $rows = [];
+        foreach ($controlNumbers as $controlNumber) {
+            $userId = $controlNumber->user->id;
+
+            if (! isset($rows[$userId])) {
+                $rows[$userId] = [
+                    'name' => "{$controlNumber->user->first_name} {$controlNumber->user->last_name}",
+                    'mtaa' => $controlNumber->user->street,
+                    'target' => (int) $controlNumber->user->control_number_target,
+                    'totalSales' => 0,
+                    'dates' => [],
+                ];
+            }
+
+            $rows[$userId]['totalSales'] += (int) $controlNumber->amount;
+            $target = $rows[$userId]['target'];
+            $percentage = $target ? min(round(($rows[$userId]['totalSales'] / $target) * 100), 100) : 0;
+            $rows[$userId]['dates'][$controlNumber->created_at->format('Y-m-d')] = $percentage;
+        }
+
+        $pdf = Pdf::loadView('pdf.target-report', [
+            'title' => $title,
+            'targetLabel' => 'Control Number Target',
+            'dates' => $dates,
+            'rows' => array_values($rows),
+        ]);
+
+        return $pdf->download($filename);
+    }
 
 }
