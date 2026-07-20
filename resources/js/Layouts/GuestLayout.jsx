@@ -1,16 +1,17 @@
 import ApplicationLogo from "@/Components/ApplicationLogo";
-import { Link } from "@inertiajs/react";
 
 export default function Guest({ children }) {
     return (
-        <div className="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-            <div className="bg-white w-3/4 md:w-2/4 lg:w-1/3 mx-20 flex items-center justify-center flex-col py-5 shadow-md rounded-xl">
-                <div className="mt-5">
-                    <ApplicationLogo className="w-20 h-20 fill-current text-blue-500 text-2xl font-bold py-6" />
-                </div>
-
-                <div className="w-full mb-12 sm:max-w-md  px-6 overflow-hidden sm:rounded-lg">
-                    {children}
+        <div className="min-h-screen flex flex-col justify-center items-center px-4 py-10 bg-gradient-to-br from-blue-50 via-gray-50 to-gray-100">
+            <div className="w-full max-w-md">
+                <div className="bg-white w-full flex items-center justify-center flex-col py-8 px-6 sm:px-10 shadow-xl shadow-gray-200/70 border border-gray-100 rounded-2xl">
+                    <div className="flex flex-col items-center mb-6">
+                        <ApplicationLogo className="text-2xl font-bold text-blue-600" />
+                        <p className="text-sm text-gray-500 mt-1 text-center">
+                            Enforcement &amp; Parking Corrector System
+                        </p>
+                    </div>
+                    <div className="w-full">{children}</div>
                 </div>
             </div>
         </div>

@@ -108,7 +108,8 @@ class ReportController extends Controller
 
         return Inertia::render("Admin/Reports", [
            "reports"=> $query->with("control_number", "user")->orderByDesc('created_at')->paginate(5),
-           "users" => $users
+           "users" => $users,
+           "supervisors" => User::where('role', 'supervisor')->get(['id', 'first_name', 'last_name']),
         ]);
     }
 

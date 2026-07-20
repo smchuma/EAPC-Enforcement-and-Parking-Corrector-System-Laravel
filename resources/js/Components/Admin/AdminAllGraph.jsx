@@ -59,7 +59,7 @@ export default function AdminAllGraph({ reports }) {
     const chartData = aggregateReports(reports);
 
     return (
-        <Card className="w-full bg-gray-50">
+        <Card className="w-full">
             <CardHeader>
                 <CardTitle>Total Mauzo ya watu</CardTitle>
                 <CardDescription>User Sales Overview</CardDescription>

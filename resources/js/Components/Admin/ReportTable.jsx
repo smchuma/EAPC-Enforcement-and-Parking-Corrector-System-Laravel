@@ -21,11 +21,11 @@ const ReportTable = ({ reports }) => {
             reports.data
                 .filter(
                     (report) =>
-                        report.user.first_name
-                            .toLowerCase()
+                        report.user?.first_name
+                            ?.toLowerCase()
                             .includes(search.toLowerCase()) ||
-                        report.user.last_name
-                            .toLowerCase()
+                        report.user?.last_name
+                            ?.toLowerCase()
                             .includes(search.toLowerCase())
                 )
                 .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
@@ -54,77 +54,85 @@ const ReportTable = ({ reports }) => {
 
     return (
         <main>
-            <div className="flex flex-col px-5 ">
-                <div className="flex items-center gap-2 mb-4">
-                    <div className="flex justify-end items-center mt-5 lg:mt-0 px-5 lg:px-2 border border-gray-500 rounded-lg w-full lg:w-64">
-                        <CiSearch size={25} />
+            <div className="flex flex-col px-4 sm:px-6 lg:px-8 py-6">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-4">
+                    <div className="flex justify-end items-center px-3 border border-gray-300 rounded-lg w-full sm:w-64 bg-white">
+                        <CiSearch size={20} className="text-gray-400" />
                         <TextInput
                             type="date"
                             value={searchDate}
                             onChange={(e) => setSearchDate(e.target.value)}
                             placeholder="Search userss..."
-                            className=" border-0 bg-transparent placeholder:text-gray-600 w-full outline-none focus:ring-0"
+                            className="border-0 shadow-none bg-transparent placeholder:text-gray-600 w-full outline-none focus:ring-0"
                         />
                     </div>
-                    <PrimaryButton className="py-3" onClick={handleSearch}>
-                        Search
-                    </PrimaryButton>
-                    <PrimaryButton
-                        className="py-3 bg-gray-800 hover:bg-gray-800 "
-                        onClick={handleClear}
-                    >
-                        Clear
-                    </PrimaryButton>
+                    <div className="flex gap-2">
+                        <PrimaryButton onClick={handleSearch}>
+                            Search
+                        </PrimaryButton>
+                        <PrimaryButton
+                            className="bg-gray-500 hover:bg-gray-600"
+                            onClick={handleClear}
+                        >
+                            Clear
+                        </PrimaryButton>
+                    </div>
                 </div>
-                <table className="min-w-full leading-normal">
+                <div className="hidden sm:block bg-white rounded-xl border border-gray-100 shadow-sm overflow-x-auto">
+                <table className="min-w-full">
                     <thead>
-                        <tr className="bg-blue-700 text-white">
-                            <th className="border p-2">Date</th>
-                            <th className="border p-2">Full Name</th>
-                            <th className="border p-2">Role</th>
-                            <th className="border p-2">Mauzo</th>
-                            <th className="border p-2">Picture</th>
-                            <th className="border p-2">
+                        <tr className="bg-gray-50 text-gray-600 text-xs font-semibold uppercase tracking-wide">
+                            <th className="px-4 py-3 text-left">Date</th>
+                            <th className="px-4 py-3 text-left">Full Name</th>
+                            <th className="px-4 py-3 text-left">Role</th>
+                            <th className="px-4 py-3 text-right">Mauzo</th>
+                            <th className="px-4 py-3 text-center">Picture</th>
+                            <th className="px-4 py-3 text-right">
                                 Total Amount (Control Numbers)
                             </th>
-                            <th className="border p-2">Actions</th>
+                            <th className="px-4 py-3 text-center">Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody className="divide-y divide-gray-100">
                         {filteredReports.map((report) => (
                             <tr
                                 key={report.id}
-                                className="bg-gray-50 hover:bg-gray-100"
+                                className="hover:bg-gray-50 transition-colors"
                             >
-                                <td className="border p-3 text-center">
+                                <td className="px-4 py-3 text-gray-600 whitespace-nowrap">
                                     {new Date(
                                         report.created_at
                                     ).toLocaleDateString()}
                                 </td>
-                                <td className="border p-3 text-center">
-                                    {report.user.first_name}{" "}
-                                    {report.user.last_name}
+                                <td className="px-4 py-3 text-gray-800">
+                                    {report.user
+                                        ? `${report.user.first_name} ${report.user.last_name}`
+                                        : "Unknown User"}
                                 </td>
-                                <td className="border p-3 text-center">
-                                    {report.user.role}
+                                <td className="px-4 py-3">
+                                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-600 capitalize">
+                                        {report.user?.role ?? "-"}
+                                    </span>
                                 </td>
-                                <td className="border p-3 text-center">
+                                <td className="px-4 py-3 text-right text-gray-600">
                                     {report.daily_sales}
                                 </td>
-                                <td className="border p-3 flex justify-center">
-                                    {report.sales_proof_image ? (
-                                        <img
-                                            src={`/storage/${report.sales_proof_image}`}
-                                            alt="Report proof"
-                                            className="w-16 h-16 object-cover rounded"
-                                        />
-                                    ) : (
-                                        <p className="text-xs font-semibold">
-                                            picha haipo
-                                        </p>
-                                    )}
+                                <td className="px-4 py-3">
+                                    <div className="flex justify-center">
+                                        {report.sales_proof_image ? (
+                                            <img
+                                                src={`/storage/${report.sales_proof_image}`}
+                                                alt="Report proof"
+                                                className="w-16 h-16 object-cover rounded-lg"
+                                            />
+                                        ) : (
+                                            <p className="text-xs text-gray-400">
+                                                picha haipo
+                                            </p>
+                                        )}
+                                    </div>
                                 </td>
-                                <td className="border p-3 text-center">
+                                <td className="px-4 py-3 text-right font-semibold text-gray-900 whitespace-nowrap">
                                     {report.control_number
                                         .reduce(
                                             (total, control) =>
@@ -135,10 +143,10 @@ const ReportTable = ({ reports }) => {
                                         .toFixed(2)}{" "}
                                     TSH
                                 </td>
-                                <td className="border p-3">
+                                <td className="px-4 py-3 text-center">
                                     <button
                                         onClick={() => openModal(report)}
-                                        className="text-blue-600 underline hover:text-blue-800"
+                                        className="text-blue-600 font-medium hover:text-blue-800"
                                     >
                                         View Details
                                     </button>
@@ -147,6 +155,85 @@ const ReportTable = ({ reports }) => {
                         ))}
                     </tbody>
                 </table>
+                </div>
+
+                {/* Cards - below sm, tables don't fit phone screens well */}
+                <div className="sm:hidden space-y-3">
+                    {filteredReports.map((report) => (
+                        <div
+                            key={report.id}
+                            className="bg-white rounded-xl border border-gray-100 shadow-sm p-4"
+                        >
+                            <div className="flex justify-between items-start gap-2 mb-3">
+                                <span className="text-xs text-gray-400">
+                                    {new Date(
+                                        report.created_at
+                                    ).toLocaleDateString()}
+                                </span>
+                                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-600 capitalize">
+                                    {report.user?.role ?? "-"}
+                                </span>
+                            </div>
+
+                            <div className="font-medium text-gray-800 mb-2">
+                                {report.user
+                                    ? `${report.user.first_name} ${report.user.last_name}`
+                                    : "Unknown User"}
+                            </div>
+
+                            <div className="flex justify-between items-center py-1.5 border-t border-gray-100">
+                                <span className="text-sm text-gray-500">
+                                    Mauzo
+                                </span>
+                                <span className="text-sm text-gray-800">
+                                    {report.daily_sales}
+                                </span>
+                            </div>
+
+                            <div className="flex justify-between items-center py-1.5 border-t border-gray-100">
+                                <span className="text-sm text-gray-500">
+                                    Picture
+                                </span>
+                                {report.sales_proof_image ? (
+                                    <img
+                                        src={`/storage/${report.sales_proof_image}`}
+                                        alt="Report proof"
+                                        className="w-14 h-14 object-cover rounded-lg"
+                                    />
+                                ) : (
+                                    <span className="text-xs text-gray-400">
+                                        picha haipo
+                                    </span>
+                                )}
+                            </div>
+
+                            <div className="flex justify-between items-center pt-2 mt-1 border-t border-gray-100">
+                                <div>
+                                    <div className="text-xs text-gray-500">
+                                        Total Amount (Control Numbers)
+                                    </div>
+                                    <div className="font-semibold text-gray-900">
+                                        {report.control_number
+                                            .reduce(
+                                                (total, control) =>
+                                                    total +
+                                                    parseFloat(control.amount),
+                                                0
+                                            )
+                                            .toFixed(2)}{" "}
+                                        TSH
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={() => openModal(report)}
+                                    className="text-blue-600 text-sm font-medium hover:text-blue-800"
+                                >
+                                    View Details
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
                 {filteredReports.length === 0 && (
                     <h1 className="mt-10 font-semibold text-center">
                         No Reports Found

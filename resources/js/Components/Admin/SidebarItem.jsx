@@ -2,7 +2,7 @@ import { Link, usePage } from "@inertiajs/react";
 import { RiArrowDownSLine, RiArrowUpSLine } from "react-icons/ri";
 import { useState, useEffect } from "react";
 
-const SidebarItem = ({ item }) => {
+const SidebarItem = ({ item, onNavigate }) => {
     const { url } = usePage();
     const [isOpen, setIsOpen] = useState(false);
 
@@ -27,65 +27,85 @@ const SidebarItem = ({ item }) => {
     };
 
     return (
-        <div className="w-full">
+        <div className="w-full px-3 mb-1">
             {item.subItems ? (
                 // Main item with dropdown functionality
                 <div
                     onClick={toggleDropdown}
-                    className={`flex justify-between hover:bg-blue-500 text-gray-900 hover:text-white mb-2 w-full p-3 py-4 gap-2 items-center cursor-pointer ease-in-out
-                    ${isActive ? "blu text-white" : ""}
-                    `}
+                    className={`flex justify-between items-center gap-2 w-full rounded-lg px-3 py-3 cursor-pointer transition-colors
+                    ${
+                        isActive
+                            ? "bg-blue-600 text-white shadow-sm"
+                            : "text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                    }`}
                 >
-                    <div className="flex">
-                        <div
-                            className={`px-3 pl-4 ${
-                                isActive ? "" : "text-blue-400"
-                            }`}
+                    <div className="flex items-center gap-3">
+                        <span
+                            className={
+                                isActive ? "text-white" : "text-blue-500"
+                            }
                         >
                             {item.icon}
-                        </div>
-                        <div>{item.name}</div>
+                        </span>
+                        <span className="text-sm font-medium">
+                            {item.name}
+                        </span>
                     </div>
                     {isOpen ? (
-                        <RiArrowUpSLine className="mr-2" />
+                        <RiArrowUpSLine size={16} />
                     ) : (
-                        <RiArrowDownSLine className="mr-2" />
+                        <RiArrowDownSLine size={16} />
                     )}
                 </div>
             ) : (
                 // Regular item without dropdown
-                <Link href={item.link} className="w-full">
+                <Link
+                    href={item.link}
+                    className="block w-full"
+                    onClick={onNavigate}
+                >
                     <div
-                        className={`flex justify-between hover:bg-blue-500 text-gray-900 hover:text-white mb-2 w-full p-3 py-4 gap-2 items-center cursor-pointer ease-in-out
-                        ${isActive ? "blu text-white" : ""}
-                        `}
+                        className={`flex items-center gap-3 w-full rounded-lg px-3 py-3 cursor-pointer transition-colors
+                        ${
+                            isActive
+                                ? "bg-blue-600 text-white shadow-sm"
+                                : "text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                        }`}
                     >
-                        <div className="flex">
-                            <div
-                                className={`px-3 pl-4 ${
-                                    isActive ? "" : "text-blue-400"
-                                }`}
-                            >
-                                {item.icon}
-                            </div>
-                            <div>{item.name}</div>
-                        </div>
+                        <span
+                            className={
+                                isActive ? "text-white" : "text-blue-500"
+                            }
+                        >
+                            {item.icon}
+                        </span>
+                        <span className="text-sm font-medium">
+                            {item.name}
+                        </span>
                     </div>
                 </Link>
             )}
 
             {/* Render dropdown links if item has subItems and is open */}
             {isOpen && item.subItems && (
-                <div className="pl-8">
-                    {item.subItems.map((subItem) => (
-                        <Link
-                            key={subItem.id}
-                            href={subItem.link}
-                            className="block py-2 text-gray-700 hover:text-blue-500"
-                        >
-                            {subItem.name}
-                        </Link>
-                    ))}
+                <div className="pl-9 mt-1 space-y-1">
+                    {item.subItems.map((subItem) => {
+                        const isSubActive = url === subItem.link;
+                        return (
+                            <Link
+                                key={subItem.id}
+                                href={subItem.link}
+                                onClick={onNavigate}
+                                className={`block py-2 px-3 rounded-md text-sm transition-colors ${
+                                    isSubActive
+                                        ? "text-blue-600 font-medium bg-blue-50"
+                                        : "text-gray-500 hover:text-blue-600 hover:bg-blue-50"
+                                }`}
+                            >
+                                {subItem.name}
+                            </Link>
+                        );
+                    })}
                 </div>
             )}
         </div>

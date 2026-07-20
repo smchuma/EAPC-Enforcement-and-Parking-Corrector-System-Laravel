@@ -1,4 +1,5 @@
 import { useForm } from "@inertiajs/react";
+import toast from "react-hot-toast";
 import {
     Dialog,
     DialogContent,
@@ -45,112 +46,99 @@ const AddTarget = ({ user, open, setOpen }) => {
                 </DialogTrigger>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle className="border-b-2 pb-4">
-                            ADD TARGET
+                        <DialogTitle className="border-b border-gray-200 pb-4">
+                            Add Target
                         </DialogTitle>
                         <DialogDescription></DialogDescription>
                         <form
                             onSubmit={handleSubmit}
-                            className="rounded px-8 pt-2 pb-8 mb-4 flex flex-col my-2"
+                            className="rounded pt-2 pb-4 flex flex-col my-2 gap-4"
                         >
+                            {/* Street Field */}
                             <div>
-                                {/* Street Field */}
-                                <div className="mb-4">
+                                <InputLabel htmlFor="grid-street" required>
+                                    Street
+                                </InputLabel>
+                                <TextInput
+                                    className="block w-full"
+                                    id="grid-street"
+                                    type="text"
+                                    value={data.street}
+                                    onChange={(e) =>
+                                        setData("street", e.target.value)
+                                    }
+                                    placeholder="Enter the Street"
+                                />
+                                <InputError
+                                    message={errors.street}
+                                    className="mt-2"
+                                />
+                            </div>
+
+                            {/* Target field for collectors */}
+                            {user.role === "collector" && (
+                                <div>
                                     <InputLabel
-                                        className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
-                                        htmlFor="grid-street"
+                                        htmlFor="grid-target"
                                         required
                                     >
-                                        Street
+                                        Target
                                     </InputLabel>
                                     <TextInput
-                                        className="placeholder:text-sm appearance-none block w-full bg-grey-lighter text-grey-darker border rounded py-3 px-4"
-                                        id="grid-street"
-                                        type="text"
-                                        value={data.street}
+                                        className="block w-full"
+                                        id="grid-target"
+                                        type="number"
+                                        placeholder="Enter the Target"
+                                        value={data.target}
                                         onChange={(e) =>
-                                            setData("street", e.target.value)
+                                            setData("target", e.target.value)
                                         }
-                                        placeholder="Enter the Street"
                                     />
                                     <InputError
-                                        message={errors.street}
+                                        message={errors.target}
                                         className="mt-2"
                                     />
                                 </div>
+                            )}
 
-                                {/* Target field for collectors */}
-                                {user.role === "collector" && (
-                                    <div className="mb-4">
-                                        <InputLabel
-                                            className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
-                                            htmlFor="grid-target"
-                                            required
-                                        >
-                                            Target
-                                        </InputLabel>
-                                        <TextInput
-                                            className="appearance-none block w-full bg-grey-lighter text-grey-darker border rounded py-3 px-4 placeholder:text-sm"
-                                            id="grid-target"
-                                            type="number"
-                                            placeholder="Enter the Target"
-                                            value={data.target}
-                                            onChange={(e) =>
-                                                setData(
-                                                    "target",
-                                                    e.target.value
-                                                )
-                                            }
-                                        />
-                                        <InputError
-                                            message={errors.target}
-                                            className="mt-2"
-                                        />
-                                    </div>
-                                )}
-
-                                {/* Control Number Target field for both collectors and enforcers */}
-                                {(user.role === "collector" ||
-                                    user.role === "enforcement") && (
-                                    <div className="mb-4">
-                                        <InputLabel
-                                            className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
-                                            htmlFor="grid-control_number_target"
-                                            required
-                                        >
-                                            Control Number Target
-                                        </InputLabel>
-                                        <TextInput
-                                            className="appearance-none block w-full bg-grey-lighter text-grey-darker border rounded py-3 px-4 placeholder:text-sm"
-                                            id="grid-control_number_target"
-                                            type="number"
-                                            placeholder="Enter the Control Number Target"
-                                            value={data.control_number_target}
-                                            onChange={(e) =>
-                                                setData(
-                                                    "control_number_target",
-                                                    e.target.value
-                                                )
-                                            }
-                                        />
-                                        <InputError
-                                            message={
-                                                errors.control_number_target
-                                            }
-                                            className="mt-2"
-                                        />
-                                    </div>
-                                )}
-
-                                {/* Submit Button */}
-                                <div className="flex justify-end mt-10">
-                                    <PrimaryButton
-                                        type="submit"
-                                        className="bg-blue-500 text-white py-2 px-4 rounded w-1/5 flex justify-center"
+                            {/* Control Number Target field for both collectors and enforcers */}
+                            {(user.role === "collector" ||
+                                user.role === "enforcement") && (
+                                <div>
+                                    <InputLabel
+                                        htmlFor="grid-control_number_target"
+                                        required
                                     >
-                                        {processing ? "Adding..." : "ADD"}
-                                    </PrimaryButton>
+                                        Control Number Target
+                                    </InputLabel>
+                                    <TextInput
+                                        className="block w-full"
+                                        id="grid-control_number_target"
+                                        type="number"
+                                        placeholder="Enter the Control Number Target"
+                                        value={data.control_number_target}
+                                        onChange={(e) =>
+                                            setData(
+                                                "control_number_target",
+                                                e.target.value
+                                            )
+                                        }
+                                    />
+                                    <InputError
+                                        message={errors.control_number_target}
+                                        className="mt-2"
+                                    />
                                 </div>
+                            )}
+
+                            {/* Submit Button */}
+                            <div className="flex justify-end mt-4">
+                                <PrimaryButton
+                                    type="submit"
+                                    disabled={processing}
+                                >
+                                    {processing ? "Adding..." : "Add"}
+                                </PrimaryButton>
                             </div>
                         </form>
                     </DialogHeader>

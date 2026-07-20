@@ -85,11 +85,12 @@ const TargetReportTable = ({ reports }) => {
         ),
     ];
     return (
-        <main>
+        <main className="px-3 sm:px-5">
             <main>
                 <PrimaryButton onClick={handleDownload}>
                     Download Report
                 </PrimaryButton>
+                <div className="overflow-x-auto">
                 <table className="min-w-full mt-5 leading-normal">
                     <thead>
                         <tr className="bg-blue-700 text-white">
@@ -155,6 +156,7 @@ const TargetReportTable = ({ reports }) => {
                         })}
                     </tbody>
                 </table>
+                </div>
             </main>
         </main>
     );

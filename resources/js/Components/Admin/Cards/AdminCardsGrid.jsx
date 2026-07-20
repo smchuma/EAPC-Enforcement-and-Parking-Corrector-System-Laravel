@@ -47,7 +47,7 @@ const AdminCardsGrid = ({ reports }) => {
     ];
 
     return (
-        <main className="container mx-auto px-8 py-6">
+        <main>
             <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-3 ">
                 {cardData.map((card) => (
                     <Card

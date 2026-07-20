@@ -58,11 +58,19 @@ class AdminController extends Controller
         $lastName = strtolower(preg_replace('/\s+/', '', $validated['last_name']));
         $username = substr($firstName, 0, 1) . $lastName;
         $lettersUsed = 1;
-        while (User::where('username', $username)->exists()) {
+        while (User::where('username', $username)->exists() && $lettersUsed < strlen($firstName)) {
             $lettersUsed++;
             $username = substr($firstName, 0, $lettersUsed) . $lastName;
-            if ($lettersUsed >= strlen($firstName)) {
-                break;
+        }
+
+        // Full first name still collides (e.g. two users with identical names) -
+        // guarantee uniqueness with a numeric suffix instead of saving a duplicate.
+        if (User::where('username', $username)->exists()) {
+            $baseUsername = $username;
+            $suffix = 2;
+            while (User::where('username', $username)->exists()) {
+                $username = $baseUsername . $suffix;
+                $suffix++;
             }
         }
 
@@ -76,7 +84,7 @@ class AdminController extends Controller
             'role' => $validated['role']
         ]);
 
-        return redirect()->back()->with('success', 'User created successfully.');
+        return redirect()->back()->with('success', "User created successfully. Username: {$username}");
     }
 
     ///delete a user

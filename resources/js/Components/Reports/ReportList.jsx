@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { CiSearch } from "react-icons/ci";
 import {
     Dialog,
     DialogContent,
@@ -39,122 +40,219 @@ const ReportList = ({ reports, auth }) => {
     const closeModal = () => setSelectedReport(null);
 
     return (
-        <div className="container mx-auto">
+        <div className="container mx-auto px-3 sm:px-0">
             {/* Single Date Filter Input */}
-            <div className="flex space-x-4 mb-6 mt-5">
-                <div className="flex justify-center items-center gap-x-3">
-                    <label className="block font-medium mb-1">
+            <div className="flex flex-col sm:flex-row sm:items-end gap-3 sm:gap-2 mb-6 mt-5">
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
                         Search Ripoti
                     </label>
-                    <TextInput
-                        type="date"
-                        value={searchDate}
-                        onChange={(e) => setSearchDate(e.target.value)}
-                        className="border border-gray-300 rounded-md p-2"
-                    />
+                    <div className="flex items-center px-3 border border-gray-300 rounded-lg w-full sm:w-64 bg-white">
+                        <CiSearch size={20} className="text-gray-400" />
+                        <TextInput
+                            type="date"
+                            value={searchDate}
+                            onChange={(e) => setSearchDate(e.target.value)}
+                            className="border-0 shadow-none bg-transparent w-full outline-none focus:ring-0"
+                        />
+                    </div>
                 </div>
-                <div className="self-end flex space-x-2">
-                    <PrimaryButton
-                        onClick={handleSearch}
-                        className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-                    >
+                <div className="flex gap-2">
+                    <PrimaryButton onClick={handleSearch}>
                         Search
                     </PrimaryButton>
 
                     {/* Clear button */}
                     <PrimaryButton
+                        className="bg-gray-500 hover:bg-gray-600"
                         onClick={handleClear}
-                        className="border-2 bg-gray-600 text-black py-2 px-4 rounded hover:bg-gray-400"
                     >
                         Clear
                     </PrimaryButton>
                 </div>
             </div>
 
-            {/* Table */}
-            <table className="min-w-full table-auto border-collapse">
-                <thead className="bg-gray-900 text-white">
-                    <tr>
-                        <th className="border p-2">Date</th>
+            {/* Table - sm and up */}
+            <div className="hidden sm:block bg-white rounded-xl border border-gray-100 shadow-sm overflow-x-auto">
+                <table className="min-w-full">
+                    <thead>
+                        <tr className="bg-gray-50 text-gray-600 text-xs font-semibold uppercase tracking-wide">
+                            <th className="px-4 py-3 text-left">Date</th>
 
-                        {auth.user.role === "supervisor" && (
-                            <th className="border p-2">Collector</th>
-                        )}
-                        {["collector", "supervisor"].includes(
-                            auth.user.role
-                        ) && <th className="border p-2">Mauzo</th>}
-                        {["collector", "supervisor"].includes(
-                            auth.user.role
-                        ) && <th className="border p-2">Picture</th>}
+                            {auth.user.role === "supervisor" && (
+                                <th className="px-4 py-3 text-left">
+                                    Collector
+                                </th>
+                            )}
+                            {["collector", "supervisor"].includes(
+                                auth.user.role
+                            ) && (
+                                <th className="px-4 py-3 text-right">
+                                    Mauzo
+                                </th>
+                            )}
+                            {["collector", "supervisor"].includes(
+                                auth.user.role
+                            ) && (
+                                <th className="px-4 py-3 text-center">
+                                    Picture
+                                </th>
+                            )}
 
-                        <th className="border p-2">
-                            Total Amount (Control Numbers)
-                        </th>
-                        <th className="border p-2">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {filteredReports.map((report) => (
-                        <tr
-                            key={report.id}
-                            className="bg-gray-50 hover:bg-gray-100"
-                        >
-                            <td className="border p-3 text-center">
+                            <th className="px-4 py-3 text-right">
+                                Total Amount (Control Numbers)
+                            </th>
+                            <th className="px-4 py-3 text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100">
+                        {filteredReports.map((report) => (
+                            <tr
+                                key={report.id}
+                                className="hover:bg-gray-50 transition-colors"
+                            >
+                                <td className="px-4 py-3 text-gray-600 whitespace-nowrap">
+                                    {new Date(
+                                        report.created_at
+                                    ).toLocaleDateString()}
+                                </td>
+                                {auth.user.role === "supervisor" && (
+                                    <td className="px-4 py-3 text-gray-800">
+                                        {report.user?.first_name}{" "}
+                                        {report.user?.last_name}
+                                    </td>
+                                )}
+                                {["collector", "supervisor"].includes(
+                                    auth.user.role
+                                ) && (
+                                    <td className="px-4 py-3 text-right text-gray-600">
+                                        {report.daily_sales}
+                                    </td>
+                                )}
+                                {["collector", "supervisor"].includes(
+                                    auth.user.role
+                                ) && (
+                                    <td className="px-4 py-3">
+                                        <div className="flex justify-center">
+                                            {report.sales_proof_image ? (
+                                                <img
+                                                    src={`/storage/${report.sales_proof_image}`}
+                                                    alt="Report proof"
+                                                    className="w-16 h-16 object-cover rounded-lg"
+                                                />
+                                            ) : (
+                                                <p className="text-xs text-gray-400">
+                                                    picha haipo
+                                                </p>
+                                            )}
+                                        </div>
+                                    </td>
+                                )}
+                                <td className="px-4 py-3 text-right font-semibold text-gray-900">
+                                    {report.control_number
+                                        .reduce(
+                                            (total, control) =>
+                                                total +
+                                                parseFloat(control.amount),
+                                            0
+                                        )
+                                        .toFixed(2)}
+                                </td>
+                                <td className="px-4 py-3 text-center">
+                                    <button
+                                        onClick={() => openModal(report)}
+                                        className="text-blue-600 font-medium hover:text-blue-800"
+                                    >
+                                        Ona Control Number
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+
+            {/* Cards - below sm, tables don't fit phone screens well */}
+            <div className="sm:hidden space-y-3">
+                {filteredReports.map((report) => (
+                    <div
+                        key={report.id}
+                        className="bg-white rounded-xl border border-gray-100 shadow-sm p-4"
+                    >
+                        <div className="flex justify-between items-start gap-2 mb-3">
+                            <span className="text-xs text-gray-400">
                                 {new Date(
                                     report.created_at
                                 ).toLocaleDateString()}
-                            </td>
+                            </span>
                             {auth.user.role === "supervisor" && (
-                                <td className="border p-3 text-center">
+                                <span className="font-medium text-gray-800 text-sm text-right">
                                     {report.user?.first_name}{" "}
                                     {report.user?.last_name}
-                                </td>
+                                </span>
                             )}
-                            {["collector", "supervisor"].includes(
-                                auth.user.role
-                            ) && (
-                                <td className="border p-3 text-center">
+                        </div>
+
+                        {["collector", "supervisor"].includes(
+                            auth.user.role
+                        ) && (
+                            <div className="flex justify-between items-center py-1.5 border-t border-gray-100">
+                                <span className="text-sm text-gray-500">
+                                    Mauzo
+                                </span>
+                                <span className="text-sm text-gray-800">
                                     {report.daily_sales}
-                                </td>
-                            )}
-                            {["collector", "supervisor"].includes(
-                                auth.user.role
-                            ) && (
-                                <td className="border p-3 flex justify-center">
-                                    {report.sales_proof_image ? (
-                                        <img
-                                            src={`/storage/${report.sales_proof_image}`}
-                                            alt="Report proof"
-                                            className="w-16 h-16 object-cover rounded"
-                                        />
-                                    ) : (
-                                        <p className="text-xs font-semibold">
-                                            picha haipo
-                                        </p>
-                                    )}
-                                </td>
-                            )}
-                            <td className="border p-3 text-center">
-                                {report.control_number
-                                    .reduce(
-                                        (total, control) =>
-                                            total + parseFloat(control.amount),
-                                        0
-                                    )
-                                    .toFixed(2)}{" "}
-                            </td>
-                            <td className="border p-3 text-center">
-                                <button
-                                    onClick={() => openModal(report)}
-                                    className="text-blue-600 underline hover:text-blue-800"
-                                >
-                                    Ona Control Number
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+                                </span>
+                            </div>
+                        )}
+
+                        {["collector", "supervisor"].includes(
+                            auth.user.role
+                        ) && (
+                            <div className="flex justify-between items-center py-1.5 border-t border-gray-100">
+                                <span className="text-sm text-gray-500">
+                                    Picture
+                                </span>
+                                {report.sales_proof_image ? (
+                                    <img
+                                        src={`/storage/${report.sales_proof_image}`}
+                                        alt="Report proof"
+                                        className="w-14 h-14 object-cover rounded-lg"
+                                    />
+                                ) : (
+                                    <span className="text-xs text-gray-400">
+                                        picha haipo
+                                    </span>
+                                )}
+                            </div>
+                        )}
+
+                        <div className="flex justify-between items-center pt-2 mt-1 border-t border-gray-100">
+                            <div>
+                                <div className="text-xs text-gray-500">
+                                    Total Amount (Control Numbers)
+                                </div>
+                                <div className="font-semibold text-gray-900">
+                                    {report.control_number
+                                        .reduce(
+                                            (total, control) =>
+                                                total +
+                                                parseFloat(control.amount),
+                                            0
+                                        )
+                                        .toFixed(2)}
+                                </div>
+                            </div>
+                            <button
+                                onClick={() => openModal(report)}
+                                className="text-blue-600 text-sm font-medium hover:text-blue-800"
+                            >
+                                Ona Control Number
+                            </button>
+                        </div>
+                    </div>
+                ))}
+            </div>
             {/* Modal for Control Numbers Details */}
             {selectedReport && (
                 <Dialog

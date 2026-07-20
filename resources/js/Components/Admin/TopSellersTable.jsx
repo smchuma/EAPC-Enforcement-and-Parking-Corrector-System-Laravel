@@ -43,50 +43,57 @@ export default function TopSellersTable({ reports }) {
     );
 
     return (
-        <Card className="w-full bg-gray-50">
+        <Card className="w-full">
             <CardHeader>
                 <CardTitle>Top Sellers</CardTitle>
             </CardHeader>
             <CardContent>
-                <table className="w-full border-collapse">
-                    <thead>
-                        <tr>
-                            <th className="px-4 py-2 border-b">Name</th>
-                            <th className="px-4 py-2 border-b">Role</th>
-                            <th className="px-4 py-2 border-b">
-                                Total Daily Sales
-                            </th>
-                            <th className="px-4 py-2 border-b">
-                                Total Control Sales
-                            </th>
-                            <th className="px-4 py-2 border-b">
-                                Combined Total Sales
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {sortedUsers.map((user, index) => (
-                            <tr key={index} className="hover:bg-gray-100">
-                                <td className="px-4 py-2 border-b text-center">
-                                    {user.name}
-                                </td>
-                                <td className="px-4 py-2 border-b text-center">
-                                    {user.role}
-                                </td>
-                                <td className="px-4 py-2 border-b text-center">
-                                    {user.totalDailySales}
-                                </td>
-                                <td className="px-4 py-2 border-b text-center">
-                                    {user.totalControlSales}
-                                </td>
-                                <td className="px-4 py-2 border-b font-bold text-center">
-                                    {user.totalDailySales +
-                                        user.totalControlSales}
-                                </td>
+                <div className="overflow-x-auto">
+                    <table className="w-full border-collapse">
+                        <thead>
+                            <tr className="bg-gray-50 text-gray-600 text-xs font-semibold uppercase tracking-wide">
+                                <th className="px-4 py-3 text-left">Name</th>
+                                <th className="px-4 py-3 text-left">Role</th>
+                                <th className="px-4 py-3 text-right">
+                                    Total Daily Sales
+                                </th>
+                                <th className="px-4 py-3 text-right">
+                                    Total Control Sales
+                                </th>
+                                <th className="px-4 py-3 text-right">
+                                    Combined Total Sales
+                                </th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody className="divide-y divide-gray-100">
+                            {sortedUsers.map((user, index) => (
+                                <tr
+                                    key={index}
+                                    className="hover:bg-gray-50 transition-colors"
+                                >
+                                    <td className="px-4 py-3 text-gray-800">
+                                        {user.name}
+                                    </td>
+                                    <td className="px-4 py-3">
+                                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-600 capitalize">
+                                            {user.role}
+                                        </span>
+                                    </td>
+                                    <td className="px-4 py-3 text-right text-gray-600">
+                                        {user.totalDailySales}
+                                    </td>
+                                    <td className="px-4 py-3 text-right text-gray-600">
+                                        {user.totalControlSales}
+                                    </td>
+                                    <td className="px-4 py-3 text-right font-semibold text-gray-900">
+                                        {user.totalDailySales +
+                                            user.totalControlSales}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </CardContent>
         </Card>
     );

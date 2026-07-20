@@ -11,6 +11,8 @@ import {
 import { IoMdAddCircleOutline } from "react-icons/io";
 import InputLabel from "./InputLabel";
 import TextInput from "./TextInput";
+import SelectField from "./SelectField";
+import PrimaryButton from "./PrimaryButton";
 import { useForm } from "@inertiajs/react";
 
 const SalesForm = ({ auth, supervisors = [] }) => {
@@ -57,14 +59,14 @@ const SalesForm = ({ auth, supervisors = [] }) => {
         <div>
             <Dialog open={open} onOpenChange={setOpen}>
                 <DialogTrigger>
-                    <div className="flex bg-gray-800 px-3 text-white p-2 rounded-md gap-x-2 items-center hover:scale-105 transition-all">
+                    <div className="flex bg-blue-600 px-4 py-2 text-white rounded-lg gap-x-2 items-center font-medium text-sm hover:bg-blue-700 transition-colors">
                         <IoMdAddCircleOutline size={18} />
                         Jaza Ripoti
                     </div>
                 </DialogTrigger>
-                <DialogContent className="">
+                <DialogContent>
                     <DialogHeader>
-                        <DialogTitle className="border-b-2 pb-4">
+                        <DialogTitle className="border-b border-gray-200 pb-4">
                             Ripoti
                         </DialogTitle>
                         <DialogDescription>
@@ -73,15 +75,15 @@ const SalesForm = ({ auth, supervisors = [] }) => {
 
                         <form
                             onSubmit={handleSubmit}
-                            className="rounded pt-3 px-5 text-black"
+                            className="rounded pt-3 text-black"
                         >
                             {role === "collector" && (
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-3">
                                     {/* Jaza Mauzo */}
                                     <div className="flex flex-col">
                                         <InputLabel
                                             htmlFor="jazaMauzo"
-                                            className="mb-4"
+                                            className="mb-2"
                                         >
                                             Jaza Mauzo
                                         </InputLabel>
@@ -97,7 +99,6 @@ const SalesForm = ({ auth, supervisors = [] }) => {
                                             id="jazaMauzo"
                                             name="jazaMauzo"
                                             required
-                                            className="border border-gray-400 rounded-md"
                                             placeholder="Ingiza mauzo yako"
                                         />
                                     </div>
@@ -106,7 +107,7 @@ const SalesForm = ({ auth, supervisors = [] }) => {
                                     <div className="flex flex-col">
                                         <InputLabel
                                             htmlFor="uploadPicha"
-                                            className="mb-4"
+                                            className="mb-2"
                                         >
                                             Weka Picha Inayoonyesha Mauzo Yako
                                             ya Leo
@@ -123,7 +124,6 @@ const SalesForm = ({ auth, supervisors = [] }) => {
                                             id="uploadPicha"
                                             name="uploadPicha"
                                             required
-                                            className="p-2 border border-gray-400 rounded"
                                         />
                                     </div>
                                 </div>
@@ -133,11 +133,11 @@ const SalesForm = ({ auth, supervisors = [] }) => {
                                 <div className="flex flex-col mt-4">
                                     <InputLabel
                                         htmlFor="supervisorSelect"
-                                        className="mb-4"
+                                        className="mb-2"
                                     >
                                         Chagua Msimamizi
                                     </InputLabel>
-                                    <select
+                                    <SelectField
                                         id="supervisorSelect"
                                         value={data.supervisor_id}
                                         onChange={(e) =>
@@ -147,7 +147,6 @@ const SalesForm = ({ auth, supervisors = [] }) => {
                                             )
                                         }
                                         required
-                                        className="p-2 border border-gray-400 rounded"
                                     >
                                         <option value="">Chagua...</option>
                                         {supervisors.map((supervisor) => (
@@ -159,9 +158,9 @@ const SalesForm = ({ auth, supervisors = [] }) => {
                                                 {supervisor.last_name}
                                             </option>
                                         ))}
-                                    </select>
+                                    </SelectField>
                                     {errors.supervisor_id && (
-                                        <span className="text-red-500 mt-1">
+                                        <span className="text-red-500 text-sm mt-1">
                                             {errors.supervisor_id}
                                         </span>
                                     )}
@@ -170,25 +169,25 @@ const SalesForm = ({ auth, supervisors = [] }) => {
 
                             {/* Mauzo ya Control Number */}
                             <div className="mt-6">
-                                <h2 className="text-lg font-semibold mb-5">
+                                <h2 className="text-lg font-semibold mb-4">
                                     Mauzo ya Control Number
                                 </h2>
                                 {data.control_numbers.map(
                                     (controller, index) => (
                                         <div
                                             key={index}
-                                            className="flex items-center mb-5"
+                                            className="flex items-start gap-2 mb-4"
                                         >
-                                            <div className="flex-1 grid grid-cols-2 gap-4">
+                                            <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4">
                                                 {/* Control Number */}
                                                 <div className="flex flex-col">
-                                                    <label
+                                                    <InputLabel
                                                         htmlFor={`controlNumber-${index}`}
-                                                        className="mb-3"
+                                                        className="mb-2"
                                                     >
                                                         Control Number
-                                                    </label>
-                                                    <input
+                                                    </InputLabel>
+                                                    <TextInput
                                                         type="number"
                                                         id={`controlNumber-${index}`}
                                                         name={`controlNumber-${index}`}
@@ -210,13 +209,12 @@ const SalesForm = ({ auth, supervisors = [] }) => {
                                                             );
                                                         }}
                                                         required
-                                                        className="p-2 border border-gray-400 rounded"
                                                         placeholder="Ingiza Control Number"
                                                     />
                                                     {errors[
                                                         `control_numbers.${index}.number`
                                                     ] && (
-                                                        <span className="text-red-500 mt-1">
+                                                        <span className="text-red-500 text-sm mt-1">
                                                             {
                                                                 errors[
                                                                     `control_numbers.${index}.number`
@@ -228,13 +226,13 @@ const SalesForm = ({ auth, supervisors = [] }) => {
 
                                                 {/* Amount */}
                                                 <div className="flex flex-col">
-                                                    <label
+                                                    <InputLabel
                                                         htmlFor={`amount-${index}`}
-                                                        className="mb-3"
+                                                        className="mb-2"
                                                     >
                                                         Kiasi
-                                                    </label>
-                                                    <input
+                                                    </InputLabel>
+                                                    <TextInput
                                                         type="number"
                                                         id={`amount-${index}`}
                                                         name={`amount-${index}`}
@@ -256,7 +254,6 @@ const SalesForm = ({ auth, supervisors = [] }) => {
                                                             );
                                                         }}
                                                         required
-                                                        className="p-2 border border-gray-400 rounded"
                                                         placeholder="Ingiza Kiasi"
                                                     />
                                                 </div>
@@ -272,7 +269,7 @@ const SalesForm = ({ auth, supervisors = [] }) => {
                                                             index
                                                         )
                                                     }
-                                                    className="bg-transparent ml-4 text-red-500 hover:text-red-700 mt-6"
+                                                    className="bg-transparent shrink-0 text-red-500 hover:text-red-700 mt-8"
                                                     aria-label="Delete Control Number"
                                                 >
                                                     <FaTrash size={15} />
@@ -286,10 +283,10 @@ const SalesForm = ({ auth, supervisors = [] }) => {
                                 <button
                                     type="button"
                                     onClick={addControlNumber}
-                                    className="flex items-center text-blue-500 hover:text-blue-700"
+                                    className="flex items-center text-blue-600 hover:text-blue-700 text-sm font-medium"
                                 >
-                                    <FaPlus className="mr-2" /> Ongeza Control
-                                    Number
+                                    <FaPlus className="mr-2" size={12} />{" "}
+                                    Ongeza Control Number
                                 </button>
                             </div>
 
@@ -298,14 +295,14 @@ const SalesForm = ({ auth, supervisors = [] }) => {
                             </p>
 
                             {/* Submit Button */}
-                            <div className="mt-7 mb-8 flex justify-end gap-2">
-                                <button
+                            <div className="mt-7 mb-2 flex justify-end">
+                                <PrimaryButton
                                     type="submit"
-                                    className="w-1/4 bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition-colors"
-                                    disabled={processing} // Disable button during form processing
+                                    className="w-full sm:w-auto"
+                                    disabled={processing}
                                 >
                                     {processing ? "Inatuma..." : "Tuma Mauzo"}
-                                </button>
+                                </PrimaryButton>
                             </div>
                         </form>
                     </DialogHeader>

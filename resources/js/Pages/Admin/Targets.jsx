@@ -4,7 +4,7 @@ import AdminLayout from "@/Layouts/AdminLayout";
 const Targets = ({ users }) => {
     return (
         <AdminLayout>
-            <main className="container px-2 ">
+            <main>
                 <TargetTable users={users} />
             </main>
         </AdminLayout>

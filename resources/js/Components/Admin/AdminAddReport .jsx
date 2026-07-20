@@ -11,14 +11,17 @@ import {
 import { IoMdAddCircleOutline } from "react-icons/io";
 import InputLabel from "../InputLabel";
 import TextInput from "../TextInput";
+import SelectField from "../SelectField";
+import PrimaryButton from "../PrimaryButton";
 import { useForm } from "@inertiajs/react";
 
-const AdminAddReport = ({ users }) => {
+const AdminAddReport = ({ users, supervisors = [] }) => {
     const [open, setOpen] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
 
     const { data, setData, post, processing, reset, errors } = useForm({
         user_id: "",
+        supervisor_id: "",
         daily_sales: "",
         control_numbers: [{ number: "", amount: "" }],
         sales_proof_image: null,
@@ -58,20 +61,18 @@ const AdminAddReport = ({ users }) => {
     };
     const filteredUsers = users.filter((user) => user.role !== "admin");
 
-    console.log(selectedUser);
-
     return (
         <div>
             <Dialog open={open} onOpenChange={setOpen}>
                 <DialogTrigger>
-                    <div className="flex bg-gray-800 px-3 text-white p-2 rounded-md gap-x-2 items-center hover:scale-105 transition-all">
+                    <div className="flex bg-blue-600 px-4 py-2 text-white rounded-lg gap-x-2 items-center font-medium text-sm hover:bg-blue-700 transition-colors">
                         <IoMdAddCircleOutline size={18} />
                         Jaza Ripoti
                     </div>
                 </DialogTrigger>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle className="border-b-2 pb-4">
+                        <DialogTitle className="border-b border-gray-200 pb-4">
                             Ripoti
                         </DialogTitle>
                         <DialogDescription>
@@ -87,12 +88,11 @@ const AdminAddReport = ({ users }) => {
                                 <InputLabel htmlFor="userSelect">
                                     Chagua Mtumiaji
                                 </InputLabel>
-                                <select
+                                <SelectField
                                     id="userSelect"
                                     value={data.user_id}
                                     onChange={handleUserChange}
                                     required
-                                    className="p-2 border border-gray-400 rounded"
                                 >
                                     <option value="">Chagua...</option>
                                     {filteredUsers.map((user) => (
@@ -100,7 +100,7 @@ const AdminAddReport = ({ users }) => {
                                             {user.first_name} {user.last_name}
                                         </option>
                                     ))}
-                                </select>
+                                </SelectField>
                             </div>
 
                             {/* Conditional Inputs for Collector */}
@@ -110,7 +110,7 @@ const AdminAddReport = ({ users }) => {
                                     <div className="flex flex-col">
                                         <InputLabel
                                             htmlFor="jazaMauzo"
-                                            className="mb-4"
+                                            className="mb-2"
                                         >
                                             Jaza Mauzo
                                         </InputLabel>
@@ -126,7 +126,6 @@ const AdminAddReport = ({ users }) => {
                                             id="jazaMauzo"
                                             name="jazaMauzo"
                                             required
-                                            className="border border-gray-400 rounded-md"
                                             placeholder="Ingiza mauzo yako"
                                         />
                                     </div>
@@ -135,7 +134,7 @@ const AdminAddReport = ({ users }) => {
                                     <div className="flex flex-col">
                                         <InputLabel
                                             htmlFor="uploadPicha"
-                                            className="mb-4"
+                                            className="mb-2"
                                         >
                                             Weka Picha ya Mauzo
                                         </InputLabel>
@@ -151,9 +150,45 @@ const AdminAddReport = ({ users }) => {
                                             id="uploadPicha"
                                             name="uploadPicha"
                                             required
-                                            className="p-2 border border-gray-400 rounded"
                                         />
                                     </div>
+                                </div>
+                            )}
+
+                            {selectedUser?.role === "collector" && (
+                                <div className="flex flex-col mt-4">
+                                    <InputLabel
+                                        htmlFor="supervisorSelect"
+                                        className="mb-2"
+                                    >
+                                        Chagua Msimamizi
+                                    </InputLabel>
+                                    <SelectField
+                                        id="supervisorSelect"
+                                        value={data.supervisor_id}
+                                        onChange={(e) =>
+                                            setData(
+                                                "supervisor_id",
+                                                e.target.value
+                                            )
+                                        }
+                                    >
+                                        <option value="">Chagua...</option>
+                                        {supervisors.map((supervisor) => (
+                                            <option
+                                                key={supervisor.id}
+                                                value={supervisor.id}
+                                            >
+                                                {supervisor.first_name}{" "}
+                                                {supervisor.last_name}
+                                            </option>
+                                        ))}
+                                    </SelectField>
+                                    {errors.supervisor_id && (
+                                        <span className="text-red-500 text-sm mt-1">
+                                            {errors.supervisor_id}
+                                        </span>
+                                    )}
                                 </div>
                             )}
 
@@ -171,13 +206,13 @@ const AdminAddReport = ({ users }) => {
                                             <div className="flex-1 grid grid-cols-2 gap-4">
                                                 {/* Control Number */}
                                                 <div className="flex flex-col">
-                                                    <label
+                                                    <InputLabel
                                                         htmlFor={`controlNumber-${index}`}
-                                                        className="mb-3"
+                                                        className="mb-2"
                                                     >
                                                         Control Number
-                                                    </label>
-                                                    <input
+                                                    </InputLabel>
+                                                    <TextInput
                                                         type="text"
                                                         id={`controlNumber-${index}`}
                                                         pattern="[0-9]{0,13}"
@@ -201,13 +236,12 @@ const AdminAddReport = ({ users }) => {
                                                             );
                                                         }}
                                                         required
-                                                        className="p-2 border border-gray-400 rounded"
                                                         placeholder="Ingiza Control Number"
                                                     />
                                                     {errors[
                                                         `control_numbers.${index}.number`
                                                     ] && (
-                                                        <span className="text-red-500 mt-1">
+                                                        <span className="text-red-500 text-sm mt-1">
                                                             {
                                                                 errors[
                                                                     `control_numbers.${index}.number`
@@ -219,13 +253,13 @@ const AdminAddReport = ({ users }) => {
 
                                                 {/* Amount */}
                                                 <div className="flex flex-col">
-                                                    <label
+                                                    <InputLabel
                                                         htmlFor={`amount-${index}`}
-                                                        className="mb-3"
+                                                        className="mb-2"
                                                     >
                                                         Kiasi
-                                                    </label>
-                                                    <input
+                                                    </InputLabel>
+                                                    <TextInput
                                                         type="number"
                                                         id={`amount-${index}`}
                                                         name={`amount-${index}`}
@@ -247,7 +281,6 @@ const AdminAddReport = ({ users }) => {
                                                             );
                                                         }}
                                                         required
-                                                        className="p-2 border border-gray-400 rounded"
                                                         placeholder="Ingiza Kiasi"
                                                     />
                                                 </div>
@@ -277,10 +310,10 @@ const AdminAddReport = ({ users }) => {
                                 <button
                                     type="button"
                                     onClick={addControlNumber}
-                                    className="flex items-center text-blue-500 hover:text-blue-700"
+                                    className="flex items-center text-blue-600 hover:text-blue-700 text-sm font-medium"
                                 >
-                                    <FaPlus className="mr-2" /> Ongeza Control
-                                    Number
+                                    <FaPlus className="mr-2" size={12} />{" "}
+                                    Ongeza Control Number
                                 </button>
                             </div>
                             <p className="text-sm mt-3 text-center text-red-600">
@@ -289,13 +322,12 @@ const AdminAddReport = ({ users }) => {
 
                             {/* Submit Button */}
                             <div className="mt-7 mb-8 flex justify-end gap-2">
-                                <button
+                                <PrimaryButton
                                     type="submit"
-                                    className="w-1/4 bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition-colors"
                                     disabled={processing}
                                 >
                                     {processing ? "Inatuma..." : "Tuma Ripoti"}
-                                </button>
+                                </PrimaryButton>
                             </div>
                         </form>
                     </DialogHeader>

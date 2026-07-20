@@ -7,14 +7,16 @@ import AdminLayout from "@/Layouts/AdminLayout";
 export default function Dashboard({ reports }) {
     return (
         <AdminLayout>
-            <main className="mt-16">
+            <main className="px-4 sm:px-6 lg:px-8 py-6 space-y-8">
                 <AdminCardsGrid reports={reports} />
-                <div className="flex flex-col lg:flex-row gap-5 px-8  w-full">
+                <div className="flex flex-col lg:flex-row gap-5 w-full">
                     <AdminBarChart reports={reports} />
                     <AdminAllGraph reports={reports} />
                 </div>
-                <h1 className="mt-10 mx-10 font-bold mb-5">Top Sellers</h1>
-                <div className="pb-20 px-8  w-full">
+                <div>
+                    <h2 className="font-semibold text-lg text-gray-800 mb-4">
+                        Top Sellers
+                    </h2>
                     <TopSellersTable reports={reports} />
                 </div>
             </main>

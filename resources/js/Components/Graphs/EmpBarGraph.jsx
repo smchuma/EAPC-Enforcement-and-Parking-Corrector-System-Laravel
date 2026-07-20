@@ -84,7 +84,7 @@ export default function EmpBarGraph({ reports }) {
                         />
                         <Bar
                             dataKey="control_number_target"
-                            fill="#0d8a6f"
+                            fill="var(--color-control_number_target)"
                             radius={4}
                         />
                     </BarChart>

@@ -9,8 +9,10 @@ const Users = () => {
 
     return (
         <AdminLayout>
-            <main className="container px-2">
-                <UserCreateForm />
+            <main className="pt-6">
+                <div className="flex justify-end px-4 sm:px-6 lg:px-8">
+                    <UserCreateForm />
+                </div>
                 <UsersTable users={users} />
             </main>
         </AdminLayout>

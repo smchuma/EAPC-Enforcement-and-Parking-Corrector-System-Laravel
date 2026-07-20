@@ -16,7 +16,7 @@ export function UserDetails({ user }) {
             </CardHeader>
             <CardContent className="mt-4 grid grid-cols-2 gap-4">
                 <div>
-                    <span className="font-semibold text-gray-600">Email:</span>
+                    <span className="font-semibold text-gray-600">Name:</span>
                     <div className="text-gray-800">
                         {" "}
                         {`${user.first_name} ${user.last_name}`}

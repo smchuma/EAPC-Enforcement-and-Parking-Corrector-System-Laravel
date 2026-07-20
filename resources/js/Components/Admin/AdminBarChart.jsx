@@ -58,7 +58,7 @@ export default function AdminBarGraph({ reports }) {
     const chartData = Object.values(monthlyData);
 
     return (
-        <Card className="w-full bg-gray-50">
+        <Card className="w-full">
             <CardHeader>
                 <CardTitle>Mauzo ya Target na Control Number</CardTitle>
                 <CardDescription>
@@ -87,7 +87,7 @@ export default function AdminBarGraph({ reports }) {
                         />
                         <Bar
                             dataKey="control_number_target"
-                            fill="#00687a"
+                            fill="var(--color-control_number_target)"
                             radius={4}
                         />
                     </BarChart>
