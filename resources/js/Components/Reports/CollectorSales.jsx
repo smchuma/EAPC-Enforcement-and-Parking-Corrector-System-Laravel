@@ -1,5 +1,6 @@
 import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
+import { formatNumber } from "@/lib/formatNumber";
 
 const CollectorSales = ({ reports }) => {
     // Extract unique dates from the grouped data
@@ -9,7 +10,12 @@ const CollectorSales = ({ reports }) => {
     const columns = [
         { field: "name", headerName: "Name", width: 200 },
         { field: "mtaa", headerName: "Mtaa", width: 150 },
-        { field: "target", headerName: "Target", width: 120 },
+        {
+            field: "target",
+            headerName: "Target",
+            width: 120,
+            valueFormatter: (value) => formatNumber(value),
+        },
         ...dates.map((date, index) => ({
             field: `date_${index}`,
             headerName: date,

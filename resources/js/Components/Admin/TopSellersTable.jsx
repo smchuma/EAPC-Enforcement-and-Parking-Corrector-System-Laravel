@@ -1,6 +1,13 @@
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import Pagination from "../Pagination";
+import { formatNumber } from "@/lib/formatNumber";
+
+const PER_PAGE = 10;
 
 export default function TopSellersTable({ reports }) {
+    const [page, setPage] = useState(1);
+
     // Aggregate total sales per user
     const userSalesData = reports.reduce((acc, report) => {
         if (!report.user) return acc;
@@ -42,6 +49,13 @@ export default function TopSellersTable({ reports }) {
             (a.totalDailySales + a.totalControlSales)
     );
 
+    const totalPages = Math.max(1, Math.ceil(sortedUsers.length / PER_PAGE));
+    const currentPage = Math.min(page, totalPages);
+    const pagedUsers = sortedUsers.slice(
+        (currentPage - 1) * PER_PAGE,
+        currentPage * PER_PAGE
+    );
+
     return (
         <Card className="w-full">
             <CardHeader>
@@ -66,7 +80,7 @@ export default function TopSellersTable({ reports }) {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-100">
-                            {sortedUsers.map((user, index) => (
+                            {pagedUsers.map((user, index) => (
                                 <tr
                                     key={index}
                                     className="hover:bg-gray-50 transition-colors"
@@ -80,20 +94,29 @@ export default function TopSellersTable({ reports }) {
                                         </span>
                                     </td>
                                     <td className="px-4 py-3 text-right text-gray-600">
-                                        {user.totalDailySales}
+                                        {formatNumber(user.totalDailySales)}
                                     </td>
                                     <td className="px-4 py-3 text-right text-gray-600">
-                                        {user.totalControlSales}
+                                        {formatNumber(user.totalControlSales)}
                                     </td>
                                     <td className="px-4 py-3 text-right font-semibold text-gray-900">
-                                        {user.totalDailySales +
-                                            user.totalControlSales}
+                                        {formatNumber(
+                                            user.totalDailySales +
+                                                user.totalControlSales
+                                        )}
                                     </td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
                 </div>
+                <Pagination
+                    page={currentPage}
+                    totalPages={totalPages}
+                    total={sortedUsers.length}
+                    perPage={PER_PAGE}
+                    onPageChange={setPage}
+                />
             </CardContent>
         </Card>
     );

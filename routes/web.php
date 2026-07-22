@@ -69,6 +69,7 @@ Route::group(['prefix' => 'admin'], function() {
         Route::post('/users/store', [AdminController::class, 'storeUser'])->name('admin.storeUser');
         Route::put('/user/update/{id}', [AdminController::class, 'update_user'])->name('admin.update_user');
         Route::delete('/user/delete/{id}', [AdminController::class, 'destroy_user'] )->name('admin.destroy_user');
+        Route::post('/user/invite/{id}', [AdminController::class, 'sendInvitation'])->name('admin.send_invitation');
 
         Route::get('/targets', [AdminController::class, 'viewTargets'])->name('admin.view_targets');
         Route::put('/targets/{id}', [AdminController::class, 'add_target'])->name('admin.add_target');
@@ -86,6 +87,13 @@ Route::group(['prefix' => 'supervisor'], function() {
         Route::get('/dashboard', [SupervisorController::class, 'dashboard'])->name('supervisor.dashboard');
         Route::get('/dashboard/pdf', [SupervisorController::class, 'reportsPdf'])->name('supervisor.reports_pdf');
         Route::get('/dashboard/csv', [SupervisorController::class, 'reportsCsv'])->name('supervisor.reports_csv');
+
+        // Temporary: supervisors can register users too, for now (will be removed later).
+        Route::get('/users', [SupervisorController::class, 'viewUsers'])->name('supervisor.viewUsers');
+        Route::post('/users/store', [AdminController::class, 'storeUser'])->name('supervisor.storeUser');
+        Route::put('/user/update/{id}', [AdminController::class, 'update_user'])->name('supervisor.update_user');
+        Route::delete('/user/delete/{id}', [AdminController::class, 'destroy_user'])->name('supervisor.destroy_user');
+        Route::post('/user/invite/{id}', [AdminController::class, 'sendInvitation'])->name('supervisor.send_invitation');
     });
 });
 

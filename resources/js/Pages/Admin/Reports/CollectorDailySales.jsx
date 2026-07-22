@@ -1,11 +1,12 @@
 import AdminLayout from "@/Layouts/AdminLayout";
-import { Link } from "@inertiajs/react";
+import { Head, Link } from "@inertiajs/react";
 import { IoMdArrowBack } from "react-icons/io";
 import CollectorSales from "@/Components/Reports/CollectorSales";
 
 const CollectorDailySales = ({ reports }) => {
     return (
         <AdminLayout>
+            <Head title="Collector Daily Sales Report" />
             <main className="p-5 space-y-4">
                 <div className="flex items-center justify-between gap-x-5">
                     <Link href="/admin/target-reports">

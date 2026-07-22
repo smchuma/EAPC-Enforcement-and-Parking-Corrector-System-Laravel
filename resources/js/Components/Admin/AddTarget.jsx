@@ -41,15 +41,20 @@ const AddTarget = ({ user, open, setOpen }) => {
                 <DialogTrigger>
                     <div className="flex items-center gap-x-2 cursor-pointer">
                         <MdOutlineEdit />
-                        Add Target
+                        Edit Target
                     </div>
                 </DialogTrigger>
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle className="border-b border-gray-200 pb-4">
-                            Add Target
+                            Edit Target
                         </DialogTitle>
-                        <DialogDescription></DialogDescription>
+                        <DialogDescription>
+                            The control number target is set automatically
+                            (Collector: 100,000, Enforcement: 150,000). Only
+                            change it here if it needs to be different for
+                            this person.
+                        </DialogDescription>
                         <form
                             onSubmit={handleSubmit}
                             className="rounded pt-2 pb-4 flex flex-col my-2 gap-4"
@@ -137,7 +142,7 @@ const AddTarget = ({ user, open, setOpen }) => {
                                     type="submit"
                                     disabled={processing}
                                 >
-                                    {processing ? "Adding..." : "Add"}
+                                    {processing ? "Saving..." : "Save"}
                                 </PrimaryButton>
                             </div>
                         </form>

@@ -18,7 +18,7 @@ import PrimaryButton from "../PrimaryButton";
 import SelectField from "../SelectField";
 import { MdOutlineEdit } from "react-icons/md";
 
-const EditUser = ({ user, open, setOpen }) => {
+const EditUser = ({ user, open, setOpen, updateRoute = "admin.update_user" }) => {
     const { data, setData, put, processing, errors, reset } = useForm({
         first_name: user.first_name || "",
         last_name: user.last_name || "",
@@ -28,7 +28,8 @@ const EditUser = ({ user, open, setOpen }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        put(route("admin.update_user", user.id, { preserveScroll: true }), {
+        put(route(updateRoute, user.id), {
+            preserveScroll: true,
             onSuccess: () => {
                 reset();
                 setOpen(false);
@@ -110,6 +111,25 @@ const EditUser = ({ user, open, setOpen }) => {
                                         className="mt-2"
                                     />
                                 </div>
+                            </div>
+                            <div>
+                                <InputLabel htmlFor="grid-email" required>
+                                    Email
+                                </InputLabel>
+                                <TextInput
+                                    className="block w-full"
+                                    id="grid-email"
+                                    type="email"
+                                    value={data.email}
+                                    onChange={(e) =>
+                                        setData("email", e.target.value)
+                                    }
+                                    placeholder="Enter the Email"
+                                />
+                                <InputError
+                                    message={errors.email}
+                                    className="mt-2"
+                                />
                             </div>
                             <div>
                                 <InputLabel htmlFor="role" required>

@@ -9,6 +9,8 @@ import {
 } from "../ui/dialog";
 import TextInput from "../TextInput";
 import PrimaryButton from "../PrimaryButton";
+import PaginationLinks from "../PaginationLinks";
+import { formatMoney, formatNumber } from "@/lib/formatNumber";
 
 const ReportList = ({ reports, auth }) => {
     const [filteredReports, setFilteredReports] = useState(reports.data);
@@ -126,7 +128,7 @@ const ReportList = ({ reports, auth }) => {
                                     auth.user.role
                                 ) && (
                                     <td className="px-4 py-3 text-right text-gray-600">
-                                        {report.daily_sales}
+                                        {formatNumber(report.daily_sales)}
                                     </td>
                                 )}
                                 {["collector", "supervisor"].includes(
@@ -149,14 +151,14 @@ const ReportList = ({ reports, auth }) => {
                                     </td>
                                 )}
                                 <td className="px-4 py-3 text-right font-semibold text-gray-900">
-                                    {report.control_number
-                                        .reduce(
+                                    {formatMoney(
+                                        report.control_number.reduce(
                                             (total, control) =>
                                                 total +
                                                 parseFloat(control.amount),
                                             0
                                         )
-                                        .toFixed(2)}
+                                    )}
                                 </td>
                                 <td className="px-4 py-3 text-center">
                                     <button
@@ -201,7 +203,7 @@ const ReportList = ({ reports, auth }) => {
                                     Mauzo
                                 </span>
                                 <span className="text-sm text-gray-800">
-                                    {report.daily_sales}
+                                    {formatNumber(report.daily_sales)}
                                 </span>
                             </div>
                         )}
@@ -233,14 +235,14 @@ const ReportList = ({ reports, auth }) => {
                                     Total Amount (Control Numbers)
                                 </div>
                                 <div className="font-semibold text-gray-900">
-                                    {report.control_number
-                                        .reduce(
+                                    {formatMoney(
+                                        report.control_number.reduce(
                                             (total, control) =>
                                                 total +
                                                 parseFloat(control.amount),
                                             0
                                         )
-                                        .toFixed(2)}
+                                    )}
                                 </div>
                             </div>
                             <button
@@ -275,7 +277,10 @@ const ReportList = ({ reports, auth }) => {
                                                     {control.control_number}
                                                 </span>
                                                 <span>
-                                                    Amount: {control.amount}
+                                                    Amount:{" "}
+                                                    {formatNumber(
+                                                        control.amount
+                                                    )}
                                                 </span>
                                             </div>
                                         )
@@ -299,6 +304,8 @@ const ReportList = ({ reports, auth }) => {
                     Hauna ripoti yoyote
                 </h1>
             )}
+
+            <PaginationLinks meta={reports} />
         </div>
     );
 };

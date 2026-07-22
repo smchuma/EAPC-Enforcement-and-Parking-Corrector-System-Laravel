@@ -27,7 +27,7 @@ class ReportController extends Controller
         }
 
         return Inertia::render("Taarifa/Ripoti", [
-           "reports"=> $query->with("control_number")->orderByDesc('created_at')->paginate(5),
+           "reports"=> $query->with("control_number")->orderByDesc('created_at')->paginate(10)->withQueryString(),
            "supervisors" => User::where('role', 'supervisor')->get(['id', 'first_name', 'last_name']),
         ]);
     }

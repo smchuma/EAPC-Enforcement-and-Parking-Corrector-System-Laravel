@@ -1,5 +1,6 @@
 import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
+import { formatNumber } from "@/lib/formatNumber";
 
 const CollectorControlNumber = ({ reports }) => {
     // Prepare columns dynamically
@@ -11,6 +12,7 @@ const CollectorControlNumber = ({ reports }) => {
             field: "target",
             headerName: "Control Number Target",
             width: 180,
+            valueFormatter: (value) => formatNumber(value),
         },
         ...dates.map((date, index) => ({
             field: `date_${index}`,

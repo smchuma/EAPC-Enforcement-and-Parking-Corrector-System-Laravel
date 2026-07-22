@@ -3,9 +3,12 @@ import TextInput from "../TextInput";
 import { CiSearch } from "react-icons/ci";
 import { FaEllipsisVertical } from "react-icons/fa6";
 import { BsTrash } from "react-icons/bs";
+import { MdOutlineMailOutline } from "react-icons/md";
 import Swal from "sweetalert2";
-import { useForm } from "@inertiajs/react";
+import toast from "react-hot-toast";
+import { router, useForm, usePage } from "@inertiajs/react";
 import EditUser from "./EditUser";
+import PaginationLinks from "../PaginationLinks";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -14,12 +17,18 @@ import {
     DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 
-const UsersTable = ({ users }) => {
+const UsersTable = ({
+    users,
+    updateRoute = "admin.update_user",
+    deleteRoute = "admin.destroy_user",
+    inviteRoute = "admin.send_invitation",
+}) => {
     const [search, setSearch] = useState("");
 
     const [filteredData, setFilteredData] = useState(users.data);
     const { delete: destroy } = useForm();
     const [open, setOpen] = useState(false);
+    const { auth } = usePage().props;
 
     // delete a user
 
@@ -33,7 +42,7 @@ const UsersTable = ({ users }) => {
             cancelButtonText: "No, keep it",
         }).then((result) => {
             if (result.isConfirmed) {
-                destroy(route("admin.destroy_user", user.id), {
+                destroy(route(deleteRoute, user.id), {
                     preserveScroll: true,
                     onSuccess: () => {
                         setFilteredData(
@@ -42,6 +51,34 @@ const UsersTable = ({ users }) => {
                     },
                 });
                 Swal.fire("Deleted!", "The user  has been deleted.", "success");
+            }
+        });
+    };
+
+    // (re)send a password set-up link
+
+    const handleSendInvitation = (user) => {
+        const isPending = user.status === "pending";
+
+        Swal.fire({
+            title: `${user.first_name} ${user.last_name}`,
+            text: isPending
+                ? "Resend the account set-up invitation to this user's email?"
+                : "Send a password reset link to this user's email? Make sure their email address is correct first.",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonText: "Yes, send it",
+            cancelButtonText: "Cancel",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                router.post(
+                    route(inviteRoute, user.id),
+                    {},
+                    {
+                        preserveScroll: true,
+                        onError: () => toast.error("Failed to send email"),
+                    }
+                );
             }
         });
     };
@@ -89,6 +126,7 @@ const UsersTable = ({ users }) => {
                 <table className="min-w-full">
                     <thead>
                         <tr className="bg-gray-50 text-gray-600 text-xs font-semibold uppercase tracking-wide">
+                            <th className="px-4 py-3 text-left">#</th>
                             <th className="px-4 py-3 text-left">
                                 First Name
                             </th>
@@ -99,17 +137,21 @@ const UsersTable = ({ users }) => {
                             </th>
                             <th className="px-4 py-3 text-left">Email</th>
                             <th className="px-4 py-3 text-left">Role</th>
+                            <th className="px-4 py-3 text-left">Status</th>
                             <th className="px-4 py-3 text-center">
                                 Actions
                             </th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
-                        {filteredData.map((user) => (
+                        {filteredData.map((user, index) => (
                             <tr
                                 key={user.id}
                                 className="hover:bg-gray-50 transition-colors"
                             >
+                                <td className="px-4 py-3 text-gray-500">
+                                    {(users.from ?? 1) + index}
+                                </td>
                                 <td className="px-4 py-3 text-gray-800">
                                     {user.first_name}
                                 </td>
@@ -130,6 +172,17 @@ const UsersTable = ({ users }) => {
                                         {user.role}
                                     </span>
                                 </td>
+                                <td className="px-4 py-3">
+                                    {user.status === "pending" ? (
+                                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-amber-50 text-amber-600">
+                                            Pending
+                                        </span>
+                                    ) : (
+                                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-50 text-green-600">
+                                            Active
+                                        </span>
+                                    )}
+                                </td>
 
                                 <td className="px-4 py-3 text-gray-500">
                                     <div className="flex justify-center cursor-pointer">
@@ -148,20 +201,44 @@ const UsersTable = ({ users }) => {
                                                         open={open}
                                                         setOpen={setOpen}
                                                         user={user}
+                                                        updateRoute={
+                                                            updateRoute
+                                                        }
                                                     />
                                                 </DropdownMenuLabel>
                                                 <DropdownMenuSeparator />
                                                 <DropdownMenuLabel
                                                     className="hover:bg-gray-100 cursor-pointer w-full"
-                                                    onClick={(e) => {
-                                                        handleDelete(user);
-                                                    }}
+                                                    onClick={() =>
+                                                        handleSendInvitation(
+                                                            user
+                                                        )
+                                                    }
                                                 >
-                                                    <div className="flex items-center gap-x-2 text-red-600">
-                                                        <BsTrash />
-                                                        Delete
+                                                    <div className="flex items-center gap-x-2 text-blue-600">
+                                                        <MdOutlineMailOutline />
+                                                        {user.status ===
+                                                        "pending"
+                                                            ? "Resend Invitation"
+                                                            : "Send Password Reset"}
                                                     </div>
                                                 </DropdownMenuLabel>
+                                                {user.id !== auth.user.id && (
+                                                    <>
+                                                        <DropdownMenuSeparator />
+                                                        <DropdownMenuLabel
+                                                            className="hover:bg-gray-100 cursor-pointer w-full"
+                                                            onClick={(e) => {
+                                                                handleDelete(user);
+                                                            }}
+                                                        >
+                                                            <div className="flex items-center gap-x-2 text-red-600">
+                                                                <BsTrash />
+                                                                Delete
+                                                            </div>
+                                                        </DropdownMenuLabel>
+                                                    </>
+                                                )}
                                             </DropdownMenuContent>
                                         </DropdownMenu>
                                     </div>
@@ -174,14 +251,15 @@ const UsersTable = ({ users }) => {
 
                 {/* Cards - below sm, tables don't fit phone screens well */}
                 <div className="sm:hidden space-y-3">
-                    {filteredData.map((user) => (
+                    {filteredData.map((user, index) => (
                         <div
                             key={user.id}
                             className="bg-white rounded-xl border border-gray-100 shadow-sm p-4"
                         >
                             <div className="flex justify-between items-start gap-2 mb-2">
                                 <span className="font-medium text-gray-800">
-                                    {user.first_name} {user.last_name}
+                                    {(users.from ?? 1) + index}. {user.first_name}{" "}
+                                    {user.last_name}
                                 </span>
                                 <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-600 capitalize shrink-0">
                                     {user.role}
@@ -215,6 +293,21 @@ const UsersTable = ({ users }) => {
                                 </span>
                             </div>
 
+                            <div className="flex justify-between items-center py-1.5 border-t border-gray-100">
+                                <span className="text-sm text-gray-500">
+                                    Status
+                                </span>
+                                {user.status === "pending" ? (
+                                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-amber-50 text-amber-600">
+                                        Pending
+                                    </span>
+                                ) : (
+                                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-50 text-green-600">
+                                        Active
+                                    </span>
+                                )}
+                            </div>
+
                             <div className="flex justify-end items-center pt-2 mt-1 border-t border-gray-100">
                                 <DropdownMenu>
                                     <DropdownMenuTrigger>
@@ -232,20 +325,39 @@ const UsersTable = ({ users }) => {
                                                 open={open}
                                                 setOpen={setOpen}
                                                 user={user}
+                                                updateRoute={updateRoute}
                                             />
                                         </DropdownMenuLabel>
                                         <DropdownMenuSeparator />
                                         <DropdownMenuLabel
                                             className="hover:bg-gray-100 cursor-pointer w-full"
-                                            onClick={(e) => {
-                                                handleDelete(user);
-                                            }}
+                                            onClick={() =>
+                                                handleSendInvitation(user)
+                                            }
                                         >
-                                            <div className="flex items-center gap-x-2 text-red-600">
-                                                <BsTrash />
-                                                Delete
+                                            <div className="flex items-center gap-x-2 text-blue-600">
+                                                <MdOutlineMailOutline />
+                                                {user.status === "pending"
+                                                    ? "Resend Invitation"
+                                                    : "Send Password Reset"}
                                             </div>
                                         </DropdownMenuLabel>
+                                        {user.id !== auth.user.id && (
+                                            <>
+                                                <DropdownMenuSeparator />
+                                                <DropdownMenuLabel
+                                                    className="hover:bg-gray-100 cursor-pointer w-full"
+                                                    onClick={(e) => {
+                                                        handleDelete(user);
+                                                    }}
+                                                >
+                                                    <div className="flex items-center gap-x-2 text-red-600">
+                                                        <BsTrash />
+                                                        Delete
+                                                    </div>
+                                                </DropdownMenuLabel>
+                                            </>
+                                        )}
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             </div>
@@ -255,6 +367,8 @@ const UsersTable = ({ users }) => {
                 {filteredData.length == 0 && (
                     <h1 className="text-center my-5">No User Found</h1>
                 )}
+
+                <PaginationLinks meta={users} />
             </div>
         </main>
     );

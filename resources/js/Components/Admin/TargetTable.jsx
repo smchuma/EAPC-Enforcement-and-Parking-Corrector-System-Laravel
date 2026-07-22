@@ -3,6 +3,7 @@ import TextInput from "../TextInput";
 import { CiSearch } from "react-icons/ci";
 import { FaEllipsisVertical } from "react-icons/fa6";
 import EditUser from "./EditUser";
+import PaginationLinks from "../PaginationLinks";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -11,6 +12,7 @@ import {
     DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import AddTarget from "./AddTarget";
+import { formatNumber } from "@/lib/formatNumber";
 
 const TargetTable = ({ users }) => {
     const [search, setSearch] = useState("");
@@ -91,11 +93,11 @@ const TargetTable = ({ users }) => {
                                     {user.street || "N/A"}
                                 </td>
                                 <td className="px-4 py-3 text-right text-gray-600">
-                                    {user.target || "N/A"}
+                                    {formatNumber(user.target)}
                                 </td>
 
                                 <td className="px-4 py-3 text-right text-gray-600">
-                                    {user.control_number_target || "N/A"}
+                                    {formatNumber(user.control_number_target)}
                                 </td>
 
                                 <td className="px-4 py-3 text-gray-500">
@@ -158,7 +160,7 @@ const TargetTable = ({ users }) => {
                                     Target
                                 </span>
                                 <span className="text-sm text-gray-800">
-                                    {user.target || "N/A"}
+                                    {formatNumber(user.target)}
                                 </span>
                             </div>
 
@@ -167,7 +169,7 @@ const TargetTable = ({ users }) => {
                                     Control Number Target
                                 </span>
                                 <span className="text-sm text-gray-800">
-                                    {user.control_number_target || "N/A"}
+                                    {formatNumber(user.control_number_target)}
                                 </span>
                             </div>
 
@@ -200,6 +202,8 @@ const TargetTable = ({ users }) => {
                 {filteredData.length == 0 && (
                     <h1 className="text-center my-5">No User Found</h1>
                 )}
+
+                <PaginationLinks meta={users} />
             </div>
         </main>
     );

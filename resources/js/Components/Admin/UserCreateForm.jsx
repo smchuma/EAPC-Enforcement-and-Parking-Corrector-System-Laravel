@@ -17,16 +17,15 @@ import PrimaryButton from "../PrimaryButton";
 import SelectField from "../SelectField";
 
 const generateUsername = (firstName, lastName) =>
-    (firstName.charAt(0) + lastName).toLowerCase().replace(/\s+/g, "");
+    (firstName.charAt(0) + "." + lastName).toLowerCase().replace(/\s+/g, "");
 
-const UserCreateForm = () => {
+const UserCreateForm = ({ storeRoute = "admin.storeUser" }) => {
     const { data, setData, post, processing, errors, reset } = useForm({
         first_name: "",
         last_name: "",
         phone_number: "",
         email: "",
         role: "",
-        password: "",
     });
 
     const [open, setOpen] = useState(false);
@@ -41,7 +40,8 @@ const UserCreateForm = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        post(route("admin.storeUser", { preserveScroll: true }), {
+        post(route(storeRoute), {
+            preserveScroll: true,
             onSuccess: () => {
                 reset();
                 setOpen(false);
@@ -181,62 +181,39 @@ const UserCreateForm = () => {
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <InputLabel htmlFor="role" required>
-                                        Role
-                                    </InputLabel>
-                                    <SelectField
-                                        id="role"
-                                        value={data.role}
-                                        className="block w-full"
-                                        onChange={(e) =>
-                                            setData("role", e.target.value)
-                                        }
-                                    >
-                                        <option value="">Select</option>
-                                        <option value="enforcement">
-                                            Enforcement
-                                        </option>
-                                        <option value="collector">
-                                            Collector
-                                        </option>
-                                        <option value="supervisor">
-                                            Supervisor
-                                        </option>
-                                    </SelectField>
-                                    <InputError
-                                        message={errors.role}
-                                        className="mt-2"
-                                    />
-                                </div>
-                                <div>
-                                    <InputLabel
-                                        htmlFor="grid-password"
-                                        required
-                                    >
-                                        Password
-                                    </InputLabel>
-                                    <TextInput
-                                        className="block w-full"
-                                        id="grid-password"
-                                        autoComplete="password"
-                                        type="password"
-                                        placeholder="Enter the password"
-                                        value={data.password}
-                                        onChange={(e) =>
-                                            setData(
-                                                "password",
-                                                e.target.value
-                                            )
-                                        }
-                                    />
-                                    <InputError
-                                        message={errors.password}
-                                        className="mt-2"
-                                    />
-                                </div>
+                            <div>
+                                <InputLabel htmlFor="role" required>
+                                    Role
+                                </InputLabel>
+                                <SelectField
+                                    id="role"
+                                    value={data.role}
+                                    className="block w-full"
+                                    onChange={(e) =>
+                                        setData("role", e.target.value)
+                                    }
+                                >
+                                    <option value="">Select</option>
+                                    <option value="enforcement">
+                                        Enforcement
+                                    </option>
+                                    <option value="collector">
+                                        Collector
+                                    </option>
+                                    <option value="supervisor">
+                                        Supervisor
+                                    </option>
+                                </SelectField>
+                                <InputError
+                                    message={errors.role}
+                                    className="mt-2"
+                                />
                             </div>
+
+                            <p className="text-xs text-gray-500">
+                                The user will receive an email invitation to
+                                set their own password.
+                            </p>
 
                             <div className="flex justify-end mt-2">
                                 <PrimaryButton

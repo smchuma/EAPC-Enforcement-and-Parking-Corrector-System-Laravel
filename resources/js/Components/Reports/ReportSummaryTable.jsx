@@ -1,9 +1,10 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { FaDownload } from "react-icons/fa";
 import TextInput from "../TextInput";
 import SelectField from "../SelectField";
 import PrimaryButton from "../PrimaryButton";
+import Pagination from "../Pagination";
 import {
     Dialog,
     DialogContent,
@@ -12,12 +13,15 @@ import {
     DialogTitle,
 } from "../ui/dialog";
 
+const PER_PAGE = 10;
+
 const ReportSummaryTable = ({ reports, pdfRoute, csvRoute }) => {
     const [searchDate, setSearchDate] = useState("");
     const [selectedPerson, setSelectedPerson] = useState("");
     const [selectedRow, setSelectedRow] = useState(null);
     const [fromDate, setFromDate] = useState("");
     const [toDate, setToDate] = useState("");
+    const [page, setPage] = useState(1);
 
     const people = useMemo(
         () => [...new Set(reports.map((row) => row.name))].sort(),
@@ -33,6 +37,20 @@ const ReportSummaryTable = ({ reports, pdfRoute, csvRoute }) => {
                 return matchesDate && matchesPerson;
             }),
         [reports, searchDate, selectedPerson]
+    );
+
+    useEffect(() => {
+        setPage(1);
+    }, [searchDate, selectedPerson, reports]);
+
+    const totalPages = Math.max(
+        1,
+        Math.ceil(filteredReports.length / PER_PAGE)
+    );
+    const currentPage = Math.min(page, totalPages);
+    const pagedReports = filteredReports.slice(
+        (currentPage - 1) * PER_PAGE,
+        currentPage * PER_PAGE
     );
 
     const handleClear = () => {
@@ -164,7 +182,7 @@ const ReportSummaryTable = ({ reports, pdfRoute, csvRoute }) => {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-100">
-                            {filteredReports.map((row) => (
+                            {pagedReports.map((row) => (
                                 <tr
                                     key={`${row.user_id}-${row.date}`}
                                     className="hover:bg-gray-50 transition-colors"
@@ -208,7 +226,7 @@ const ReportSummaryTable = ({ reports, pdfRoute, csvRoute }) => {
 
                 {/* Cards - below sm */}
                 <div className="sm:hidden space-y-3">
-                    {filteredReports.map((row) => (
+                    {pagedReports.map((row) => (
                         <div
                             key={`${row.user_id}-${row.date}`}
                             className="bg-white rounded-xl border border-gray-100 shadow-sm p-4"
@@ -270,6 +288,14 @@ const ReportSummaryTable = ({ reports, pdfRoute, csvRoute }) => {
                         No Reports Found
                     </h1>
                 )}
+
+                <Pagination
+                    page={currentPage}
+                    totalPages={totalPages}
+                    total={filteredReports.length}
+                    perPage={PER_PAGE}
+                    onPageChange={setPage}
+                />
 
                 {selectedRow && (
                     <Dialog

@@ -27,9 +27,9 @@ class ControlNumberUnique implements Rule
     {
         // Check if we have an existing user and append their name to the error message
         if ($this->existingUser) {
-            return 'Control number uliongiza imechukuliwa na ' . $this->existingUser->first_name . ' ' . $this->existingUser->last_name;
+            return 'Samahani, Control number unayo jaribu kuingiza imetumwa na ' . $this->existingUser->first_name . ' ' . $this->existingUser->last_name . '. Samahani tuma control number nyingine uliolipisha.';
         }
 
-        return 'Control number uliongiza imechukuliwa.';
+        return 'Control number uliongiza imechukuliwa. Samahani tuma control number nyingine uliolipisha.';
     }
 }

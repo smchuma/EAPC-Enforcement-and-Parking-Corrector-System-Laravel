@@ -54,7 +54,12 @@ const Sidebar = ({ isOpen, onClose }) => {
                 ${isOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0`}
             >
                 <div className="flex flex-col">
-                    <div className="flex justify-center pb-6 mb-4 border-b border-gray-100">
+                    <div className="flex justify-center items-center gap-2.5 pb-6 mb-4 border-b border-gray-100">
+                        <img
+                            src="/favicon.svg"
+                            alt="EAPCS logo"
+                            className="w-10 h-10 shrink-0"
+                        />
                         <ApplicationLogo className="text-2xl font-bold text-blue-600" />
                     </div>
                     {sidebarItem.map((item) => (

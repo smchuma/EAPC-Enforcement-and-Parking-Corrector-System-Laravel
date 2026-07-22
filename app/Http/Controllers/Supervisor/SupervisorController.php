@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Supervisor;
 
 use App\Http\Controllers\Controller;
 use App\Models\Report;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,6 +26,23 @@ class SupervisorController extends Controller
 
         return Inertia::render("Supervisor/Dashboard", [
             "reports" => $this->groupReportsByUserAndDate($reports),
+        ]);
+    }
+
+    // Temporary: supervisors can register users too, for now (will be
+    // removed later). Reuses AdminController's storeUser/update_user/
+    // destroy_user/sendInvitation for the actual mutations.
+    public function viewUsers(Request $request)
+    {
+        $query = User::query();
+
+        if ($request->has('search')) {
+            $search = $request->get('search');
+            $query->where('first_name', 'LIKE', "%{$search}%");
+        }
+
+        return Inertia::render("Supervisor/Users", [
+            "users" => $query->orderByDesc('created_at')->paginate(10)->withQueryString(),
         ]);
     }
 

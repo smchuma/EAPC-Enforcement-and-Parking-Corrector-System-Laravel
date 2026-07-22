@@ -14,6 +14,13 @@ export const ToastProvider = ({ children }) => {
         if (session?.error) {
             toast.error(session.error);
         }
+        if (session?.warning) {
+            toast(session.warning, {
+                icon: "⚠️",
+                duration: 6000,
+                style: { background: "#f59e0b", color: "#fff" },
+            });
+        }
     }, [session]);
 
     return (
