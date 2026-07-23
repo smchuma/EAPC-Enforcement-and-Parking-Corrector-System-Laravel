@@ -1,6 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { FaDownload } from "react-icons/fa";
+import { BsTrash } from "react-icons/bs";
+import { FaRegImage } from "react-icons/fa6";
+import Swal from "sweetalert2";
+import { router } from "@inertiajs/react";
 import TextInput from "../TextInput";
 import SelectField from "../SelectField";
 import PrimaryButton from "../PrimaryButton";
@@ -15,7 +19,14 @@ import {
 
 const PER_PAGE = 10;
 
-const ReportSummaryTable = ({ reports, pdfRoute, csvRoute }) => {
+const ReportSummaryTable = ({
+    reports,
+    pdfRoute,
+    csvRoute,
+    deleteReportRoute,
+    deleteControlNumberRoute,
+}) => {
+    const canDelete = Boolean(deleteReportRoute && deleteControlNumberRoute);
     const [searchDate, setSearchDate] = useState("");
     const [selectedPerson, setSelectedPerson] = useState("");
     const [selectedRow, setSelectedRow] = useState(null);
@@ -60,6 +71,42 @@ const ReportSummaryTable = ({ reports, pdfRoute, csvRoute }) => {
 
     const openModal = (row) => setSelectedRow(row);
     const closeModal = () => setSelectedRow(null);
+
+    const handleDeleteReport = (entryId) => {
+        Swal.fire({
+            title: "Delete this report?",
+            text: "This sales submission will be permanently removed.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "No, keep it",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                router.delete(route(deleteReportRoute, entryId), {
+                    preserveScroll: true,
+                    onSuccess: () => closeModal(),
+                });
+            }
+        });
+    };
+
+    const handleDeleteControlNumber = (entryId) => {
+        Swal.fire({
+            title: "Delete this control number?",
+            text: "This control number submission will be permanently removed.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "No, keep it",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                router.delete(route(deleteControlNumberRoute, entryId), {
+                    preserveScroll: true,
+                    onSuccess: () => closeModal(),
+                });
+            }
+        });
+    };
 
     const money = (value) =>
         (value || 0).toLocaleString(undefined, {
@@ -335,16 +382,36 @@ const ReportSummaryTable = ({ reports, pdfRoute, csvRoute }) => {
                                                                     TSH
                                                                 </span>
                                                                 {entry.image ? (
-                                                                    <img
-                                                                        src={`/storage/${entry.image}`}
-                                                                        alt="Sales proof"
-                                                                        className="w-10 h-10 object-cover rounded"
-                                                                    />
+                                                                    <a
+                                                                        href={`/storage/${entry.image}`}
+                                                                        target="_blank"
+                                                                        rel="noopener noreferrer"
+                                                                        className="text-blue-600 hover:text-blue-800"
+                                                                        title="Ona picha"
+                                                                    >
+                                                                        <FaRegImage size={16} />
+                                                                    </a>
                                                                 ) : (
-                                                                    <span className="text-xs text-gray-400">
-                                                                        picha
-                                                                        haipo
+                                                                    <span
+                                                                        className="text-gray-300 cursor-not-allowed"
+                                                                        title="Hakuna picha (imefutwa au haikuwepo)"
+                                                                    >
+                                                                        <FaRegImage size={16} />
                                                                     </span>
+                                                                )}
+                                                                {canDelete && (
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() =>
+                                                                            handleDeleteReport(
+                                                                                entry.id
+                                                                            )
+                                                                        }
+                                                                        className="text-red-500 hover:text-red-700 ml-2"
+                                                                        title="Delete this submission"
+                                                                    >
+                                                                        <BsTrash />
+                                                                    </button>
                                                                 )}
                                                             </div>
                                                         )
@@ -368,7 +435,7 @@ const ReportSummaryTable = ({ reports, pdfRoute, csvRoute }) => {
                                                         (control, index) => (
                                                             <div
                                                                 key={index}
-                                                                className="flex justify-between border-b border-gray-100 py-2"
+                                                                className="flex items-center justify-between border-b border-gray-100 py-2"
                                                             >
                                                                 <span className="text-sm text-gray-600">
                                                                     {
@@ -381,6 +448,20 @@ const ReportSummaryTable = ({ reports, pdfRoute, csvRoute }) => {
                                                                     )}{" "}
                                                                     TSH
                                                                 </span>
+                                                                {canDelete && (
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() =>
+                                                                            handleDeleteControlNumber(
+                                                                                control.id
+                                                                            )
+                                                                        }
+                                                                        className="text-red-500 hover:text-red-700 ml-2"
+                                                                        title="Delete this control number"
+                                                                    >
+                                                                        <BsTrash />
+                                                                    </button>
+                                                                )}
                                                             </div>
                                                         )
                                                     )}

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
+import { FaRegImage } from "react-icons/fa6";
 import {
     Dialog,
     DialogContent,
@@ -137,15 +138,22 @@ const ReportList = ({ reports, auth }) => {
                                     <td className="px-4 py-3">
                                         <div className="flex justify-center">
                                             {report.sales_proof_image ? (
-                                                <img
-                                                    src={`/storage/${report.sales_proof_image}`}
-                                                    alt="Report proof"
-                                                    className="w-16 h-16 object-cover rounded-lg"
-                                                />
+                                                <a
+                                                    href={`/storage/${report.sales_proof_image}`}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="text-blue-600 hover:text-blue-800"
+                                                    title="Ona picha"
+                                                >
+                                                    <FaRegImage size={18} />
+                                                </a>
                                             ) : (
-                                                <p className="text-xs text-gray-400">
-                                                    picha haipo
-                                                </p>
+                                                <span
+                                                    className="text-gray-300 cursor-not-allowed"
+                                                    title="Hakuna picha (imefutwa au haikuwepo)"
+                                                >
+                                                    <FaRegImage size={18} />
+                                                </span>
                                             )}
                                         </div>
                                     </td>
@@ -216,14 +224,21 @@ const ReportList = ({ reports, auth }) => {
                                     Picture
                                 </span>
                                 {report.sales_proof_image ? (
-                                    <img
-                                        src={`/storage/${report.sales_proof_image}`}
-                                        alt="Report proof"
-                                        className="w-14 h-14 object-cover rounded-lg"
-                                    />
+                                    <a
+                                        href={`/storage/${report.sales_proof_image}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-blue-600 hover:text-blue-800"
+                                        title="Ona picha"
+                                    >
+                                        <FaRegImage size={18} />
+                                    </a>
                                 ) : (
-                                    <span className="text-xs text-gray-400">
-                                        picha haipo
+                                    <span
+                                        className="text-gray-300 cursor-not-allowed"
+                                        title="Hakuna picha (imefutwa au haikuwepo)"
+                                    >
+                                        <FaRegImage size={18} />
                                     </span>
                                 )}
                             </div>

@@ -95,7 +95,15 @@ const EnforcementControlNumber = ({ reports }) => {
                     Export to PDF
                 </Button>
             </div>
-            <DataGrid rows={rows} columns={columns} pageSize={5} autoHeight />
+            <DataGrid
+                rows={rows}
+                columns={columns}
+                autoHeight
+                initialState={{
+                    pagination: { paginationModel: { pageSize: 10 } },
+                }}
+                pageSizeOptions={[10, 25, 50]}
+            />
         </main>
     );
 };

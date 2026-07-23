@@ -5,7 +5,7 @@ import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
 import TextInput from "@/Components/TextInput";
 import { Head, Link, useForm } from "@inertiajs/react";
-import { FaRegUser, FaLock, FaXmark } from "react-icons/fa6";
+import { FaRegUser, FaLock, FaXmark, FaEye, FaEyeSlash } from "react-icons/fa6";
 
 export default function Login({ status, canResetPassword, error }) {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -14,6 +14,7 @@ export default function Login({ status, canResetPassword, error }) {
         remember: false,
     });
     const [isErrorVisible, setIsErrorVisible] = useState(true);
+    const [showPassword, setShowPassword] = useState(false);
 
     useEffect(() => {
         return () => {
@@ -100,15 +101,30 @@ export default function Login({ status, canResetPassword, error }) {
                         />
                         <TextInput
                             id="password"
-                            type="password"
+                            type={showPassword ? "text" : "password"}
                             name="password"
                             value={data.password}
-                            className="block w-full pl-10 focus:border-blue-500 focus:ring-blue-500"
+                            className="block w-full pl-10 pr-10 focus:border-blue-500 focus:ring-blue-500"
                             autoComplete="current-password"
                             onChange={(e) =>
                                 setData("password", e.target.value)
                             }
                         />
+                        <button
+                            type="button"
+                            onClick={() => setShowPassword((prev) => !prev)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                            aria-label={
+                                showPassword ? "Hide password" : "Show password"
+                            }
+                            tabIndex={-1}
+                        >
+                            {showPassword ? (
+                                <FaEyeSlash size={15} />
+                            ) : (
+                                <FaEye size={15} />
+                            )}
+                        </button>
                     </div>
 
                     <InputError message={errors.password} className="mt-2" />

@@ -13,6 +13,9 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         // $schedule->command('inspire')->hourly();
+
+        // Sales-proof images are only kept for 24h to save server storage.
+        $schedule->command('reports:purge-proof-images')->hourly();
     }
 
     /**

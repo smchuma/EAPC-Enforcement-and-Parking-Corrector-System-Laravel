@@ -121,6 +121,38 @@ class ReportController extends Controller
         ]);
     }
 
+    /**
+     * Delete a wrongly submitted daily-sales report (admin only, route-gated).
+     * Also removes any control numbers still attached to it.
+     */
+    public function destroyReport($id)
+    {
+        $report = Report::findOrFail($id);
+        $report->control_number()->delete();
+        $report->delete();
+
+        return redirect()->back()->with('success', 'Report deleted successfully.');
+    }
+
+    /**
+     * Delete a single wrongly submitted control number (admin only, route-gated).
+     * Cleans up the parent report if that was its last control number and it
+     * has no daily sales of its own, so no empty husk report is left behind.
+     */
+    public function destroyControlNumber($id)
+    {
+        $controlNumber = ControlNumber::findOrFail($id);
+        $reportId = $controlNumber->report_id;
+        $controlNumber->delete();
+
+        $report = Report::find($reportId);
+        if ($report && $report->daily_sales === null && $report->control_number()->count() === 0) {
+            $report->delete();
+        }
+
+        return redirect()->back()->with('success', 'Control number deleted successfully.');
+    }
+
     public function adminReportsPdf(Request $request)
     {
         $request->validate([
@@ -210,6 +242,7 @@ class ReportController extends Controller
                 $dailySalesEntries = $dayReports
                     ->filter(fn ($r) => $r->daily_sales !== null)
                     ->map(fn ($r) => [
+                        'id' => $r->id,
                         'amount' => (float) $r->daily_sales,
                         'image' => $r->sales_proof_image,
                         'time' => $r->created_at->format('H:i'),
@@ -219,6 +252,7 @@ class ReportController extends Controller
                 $controlNumbers = $dayReports
                     ->flatMap(fn ($r) => $r->control_number)
                     ->map(fn ($cn) => [
+                        'id' => $cn->id,
                         'control_number' => $cn->control_number,
                         'amount' => (float) $cn->amount,
                     ])

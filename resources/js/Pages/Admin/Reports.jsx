@@ -11,6 +11,8 @@ const Reports = ({ reports }) => {
                     reports={reports}
                     pdfRoute="admin.reports_pdf"
                     csvRoute="admin.reports_csv"
+                    deleteReportRoute="admin.destroy_report"
+                    deleteControlNumberRoute="admin.destroy_control_number"
                 />
             </main>
         </AdminLayout>

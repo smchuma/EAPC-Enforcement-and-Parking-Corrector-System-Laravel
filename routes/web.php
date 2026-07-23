@@ -54,6 +54,8 @@ Route::group(['prefix' => 'admin'], function() {
         Route::get('/full-report', [ReportController::class, 'adminReports'])->name('admin.reports');
         Route::get('/full-report/pdf', [ReportController::class, 'adminReportsPdf'])->name('admin.reports_pdf');
         Route::get('/full-report/csv', [ReportController::class, 'adminReportsCsv'])->name('admin.reports_csv');
+        Route::delete('/report/delete/{id}', [ReportController::class, 'destroyReport'])->name('admin.destroy_report');
+        Route::delete('/control-number/delete/{id}', [ReportController::class, 'destroyControlNumber'])->name('admin.destroy_control_number');
 
         //target reports
         Route::get('/target-reports', [ReportController::class, 'target_reports'])->name('admin.target_reports');
